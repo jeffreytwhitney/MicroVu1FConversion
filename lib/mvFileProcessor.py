@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 
 
-class MicroVuProcessor:
+class Processor:
 
     def __init__(self, mv_input_filepath, op_num, user_initials, mv_output_filepath, is_profile):
         self.user_initials = user_initials
@@ -41,6 +41,14 @@ class MicroVuProcessor:
         if dim_parts[1].isnumeric() and dim_parts[2].isalpha() and len(dim_parts[2]) == 1:
             return "#" + dim_parts[1] + dim_parts[2]
 
+    def __global_replace(self, old_value, new_value):
+        quoted_old_value = "\"" + old_value + "\""
+        quoted_new_value = "\"" + new_value + "\""
+        for i, l in enumerate(self.file_lines):
+            if l.find(quoted_old_value) > 0:
+                new_line = l.replace(quoted_old_value, quoted_new_value)
+                self.file_lines[i] = new_line
+
     def __get_node_text(self, line_text, search_value):
         node_search_text = "(" + search_value + " "
         title_index = line_text.find(node_search_text)
@@ -58,6 +66,13 @@ class MicroVuProcessor:
         for i, l in enumerate(self.file_lines):
             if l.find(text_to_find) > 1:
                 return i
+
+    def __does_name_already_exist(self, name_to_find):
+        search_text = "(Name \"" + name_to_find + "\")"
+        for i, l in enumerate(self.file_lines):
+            if l.find(search_text) > 1:
+                return True
+        return False
 
     def __get_mv_filename(self):
         part_number_line = self.file_lines[self.__get_index_containing_text("AutoRptFileName")]
@@ -183,11 +198,21 @@ class MicroVuProcessor:
                 self.file_lines.insert(insert_index, line)
 
     def __replace_dimension_names(self):
-        pass
+        matches = ["(Name \"ITEM", "(Name \"INSP"]
+        for i, line in enumerate(self.file_lines):
+            if any(x in line for x in matches):
+                if line.startswith("Calc"):
+                    continue
+                old_dimension_name = self.__get_node_text(line, "Name")
+                new_dimension_name = self.__parse_dimension_name(old_dimension_name)
+                if self.__does_name_already_exist(new_dimension_name):
+                    continue
+                self.file_lines[i] = self.__set_node_text(line, "Name", new_dimension_name)
 
     def process_file(self):
         self.__replace_export_filepath()
-        self.__replace_report_filepath()
+        if not self.is_profile:
+            self.__replace_report_filepath()
         self.__update_comments()
         self.__replace_prompt_section()
         if not self.is_profile:
