@@ -1,13 +1,13 @@
+import os
 import sys
-
-from PyQt6.QtWidgets import QMessageBox, QFileDialog
+from PyQt6.QtWidgets import QMessageBox, QFileDialog, QTableWidgetItem
 from pathlib import Path
+
+import lib.Utilities
+import lib.mvFileProcessor
 from ui.gui_MicroVuProcessor_MainWindow import gui_MicroVuProcessorMainWindow
-from PyQt6 import QtWidgets
+from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import Qt
-
-
-
 
 
 class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMainWindow):
@@ -18,27 +18,59 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.btnSelectInputFolder.clicked.connect(self.btnSelectInputFolder_clicked)
         self.btnSelectOutputFolder.clicked.connect(self.btnSelectOutputFolder_clicked)
         self.btnProcessFiles.clicked.connect(self.btnProcessFiles_clicked)
-
+        self.user_initials = lib.Utilities.GetStoredIniValue("UserSettings", "Initials", "Settings")
+        self.input_rootpath = lib.Utilities.GetStoredIniValue("Paths", "InputRootpath", "Settings")
+        self.output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "OutputRootpath", "Settings")
+        self.txtOutputFolder.setText(self.output_rootpath)
+        self.txtInitials.setText(self.user_initials)
 
     def btnSelectInputFolder_clicked(self):
-        input_folder = self.get_directory_via_dialog("Select Input Folder", "V:\\Inspect Programs\\CMM Programs\\B_S Approved Programs\\PDF Approved Programs\\")
+        input_folder = self.get_directory_via_dialog("Select Input Folder", self.input_rootpath)
         self.txtInputFolder.setText(input_folder)
         self.enable_process_button()
 
     def btnSelectOutputFolder_clicked(self):
-        outputfolder = self.get_directory_via_dialog("Select Output Folder", "")
-        self.txtOutputFolder.setText(outputfolder)
+        output_folder = self.get_directory_via_dialog("Select Output Folder", self.output_rootpath)
+        self.txtOutputFolder.setText(output_folder)
         self.enable_process_button()
 
     def btnProcessFiles_clicked(self):
-        pass
+        lib.Utilities.StoreIniValue(self.txtInitials.text(), "UserSettings", "Initials", "Settings")
+        lib.Utilities.StoreIniValue(self.txtOutputFolder.text(), "Paths", "OutputRootpath", "Settings")
+        self.process_files()
 
-    def load_files(self, directory):
-        pass
+    def load_files(self):
+        self.tableWidget.setSortingEnabled(False)
+        self.tableWidget.verticalHeader().setVisible(False)
+        _translate = QtCore.QCoreApplication.translate
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("MicroVuProcessorMainWindow", "MicroVuName"))
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("MicroVuProcessorMainWindow", "IsProfile"))
+        if not os.path.exists(self.txtInputFolder.text()):
+            self.show_error_message("Input directory doesn't exist.", "Error")
+            return
+        else:
+            files = [fn for fn in os.listdir(self.txtInputFolder.text()) if fn.endswith('.iwp')]
+            if not files:
+                self.show_error_message("No files found", "Error")
+                return
+            self.tableWidget.setRowCount(len(files))
+            for row, file in enumerate(files):
+                textItem = QTableWidgetItem(file)
+                textItem.setFlags(Qt.ItemFlag.ItemIsEditable)
+                self.tableWidget.setItem(row, 0, textItem)
+                chkBoxItem = QTableWidgetItem()
+                chkBoxItem.setTextAlignment(Qt.AlignmentFlag.AlignHCenter)
+                chkBoxItem.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+                chkBoxItem.setCheckState(Qt.CheckState.Unchecked)
+                self.tableWidget.setItem(row, 1, chkBoxItem)
+            self.tableWidget.setVisible(True)
 
     def enable_process_button(self):
-        jim = self.txtOutputFolder.text()
+
         if len(self.txtOutputFolder.text()) > 0 and len(self.txtInputFolder.text()) > 0:
+            self.load_files()
             self.btnProcessFiles.setEnabled(True)
         else:
             self.btnProcessFiles.setEnabled(False)
@@ -51,10 +83,37 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
         msg_box.exec()
 
+    def show_message(self, message, title):
+        msg_box = QMessageBox(self)
+        msg_box.setIcon(QMessageBox.Icon.Information)
+        msg_box.setText(message)
+        msg_box.setWindowTitle(title)
+        msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msg_box.exec()
+
     def get_directory_via_dialog(self, title, default_directory=""):
         dialog = QFileDialog()
         return_path = dialog.getExistingDirectory(self, title, default_directory)
         return str(Path(return_path).absolute()) + "\\"
+
+    def process_files(self):
+        input_directory = self.txtInputFolder.text()
+        directory_parts = input_directory.split("\\")
+        input_subdirectory = directory_parts[-2] if directory_parts[-1] == "" else directory_parts[-1]
+        output_directory = os.path.join(self.txtOutputFolder.text(), input_subdirectory)
+        for row in range(self.tableWidget.rowCount()):
+            file_name = self.tableWidget.item(row, 0).text()
+            input_filepath = os.path.join(input_directory, file_name)
+            output_filepath = os.path.join(str(output_directory), file_name)
+            user_initials = self.txtInitials.text()
+            checkbox = self.tableWidget.item(row, 1)
+            is_profile = (
+                checkbox is not None
+                and checkbox.checkState() == Qt.CheckState.Checked
+            )
+            file_processor = lib.mvFileProcessor.Processor(input_filepath, "10", user_initials, output_filepath, is_profile)
+            file_processor.process_file()
+        self.show_message("Done!", "Done!")
 
 
 def main():

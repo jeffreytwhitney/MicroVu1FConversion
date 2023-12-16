@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="starting...">
-      <change afterPath="$PROJECT_DIR$/ui/MainWindow.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainWindow.ui" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/mvFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mvFileProcessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prompt_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ui/prompt_text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,19 +66,23 @@
     "Python.Main.executor": "Run",
     "Python.MicroVuProcessor.executor": "Run",
     "Python.MicroVuProcessor_MainWindow.executor": "Run",
+    "Python.gui_MicroVuProcessor_MainWindow.executor": "Run",
+    "Python.mvFileProcessor.executor": "Run",
     "Python.scratch.executor": "Run",
     "Python.scratch_1.executor": "Run",
     "Python.test.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
     "last.edited.regexp": "Sample_Text",
     "last_opened_file_path": "C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/lib",
-    "settings.editor.selected.configurable": "advanced.settings"
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\OneDrive\Projects\Automation\MicroVu1FConversion\ui" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\ui" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\lib" />
     </key>

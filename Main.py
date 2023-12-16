@@ -1,5 +1,7 @@
 import sys
 from PyQt6 import QtWidgets
+
+
 from ui.MicroVuProcessor_MainWindow import MicroVuProcessorMainWindow
 
 

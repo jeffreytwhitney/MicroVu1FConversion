@@ -219,6 +219,9 @@ class Processor:
             self.__replace_dimension_names()
         if os.path.exists(self.output_filepath):
             os.remove(self.output_filepath)
-        with open(self.output_filepath, 'w', encoding='utf-16-le', newline='\r\n') as f:
+        file_directory = os.path.dirname(self.output_filepath)
+        if not os.path.exists(file_directory):
+            os.mkdir(file_directory)
+        with open(self.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
             for line in self.file_lines:
                 f.write(f"{line}")
