@@ -20,7 +20,7 @@
       <x>20</x>
       <y>30</y>
       <width>761</width>
-      <height>71</height>
+      <height>82</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -36,37 +36,16 @@
      <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Input Folder:  </string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QLineEdit" name="txtInputFolder"/>
      </item>
-     <item row="0" column="3">
-      <widget class="QToolButton" name="btnSelectInputFolder">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLineEdit" name="txtOutputFolder"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Output Folder:  </string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3">
-      <widget class="QToolButton" name="btnSelectOutputFolder">
-       <property name="text">
-        <string>...</string>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="txtInitials">
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>16777215</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -77,8 +56,46 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QLineEdit" name="txtInitials">
+     <item row="3" column="0">
+      <widget class="QLabel" name="OpNumberLabel">
+       <property name="text">
+        <string>Op Number:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QToolButton" name="btnSelectOutputFolder">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QToolButton" name="btnSelectInputFolder">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Output Folder:  </string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="txtOutputFolder"/>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Input Folder:  </string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="txtOpNumber">
        <property name="maximumSize">
         <size>
          <width>50</width>

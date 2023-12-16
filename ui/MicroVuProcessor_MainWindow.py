@@ -35,6 +35,18 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.enable_process_button()
 
     def btnProcessFiles_clicked(self):
+        if len(self.txtOpNumber.text()) == 0:
+            self.show_error_message("Op Number field is blank.", "Error")
+            return
+        if len(self.txtInitials.text()) == 0:
+            self.show_error_message("Initials field is blank.", "Error")
+            return
+        if len(self.txtInputFolder.text()) == 0:
+            self.show_error_message("Input Folder field is blank.", "Error")
+            return
+        if len(self.txtOutputFolder.text()) == 0:
+            self.show_error_message("Output Folder field is blank.", "Error")
+            return
         lib.Utilities.StoreIniValue(self.txtInitials.text(), "UserSettings", "Initials", "Settings")
         lib.Utilities.StoreIniValue(self.txtOutputFolder.text(), "Paths", "OutputRootpath", "Settings")
         self.process_files()
@@ -68,7 +80,6 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
             self.tableWidget.setVisible(True)
 
     def enable_process_button(self):
-
         if len(self.txtOutputFolder.text()) > 0 and len(self.txtInputFolder.text()) > 0:
             self.load_files()
             self.btnProcessFiles.setEnabled(True)
@@ -101,6 +112,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         directory_parts = input_directory.split("\\")
         input_subdirectory = directory_parts[-2] if directory_parts[-1] == "" else directory_parts[-1]
         output_directory = os.path.join(self.txtOutputFolder.text(), input_subdirectory)
+        op_number = self.txtOpNumber.text()
         for row in range(self.tableWidget.rowCount()):
             file_name = self.tableWidget.item(row, 0).text()
             input_filepath = os.path.join(input_directory, file_name)
@@ -111,7 +123,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 checkbox is not None
                 and checkbox.checkState() == Qt.CheckState.Checked
             )
-            file_processor = lib.mvFileProcessor.Processor(input_filepath, "10", user_initials, output_filepath, is_profile)
+            file_processor = lib.mvFileProcessor.Processor(input_filepath, op_number, user_initials, output_filepath, is_profile)
             file_processor.process_file()
         self.show_message("Done!", "Done!")
 
