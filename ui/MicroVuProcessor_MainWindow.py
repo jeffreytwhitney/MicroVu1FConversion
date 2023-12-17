@@ -5,6 +5,7 @@ from pathlib import Path
 
 import lib.Utilities
 import lib.mvFileProcessor
+import lib.mvAnokaFileProcessor
 from ui.gui_MicroVuProcessor_MainWindow import gui_MicroVuProcessorMainWindow
 from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import Qt
@@ -123,7 +124,10 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 checkbox is not None
                 and checkbox.checkState() == Qt.CheckState.Checked
             )
-            file_processor = lib.mvFileProcessor.Processor(input_filepath, op_number, user_initials, output_filepath, is_profile)
+            if lib.Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids":
+                file_processor = lib.mvFileProcessor.Processor(input_filepath, op_number, user_initials, output_filepath, is_profile)
+            else:
+                file_processor = lib.mvAnokaFileProcessor.Processor(input_filepath, op_number, user_initials, output_filepath, is_profile)
             file_processor.process_file()
         self.show_message("Done!", "Done!")
 
