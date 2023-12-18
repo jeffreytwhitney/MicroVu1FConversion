@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 
 
-class Processor:
+class CoonRapidsProcessor:
 
     def __init__(self, mv_input_filepath, op_num, user_initials, mv_output_filepath, is_profile):
         self.user_initials = user_initials
@@ -17,7 +17,7 @@ class Processor:
         self.view_name = self._get_view_name()
         self.is_profile = is_profile
 
-    def _parse_dimension_name(self, dimension_name):
+    def _parse_dimension_name(self, dimension_name) -> str:
         charstr = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         chars = list(charstr)
         dim_parts = re.split("[ _X.-]", dimension_name)
@@ -41,7 +41,7 @@ class Processor:
         if dim_parts[1].isnumeric() and dim_parts[2].isalpha() and len(dim_parts[2]) == 1:
             return "#" + dim_parts[1] + dim_parts[2]
 
-    def _global_replace(self, old_value, new_value):
+    def _global_replace(self, old_value, new_value) -> None:
         quoted_old_value = "\"" + old_value + "\""
         quoted_new_value = "\"" + new_value + "\""
         for i, l in enumerate(self.file_lines):
@@ -49,44 +49,46 @@ class Processor:
                 new_line = l.replace(quoted_old_value, quoted_new_value)
                 self.file_lines[i] = new_line
 
-    def _get_node_text(self, line_text, search_value):
+    def _get_node_text(self, line_text, search_value) -> str:
         node_search_text = f"({search_value} "
-        title_index = line_text.find(node_search_text)
+        title_index = line_text.upper().find(node_search_text.upper())
         begin_quote_index = line_text.find("\"", title_index)
         end_quote_index = line_text.find("\"", begin_quote_index + 1)
         return line_text[begin_quote_index + 1:end_quote_index]
 
-    def _set_node_text(self, line_text, search_value, set_value):
+    def _set_node_text(self, line_text, search_value, set_value) -> str:
         current_value = self._get_node_text(line_text, search_value)
-        return line_text.replace(current_value, set_value)
+        current_node = f"({search_value}" + " \"" + current_value + "\")"
+        new_node = f"({search_value}" + " \"" + set_value + "\")"
+        return line_text.replace(current_node, new_node)
 
-    def _get_index_containing_text(self, text_to_find):
+    def _get_index_containing_text(self, text_to_find) -> int:
         for i, l in enumerate(self.file_lines):
-            if l.find(text_to_find) > 1:
+            if l.upper().find(text_to_find.upper()) > 1:
                 return i
 
-    def _does_name_already_exist(self, name_to_find):
+    def _does_name_already_exist(self, name_to_find) -> bool:
         search_text = "(Name \"" + name_to_find + "\")"
-        return any(l.find(search_text) > 1 for l in self.file_lines)
+        return any(line.find(search_text) > 1 for line in self.file_lines)
 
-    def _get_mv_filename(self):
+    def _get_mv_filename(self) -> str:
         part_number_line = self.file_lines[self._get_index_containing_text("AutoRptFileName")]
         filepath_text = self._get_node_text(part_number_line, "AutoRptFileName")
         file_parts = filepath_text.split("\\")
         mv_filename = file_parts[2]
         return mv_filename[:-5]
 
-    def _get_part_number(self):
+    def _get_part_number(self) -> str:
         part_name = re.split("[ _]", self._get_mv_filename())
         return part_name[0].upper()
 
-    def _get_rev_number(self):
+    def _get_rev_number(self) -> str:
         filename_parts = re.split("[ _]", self._get_mv_filename())
         for i, p in enumerate(filename_parts):
             if p.find("REV") > -1:
                 return filename_parts[i + 1] if p == "REV" else p[3:]
 
-    def _get_view_name(self):
+    def _get_view_name(self) -> str:
         filename_parts = re.split("[ _]", self._get_mv_filename())
         count_of_parts = len(filename_parts)
         rev_index = 0
@@ -101,20 +103,20 @@ class Processor:
         view_name = "".join(f"{line} " for line in filename_parts[1:rev_index])
         return view_name.strip()
 
-    def _get_export_filepath(self):
+    def _get_export_filepath(self) -> str:
         if self.is_profile:
             return "C:\\TEXT\\OUTPUT.txt"
         part_rev = f"REV{self.rev_number}"
-        curl_filepath = "C:\\Users\\Public\\CURL\\in\\"
-        curl_filepath += self.part_number
-        curl_filepath += f"_OP{self.op_number}"
+        export_filepath = "C:\\Users\\Public\\CURL\\in\\"
+        export_filepath += self.part_number
+        export_filepath += f"_OP{self.op_number}"
         if len(self.view_name) > 0:
-            curl_filepath += f"_{self.view_name}"
-        curl_filepath += f"_{part_rev}"
-        curl_filepath += ".csv"
-        return curl_filepath
+            export_filepath += f"_{self.view_name}"
+        export_filepath += f"_{part_rev}"
+        export_filepath += "_.csv"
+        return export_filepath
 
-    def _get_report_filepath(self):
+    def _get_report_filepath(self) -> str:
         if self.is_profile:
             return ""
         view_name = self.view_name
@@ -127,22 +129,28 @@ class Processor:
         report_filepath += f"_{part_rev}_.pdf"
         return report_filepath
 
-    def _replace_export_filepath(self):
+    def _replace_export_filepath(self) -> None:
         line_idx = self._get_index_containing_text("AutoRptFileName")
         line_text = self.file_lines[line_idx]
-        curl_filepath = self._get_export_filepath()
-        updated_line_text = self._set_node_text(line_text, "ExpFile", curl_filepath)
-        updated_line_text = self._set_node_text(updated_line_text, "AutoExpFile", curl_filepath)
+        export_filepath = self._get_export_filepath()
+        updated_line_text = self._set_node_text(line_text, "ExpFile", export_filepath)
+        updated_line_text = self._set_node_text(updated_line_text, "AutoExpFile", export_filepath)
+
+        if self.is_profile:
+            updated_line_text = updated_line_text.replace("(AutoExpFSApSt DT)", "(AutoExpFSApSt None)")
+        else:
+            updated_line_text = updated_line_text.replace("(AutoExpFSApSt None)", "(AutoExpFSApSt DT)")
+        updated_line_text = updated_line_text.replace("(FldDlm Tab)", "(FldDlm CrLf)")
         self.file_lines[line_idx] = updated_line_text
 
-    def _replace_report_filepath(self):
+    def _replace_report_filepath(self) -> None:
         line_idx = self._get_index_containing_text("AutoRptFileName")
         line_text = self.file_lines[line_idx]
         report_filepath = self._get_report_filepath()
         updated_line_text = self._set_node_text(line_text, "AutoRptFileName", report_filepath)
         self.file_lines[line_idx] = updated_line_text
 
-    def _update_comments(self):
+    def _update_comments(self) -> None:
         date_text = datetime.now().strftime("%m/%d/%Y")
         comment_idx = self._get_index_containing_text("(Name \"Edited By and Comments:\")")
         new_comment = "\\r\\nConverted program to work with 1Factory. " + self.user_initials + " " + date_text + "."
@@ -151,9 +159,13 @@ class Processor:
         updated_comment_line = self._set_node_text(self.file_lines[comment_idx], "Txt", current_comment)
         self.file_lines[comment_idx] = updated_comment_line
 
-    def _replace_prompt_section(self):
+    def _replace_prompt_section(self) -> None:
         insert_index = self._get_index_containing_text("(Name \"Created By:\")")
+        if not insert_index:
+            return
         temp_idx = self._get_index_containing_text("(Name \"Edited By and Comments:\")")
+        if not temp_idx:
+            return
         if temp_idx > insert_index:
             insert_index = temp_idx
         del self.file_lines[self._get_index_containing_text("Name \"PT #\"")]
@@ -186,7 +198,7 @@ class Processor:
                 line = line.replace("<P>", str(self.part_number))
                 self.file_lines.insert(insert_index, line)
 
-    def _replace_dimension_names(self):
+    def _replace_dimension_names(self) -> None:
         matches = ["(Name \"ITEM", "(Name \"INSP"]
         for i, line in enumerate(self.file_lines):
             if any(x in line for x in matches):
@@ -198,7 +210,7 @@ class Processor:
                     continue
                 self.file_lines[i] = self._set_node_text(line, "Name", new_dimension_name)
 
-    def process_file(self):
+    def process_file(self) -> None:
         self._replace_export_filepath()
         if not self.is_profile:
             self._replace_report_filepath()
@@ -214,3 +226,11 @@ class Processor:
         with open(self.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
             for line in self.file_lines:
                 f.write(f"{line}")
+
+
+class AnokaProcessor(CoonRapidsProcessor):
+    def __init__(self, mv_input_filepath, op_num, user_initials, mv_output_filepath, is_profile):
+        super().__init__(mv_input_filepath, op_num, user_initials, mv_output_filepath, is_profile)
+
+    def replace_prompt_section(self):
+        insert_index = self._get_index_containing_text("(Name \"START:\")")
