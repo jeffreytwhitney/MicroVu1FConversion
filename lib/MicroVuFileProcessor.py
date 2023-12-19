@@ -41,12 +41,17 @@ def _parse_dimension_name(dimension_name: str) -> str:
     return ""
 
 
-def _get_node_text(line_text: str, search_value: str) -> str:
+def get_node_text(line_text: str, search_value: str, use_quote:bool = True) -> str:
     node_search_text = f"({search_value} "
     title_index = line_text.upper().find(node_search_text.upper())
-    begin_quote_index = line_text.find("\"", title_index)
-    end_quote_index = line_text.find("\"", begin_quote_index + 1)
-    return line_text[begin_quote_index + 1:end_quote_index]
+    if use_quote:
+        begin_index = line_text.find("\"", title_index)
+        end_index = line_text.find("\"", begin_index + 1)
+        return line_text[begin_index + 1:end_index]
+    else:
+        begin_index = title_index + len(search_value) + 2
+        end_index = line_text.find(")", title_index + 1)
+        return line_text[begin_index:end_index]
 
 
 def _set_node_text(line_text: str, search_value: str, set_value: str) -> str:
