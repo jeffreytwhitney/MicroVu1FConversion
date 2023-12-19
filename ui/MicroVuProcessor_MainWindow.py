@@ -5,7 +5,7 @@ from pathlib import Path
 
 import lib.Utilities
 import lib.MicroVuFileProcessor
-import lib.mvAnokaFileProcessor
+from lib.MicroVuFileProcessor import ProcessorException
 from ui.gui_MicroVuProcessor_MainWindow import gui_MicroVuProcessorMainWindow
 from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import Qt
@@ -48,6 +48,9 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         if len(self.txtOutputFolder.text()) == 0:
             self.show_error_message("Output Folder field is blank.", "Error")
             return
+        if len(self.txtRevNumber.text()) == 0:
+            self.show_error_message("Rev Number field is blank.", "Error")
+            return
         lib.Utilities.StoreIniValue(self.txtInitials.text(), "UserSettings", "Initials", "Settings")
         lib.Utilities.StoreIniValue(self.txtOutputFolder.text(), "Paths", "OutputRootpath", "Settings")
         self.process_files()
@@ -60,6 +63,8 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         item.setText(_translate("MicroVuProcessorMainWindow", "MicroVuName"))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MicroVuProcessorMainWindow", "IsProfile"))
+        item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("MicroVuProcessorMainWindow", "Process File"))
         if not os.path.exists(self.txtInputFolder.text()):
             self.show_error_message("Input directory doesn't exist.", "Error")
             return
@@ -78,6 +83,11 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 chkBoxItem.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
                 chkBoxItem.setCheckState(Qt.CheckState.Unchecked)
                 self.tableWidget.setItem(row, 1, chkBoxItem)
+                chkBoxItem = QTableWidgetItem()
+                chkBoxItem.setTextAlignment(Qt.AlignmentFlag.AlignHCenter)
+                chkBoxItem.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+                chkBoxItem.setCheckState(Qt.CheckState.Checked)
+                self.tableWidget.setItem(row, 2, chkBoxItem)
             self.tableWidget.setVisible(True)
 
     def enable_process_button(self):
@@ -115,20 +125,30 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         output_directory = os.path.join(self.txtOutputFolder.text(), input_subdirectory)
         op_number = self.txtOpNumber.text()
         for row in range(self.tableWidget.rowCount()):
+            checkbox = self.tableWidget.item(row, 2)
+            process_file = (
+                    checkbox is not None
+                    and checkbox.checkState() == Qt.CheckState.Checked
+            )
+            if not process_file:
+                continue
             file_name = self.tableWidget.item(row, 0).text()
-            input_filepath = os.path.join(input_directory, file_name)
+            input_filepath = str(os.path.join(input_directory, file_name))
             output_filepath = os.path.join(str(output_directory), file_name)
             user_initials = self.txtInitials.text()
             checkbox = self.tableWidget.item(row, 1)
+            rev_number = self.txtRevNumber.text()
             is_profile = (
                 checkbox is not None
                 and checkbox.checkState() == Qt.CheckState.Checked
             )
-            if lib.Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids":
-                file_processor = lib.MicroVuFileProcessor.CoonRapidsProcessor(input_filepath, op_number, user_initials, output_filepath, is_profile)
-            else:
-                file_processor = lib.MicroVuFileProcessor.AnokaProcessor(input_filepath, op_number, user_initials, output_filepath, is_profile)
-            file_processor.process_file()
+            file_processor = lib.MicroVuFileProcessor.get_processor(input_filepath, op_number, user_initials, output_filepath, rev_number, is_profile)
+            try:
+                file_processor.process_file()
+            except ProcessorException as e:
+                error_message = e.args[0]
+                self.show_error_message(error_message, "Processing Error")
+                continue
         self.show_message("Done!", "Done!")
 
 

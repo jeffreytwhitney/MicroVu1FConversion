@@ -20,7 +20,7 @@
       <x>20</x>
       <y>30</y>
       <width>761</width>
-      <height>82</height>
+      <height>115</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -36,8 +36,26 @@
      <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="0" column="2">
-      <widget class="QLineEdit" name="txtInputFolder"/>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Initials:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QToolButton" name="btnSelectOutputFolder">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="OpNumberLabel">
+       <property name="text">
+        <string>Op Number:</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="2">
       <widget class="QLineEdit" name="txtInitials">
@@ -49,38 +67,16 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Initials:</string>
-       </property>
-      </widget>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="txtInputFolder"/>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="OpNumberLabel">
-       <property name="text">
-        <string>Op Number:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="4">
-      <widget class="QToolButton" name="btnSelectOutputFolder">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="4">
-      <widget class="QToolButton" name="btnSelectInputFolder">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Output Folder:  </string>
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="txtOpNumber">
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>16777215</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -94,8 +90,29 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
-      <widget class="QLineEdit" name="txtOpNumber">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Output Folder:  </string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QToolButton" name="btnSelectInputFolder">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="LabelRevNumber">
+       <property name="text">
+        <string>Rev:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLineEdit" name="txtRevNumber">
        <property name="maximumSize">
         <size>
          <width>50</width>
@@ -110,7 +127,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>140</y>
+      <y>160</y>
       <width>600</width>
       <height>158</height>
      </rect>
@@ -139,6 +156,11 @@
     </column>
     <column>
      <property name="text">
+      <string>Process</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>IsProfile</string>
      </property>
     </column>
@@ -151,8 +173,8 @@
    <widget class="QPushButton" name="btnProcessFiles">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>270</y>
+      <x>680</x>
+      <y>290</y>
       <width>100</width>
       <height>23</height>
      </rect>

@@ -5,12 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="starting...">
-      <change beforePath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2923-C001-001 BOTTOM VIEW.iwp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/mvAnokaFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mvAnokaFileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/mvFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mvFileProcessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/ConvertUIToPython.bat" beforeDir="false" afterPath="$PROJECT_DIR$/ui/ConvertUIToPython.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/MainWindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MainWindow.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,28 +65,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Batch.ConvertUIToPython.executor": "Run",
-    "Python.Main.executor": "Run",
-    "Python.MicroVuProcessor.executor": "Run",
-    "Python.MicroVuProcessor_MainWindow.executor": "Run",
-    "Python.gui_MicroVuProcessor_MainWindow.executor": "Run",
-    "Python.mvFileProcessor.executor": "Run",
-    "Python.scratch.executor": "Run",
-    "Python.scratch_1.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.CodyProjectSettingsMigration": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last.edited.regexp": "Sample_Text",
-    "last_opened_file_path": "C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/lib",
-    "settings.editor.selected.configurable": "settings.qodana"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Batch.ConvertUIToPython.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVuFileProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVuProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVuProcessor_MainWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui_MicroVuProcessor_MainWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.mvFileProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scratch.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scratch_1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.CodyProjectSettingsMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last.edited.regexp&quot;: &quot;Sample_Text&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/lib&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.qodana&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\OneDrive\Projects\Automation\MicroVu1FConversion\ui" />
@@ -165,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702766946400</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="starting...">
+      <option name="closed" value="true" />
+      <created>1702905862934</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1702905862934</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -180,8 +190,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="starting..." />
     <MESSAGE value="First Working Version" />
-    <option name="LAST_COMMIT_MESSAGE" value="First Working Version" />
+    <MESSAGE value="starting..." />
+    <option name="LAST_COMMIT_MESSAGE" value="starting..." />
   </component>
 </project>
