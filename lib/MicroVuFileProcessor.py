@@ -4,6 +4,7 @@ from abc import ABCMeta, abstractmethod
 from datetime import datetime
 from pathlib import Path
 
+import lib.Utilities
 from lib import Utilities
 
 
@@ -41,7 +42,7 @@ def _parse_dimension_name(dimension_name: str) -> str:
     return ""
 
 
-def get_node_text(line_text: str, search_value: str, use_quote:bool = True) -> str:
+def _get_node_text(line_text: str, search_value: str, use_quote:bool = True) -> str:
     node_search_text = f"({search_value} "
     title_index = line_text.upper().find(node_search_text.upper())
     if use_quote:
@@ -258,14 +259,37 @@ class CoonRapidsProcessor(Processor):
                     continue
                 self.file_lines[i] = _set_node_text(line, "Name", new_dimension_name)
 
+    def _get_last_microvu_system_id(self) -> str:
+        system_line = [line for line in self.file_lines if line.upper().find("(SYS ") > 1][-1]
+        return _get_node_text(system_line, "Sys", False)
+
+    def _add_smart_profile_call(self):
+        microvu_system_id = self._get_last_microvu_system_id()
+        if microvu_system_id == "":
+            return
+        smartprofile_file = os.getcwd() + os.sep + "CallSmartProfile_text.txt"
+        with open(smartprofile_file, "r") as f:
+            prompt_lines = f.readlines()
+        smartprofile_line = prompt_lines[0]
+        smartprofile_script_path = lib.Utilities.GetStoredIniValue("Paths", "SmartProfileScriptFilePath", "Settings")
+        smartprofile_exe_path = lib.Utilities.GetStoredIniValue("Paths", "SmartProfileExeFilePath", "Settings")
+        smartprofile_line = smartprofile_line.replace("<?SYS>", str(microvu_system_id))
+        smartprofile_line = smartprofile_line.replace("<?EXE>", smartprofile_exe_path)
+        smartprofile_line = smartprofile_line.replace("<?SCR>", smartprofile_script_path)
+        self.file_lines.append(smartprofile_line)
+        self.file_lines.append(prompt_lines[1])
+        self.file_lines.append(prompt_lines[2])
+
+
     def process_file(self) -> None:
         self._replace_export_filepath()
         if not self.is_profile:
             self._replace_report_filepath()
+            self._replace_dimension_names()
+        else:
+            self._add_smart_profile_call()
         self._update_comments()
         self._replace_prompt_section()
-        if not self.is_profile:
-            self._replace_dimension_names()
         if os.path.exists(self.output_filepath):
             os.remove(self.output_filepath)
         file_directory = os.path.dirname(self.output_filepath)
