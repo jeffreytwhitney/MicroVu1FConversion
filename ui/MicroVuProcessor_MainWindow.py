@@ -97,7 +97,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         else:
             self.btnProcessFiles.setEnabled(False)
 
-    def show_error_message(self, message, title):
+    def show_error_message(self, message: str, title: str):
         msg_box = QMessageBox(self)
         msg_box.setIcon(QMessageBox.Icon.Critical)
         msg_box.setText(message)
@@ -105,7 +105,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
         msg_box.exec()
 
-    def show_message(self, message, title):
+    def show_message(self, message: str, title: str):
         msg_box = QMessageBox(self)
         msg_box.setIcon(QMessageBox.Icon.Information)
         msg_box.setText(message)
@@ -134,7 +134,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 continue
             file_name = self.tableWidget.item(row, 0).text()
             input_filepath = str(os.path.join(input_directory, file_name))
-            output_filepath = os.path.join(str(output_directory), file_name)
+            output_filepath = str(os.path.join(str(output_directory), file_name))
             user_initials = self.txtInitials.text()
             checkbox = self.tableWidget.item(row, 1)
             rev_number = self.txtRevNumber.text()
