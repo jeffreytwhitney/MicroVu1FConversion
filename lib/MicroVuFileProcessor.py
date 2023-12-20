@@ -280,7 +280,7 @@ class CoonRapidsProcessor(Processor):
         smartprofile_line = smartprofile_line.replace("<?SCR>", smartprofile_script_path)
         self.file_lines.append(smartprofile_line)
         self.file_lines.append(prompt_lines[1])
-        self.file_lines.append(prompt_lines[2])
+        self.file_lines.append(prompt_lines[2] + "\n")
 
     def process_file(self) -> None:
         self._replace_export_filepath()
@@ -288,9 +288,7 @@ class CoonRapidsProcessor(Processor):
             self._replace_report_filepath()
             self._replace_dimension_names()
         else:
-            pass
-            # THIS IS NOT WORKING JUST YET...
-            # self._add_smart_profile_call()
+            self._add_smart_profile_call()
         self._update_comments()
         self._replace_prompt_section()
         if os.path.exists(self.output_filepath):
