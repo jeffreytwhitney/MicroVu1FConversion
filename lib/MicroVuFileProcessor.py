@@ -17,8 +17,6 @@ def get_processor(input_filepath: str, op_num: str, user_initials: str, output_f
 
 
 def _parse_dimension_name(dimension_name: str) -> str:
-    charstr = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    chars = list(charstr)
     dim_parts = re.split("[ _X.-]", dimension_name)
     while "" in dim_parts:
         dim_parts.remove("")
@@ -27,38 +25,40 @@ def _parse_dimension_name(dimension_name: str) -> str:
         dim_part = dim_part.upper().replace("INSP", "").replace("ITEM", "")
         if dim_part.isnumeric():
             return dim_part
-        elif dim_part[0:-1].isnumeric():
+        elif dim_part[:-1].isnumeric():
             return dim_part
     if len(dim_parts) == 2 and dim_parts[1].isnumeric():
-        return "#" + dim_parts[1]
+        return f"#{dim_parts[1]}"
     if len(dim_parts) == 2:
         last_part = dim_parts[1][:-1]
         if last_part.isnumeric():
-            return "#" + dim_parts[1]
+            return f"#{dim_parts[1]}"
     if dim_parts[1].isnumeric() and dim_parts[2].isnumeric():
-        return "#" + dim_parts[1] + chars[int(dim_parts[2])]
+        charstr = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        chars = list(charstr)
+        return f"#{dim_parts[1]}{chars[int(dim_parts[2])]}"
     if dim_parts[1].isnumeric() and dim_parts[2].isalpha() and len(dim_parts[2]) == 1:
-        return "#" + dim_parts[1] + dim_parts[2]
+        return f"#{dim_parts[1]}{dim_parts[2]}"
     return ""
 
 
-def _get_node_text(line_text: str, search_value: str, use_quote:bool = True) -> str:
-    node_search_text = f"({search_value} "
-    title_index = line_text.upper().find(node_search_text.upper())
+def _get_node_text(line_text: str, search_value: str, use_quote: bool = True) -> str:
+    node_search_text: str = f"({search_value} "
+    title_index: int = line_text.upper().find(node_search_text.upper())
     if use_quote:
-        begin_index = line_text.find("\"", title_index)
-        end_index = line_text.find("\"", begin_index + 1)
+        begin_index: int = line_text.find("\"", title_index)
+        end_index: int = line_text.find("\"", begin_index + 1)
         return line_text[begin_index + 1:end_index]
     else:
-        begin_index = title_index + len(search_value) + 2
-        end_index = line_text.find(")", title_index + 1)
+        begin_index: int = title_index + len(search_value) + 2
+        end_index: int = line_text.find(")", title_index + 1)
         return line_text[begin_index:end_index]
 
 
 def _set_node_text(line_text: str, search_value: str, set_value: str) -> str:
-    current_value = _get_node_text(line_text, search_value)
-    current_node = f"({search_value}" + " \"" + current_value + "\")"
-    new_node = f"({search_value}" + " \"" + set_value + "\")"
+    current_value: str = _get_node_text(line_text, search_value)
+    current_node: str = f"({search_value}" + " \"" + current_value + "\")"
+    new_node: str = f"({search_value}" + " \"" + set_value + "\")"
     return line_text.replace(current_node, new_node)
 
 
@@ -163,6 +163,8 @@ class CoonRapidsProcessor(Processor):
 
     def _replace_export_filepath(self) -> None:
         line_idx = self._get_index_containing_text("AutoExpFile")
+        if not line_idx:
+            return
         line_text = self.file_lines[line_idx]
         export_filepath = self._get_export_filepath()
         updated_line_text = _set_node_text(line_text, "ExpFile", export_filepath)
@@ -195,17 +197,17 @@ class CoonRapidsProcessor(Processor):
         updated_comment_line = _set_node_text(self.file_lines[comment_idx], "Txt", current_comment)
         self.file_lines[comment_idx] = updated_comment_line
 
-    def _delete_line_containing_text(self, text_to_find) -> None:
+    def _delete_line_containing_text(self, text_to_find: str) -> None:
         idx_to_delete = self._get_index_containing_text(text_to_find)
         if idx_to_delete > 0:
             del self.file_lines[idx_to_delete]
         return
 
     def _replace_prompt_section(self) -> None:
-        insert_index = self._get_index_containing_text("(Name \"Created")
+        insert_index: int = self._get_index_containing_text("(Name \"Created")
         if not insert_index or not self.file_lines[insert_index].startswith("Txt"):
             raise ProcessorException("There is no 'Created By' line. Cannot process file.")
-        temp_idx = self._get_index_containing_text("(Name \"Edited")
+        temp_idx: int = self._get_index_containing_text("(Name \"Edited")
         if not temp_idx or not self.file_lines[temp_idx].startswith("Txt"):
             raise ProcessorException("There is no 'Edited By' line. Cannot process file.")
         if temp_idx > insert_index:
@@ -220,7 +222,7 @@ class CoonRapidsProcessor(Processor):
         self._delete_line_containing_text("Name \"Job #\"")
         self._delete_line_containing_text("Name \"Job#\"")
         insert_index += 1
-        prompt_file = os.getcwd() + os.sep + "prompt_text.txt"
+        prompt_file: str = os.getcwd() + os.sep + "prompt_text.txt"
         with open(prompt_file, "r", encoding='utf-16-le') as f:
             prompt_lines = f.readlines()
         for line in prompt_lines[::-1]:
@@ -264,22 +266,21 @@ class CoonRapidsProcessor(Processor):
         return _get_node_text(system_line, "Sys", False)
 
     def _add_smart_profile_call(self):
-        microvu_system_id = self._get_last_microvu_system_id()
-        if microvu_system_id == "":
+        microvu_system_id: str = self._get_last_microvu_system_id()
+        if not microvu_system_id:
             return
-        smartprofile_file = os.getcwd() + os.sep + "CallSmartProfile_text.txt"
+        smartprofile_file: str = os.getcwd() + os.sep + "CallSmartProfile_text.txt"
         with open(smartprofile_file, "r") as f:
             prompt_lines = f.readlines()
         smartprofile_line = prompt_lines[0]
         smartprofile_script_path = lib.Utilities.GetStoredIniValue("Paths", "SmartProfileScriptFilePath", "Settings")
         smartprofile_exe_path = lib.Utilities.GetStoredIniValue("Paths", "SmartProfileExeFilePath", "Settings")
-        smartprofile_line = smartprofile_line.replace("<?SYS>", str(microvu_system_id))
+        smartprofile_line = smartprofile_line.replace("<?SYS>", microvu_system_id)
         smartprofile_line = smartprofile_line.replace("<?EXE>", smartprofile_exe_path)
         smartprofile_line = smartprofile_line.replace("<?SCR>", smartprofile_script_path)
         self.file_lines.append(smartprofile_line)
         self.file_lines.append(prompt_lines[1])
         self.file_lines.append(prompt_lines[2])
-
 
     def process_file(self) -> None:
         self._replace_export_filepath()
@@ -287,7 +288,9 @@ class CoonRapidsProcessor(Processor):
             self._replace_report_filepath()
             self._replace_dimension_names()
         else:
-            self._add_smart_profile_call()
+            pass
+            # THIS IS NOT WORKING JUST YET...
+            # self._add_smart_profile_call()
         self._update_comments()
         self._replace_prompt_section()
         if os.path.exists(self.output_filepath):
@@ -312,15 +315,15 @@ class AnokaProcessor(CoonRapidsProcessor):
         return
 
     def _anoka_replace_prompt_section(self) -> None:
-        insert_idx = self._get_index_containing_text("(Name \"START")
+        insert_idx: int = self._get_index_containing_text("(Name \"START")
         if insert_idx == 0:
             raise ProcessorException(f"Can't determine where to put the prompts. Cannot process file {Path(self.input_filepath).name}.")
-        start_idx = self._get_index_containing_text("AutoExpFile")
+        start_idx: int = self._get_index_containing_text("AutoExpFile")
         for idx in range(insert_idx, start_idx, -1):
             if self.file_lines[idx].startswith("Prmt"):
                 del self.file_lines[idx]
-        insert_idx = self._get_index_containing_text("(Name \"START")
-        prompt_file = os.getcwd() + os.sep + "prompt_text.txt"
+        insert_idx: int = self._get_index_containing_text("(Name \"START")
+        prompt_file: str = os.getcwd() + os.sep + "prompt_text.txt"
         with open(prompt_file, "r", encoding='utf-16-le') as f:
             prompt_lines = f.readlines()
         for line in prompt_lines[::-1]:
