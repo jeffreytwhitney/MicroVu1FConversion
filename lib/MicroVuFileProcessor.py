@@ -17,7 +17,7 @@ def get_processor(input_filepath: str, op_num: str, user_initials: str, output_f
 
 
 def _parse_dimension_name(dimension_name: str) -> str:
-    dim_parts = re.split("[ _X.-]", dimension_name)
+    dim_parts = re.split("[ _Xx.-]", dimension_name)
     while "" in dim_parts:
         dim_parts.remove("")
     if len(dim_parts) == 1:
@@ -192,7 +192,7 @@ class CoonRapidsProcessor(Processor):
         new_comment = "\\r\\nConverted program to work with 1Factory. " + self.user_initials + " " + date_text + "."
         current_comment = _get_node_text(self.file_lines[comment_idx], "(Txt ", "\"")
         current_comment += new_comment
-        updated_comment_line = _set_node_text(self.file_lines[comment_idx], "(Txt  ", current_comment, "\"")
+        updated_comment_line = _set_node_text(self.file_lines[comment_idx], "(Txt ", current_comment, "\"")
         self.file_lines[comment_idx] = updated_comment_line
 
     def _delete_line_containing_text(self, text_to_find: str) -> None:
@@ -223,26 +223,34 @@ class CoonRapidsProcessor(Processor):
         prompt_file: str = os.getcwd() + os.sep + "prompt_text.txt"
         with open(prompt_file, "r", encoding='utf-16-le') as f:
             prompt_lines = f.readlines()
-        for line in prompt_lines[::-1]:
-            if line.find("(Name \"SEQUENCE\")") > 0:
-                self.file_lines.insert(insert_index, line + "\n")
+        for line in prompt_lines:
             if line.find("(Name \"IN PROCESS\")") > 0:
                 self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"MACHINE\")") > 0:
                 self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"JOB\")") > 0:
                 self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"EMPLOYEE\")") > 0:
                 self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"OPERATION\")") > 0:
                 line = line.replace("<O>", str(self.op_number))
                 self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"REV LETTER\")") > 0:
                 line = line.replace("<R>", str(self.rev_number))
                 self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"PT\")") > 0:
                 line = line.replace("<P>", str(self.part_number))
                 self.file_lines.insert(insert_index, line)
+                continue
+            if line.find("(Name \"SEQUENCE\")") > 0:
+                self.file_lines.insert(insert_index, line[1:])
+                continue
         return
 
     def _replace_dimension_names(self) -> None:
@@ -269,12 +277,13 @@ class CoonRapidsProcessor(Processor):
     def _get_instructions_count(self) -> str:
         return str(len([line for line in self.file_lines if line.find("(Name ") > 1]))
 
-    def _update_instruction_count(self):
+    def _update_instruction_count(self) -> None:
         instruction_count = self._get_instructions_count()
         idx: int = self._get_index_containing_text("AutoExpFile")
-        _set_node_text(self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
-        instruction_line = [line for line in self.file_lines if line.startswith("Instructions ")][0]
-        _set_node_text(instruction_line, "Instructions", instruction_count, " ")
+        self.file_lines[idx] = _set_node_text(self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
+        instruction_line_idx = next((i for i, l in enumerate(self.file_lines) if l.startswith("Instructions")), 0)
+        self.file_lines[instruction_line_idx] = _set_node_text(self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")
+        return
 
     def _add_smart_profile_call(self):
         microvu_system_id: str = self._get_last_microvu_system_id()
