@@ -42,23 +42,21 @@ def _parse_dimension_name(dimension_name: str) -> str:
     return ""
 
 
-def _get_node_text(line_text: str, search_value: str, use_quote: bool = True) -> str:
-    node_search_text: str = f"({search_value} "
-    title_index: int = line_text.upper().find(node_search_text.upper())
-    if use_quote:
-        begin_index: int = line_text.find("\"", title_index)
-        end_index: int = line_text.find("\"", begin_index + 1)
-        return line_text[begin_index + 1:end_index]
-    else:
-        begin_index: int = title_index + len(search_value) + 2
-        end_index: int = line_text.find(")", title_index + 1)
-        return line_text[begin_index:end_index]
+def _get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
+    if not end_delimiter:
+        end_delimiter = start_delimiter
+    title_index: int = line_text.upper().find(search_value.upper())
+    begin_index: int = line_text.find(start_delimiter, title_index + len(search_value))
+    end_index: int = line_text.find(end_delimiter, begin_index + 1)
+    if end_index == -1:
+        end_index = len(line_text)
+    return line_text[begin_index + 1:end_index].strip()
 
 
-def _set_node_text(line_text: str, search_value: str, set_value: str) -> str:
-    current_value: str = _get_node_text(line_text, search_value)
-    current_node: str = f"({search_value}" + " \"" + current_value + "\")"
-    new_node: str = f"({search_value}" + " \"" + set_value + "\")"
+def _set_node_text(line_text: str, search_value: str, set_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
+    current_value: str = _get_node_text(line_text, search_value, start_delimiter, end_delimiter)
+    current_node: str = search_value + start_delimiter + current_value + end_delimiter
+    new_node: str = search_value + start_delimiter + set_value + end_delimiter
     return line_text.replace(current_node, new_node)
 
 
@@ -167,8 +165,8 @@ class CoonRapidsProcessor(Processor):
             return
         line_text = self.file_lines[line_idx]
         export_filepath = self._get_export_filepath()
-        updated_line_text = _set_node_text(line_text, "ExpFile", export_filepath)
-        updated_line_text = _set_node_text(updated_line_text, "AutoExpFile", export_filepath)
+        updated_line_text = _set_node_text(line_text, "(ExpFile ", export_filepath, "\"")
+        updated_line_text = _set_node_text(updated_line_text, "(AutoExpFile ", export_filepath, "\"")
 
         if self.is_profile:
             updated_line_text = updated_line_text.replace("(AutoExpFSApSt DT)", "(AutoExpFSApSt None)")
@@ -183,7 +181,7 @@ class CoonRapidsProcessor(Processor):
             return
         line_text = self.file_lines[line_idx]
         report_filepath = self._get_report_filepath()
-        updated_line_text = _set_node_text(line_text, "AutoRptFileName", report_filepath)
+        updated_line_text = _set_node_text(line_text, "(AutoRptFileName ", report_filepath, "\"")
         self.file_lines[line_idx] = updated_line_text
 
     def _update_comments(self) -> None:
@@ -192,9 +190,9 @@ class CoonRapidsProcessor(Processor):
         if not comment_idx:
             return
         new_comment = "\\r\\nConverted program to work with 1Factory. " + self.user_initials + " " + date_text + "."
-        current_comment = _get_node_text(self.file_lines[comment_idx], "Txt")
+        current_comment = _get_node_text(self.file_lines[comment_idx], "(Txt ", "\"")
         current_comment += new_comment
-        updated_comment_line = _set_node_text(self.file_lines[comment_idx], "Txt", current_comment)
+        updated_comment_line = _set_node_text(self.file_lines[comment_idx], "(Txt  ", current_comment, "\"")
         self.file_lines[comment_idx] = updated_comment_line
 
     def _delete_line_containing_text(self, text_to_find: str) -> None:
@@ -253,17 +251,30 @@ class CoonRapidsProcessor(Processor):
             if any(x in line for x in matches):
                 if line.startswith("Calc"):
                     continue
-                old_dimension_name = _get_node_text(line, "Name")
+                old_dimension_name = _get_node_text(line, "(Name ", "\"")
                 new_dimension_name = _parse_dimension_name(old_dimension_name)
                 if new_dimension_name == "":
                     continue
                 if self._does_name_already_exist(new_dimension_name):
                     continue
-                self.file_lines[i] = _set_node_text(line, "Name", new_dimension_name)
+                self.file_lines[i] = _set_node_text(line, "(Name ", new_dimension_name, "\"")
 
     def _get_last_microvu_system_id(self) -> str:
-        system_line = [line for line in self.file_lines if line.upper().find("(SYS ") > 1][-1]
-        return _get_node_text(system_line, "Sys", False)
+        last_system_reference_line = [line for line in self.file_lines if line.upper().find("(SYS ") > 1][-1]
+        if last_system_reference_line.startswith("Sys 1"):
+            return _get_node_text(last_system_reference_line, "Sys 1", " ")
+        else:
+            return _get_node_text(last_system_reference_line, "(Sys", " ", ")")
+
+    def _get_instructions_count(self) -> str:
+        return str(len([line for line in self.file_lines if line.find("(Name ") > 1]))
+
+    def _update_instruction_count(self):
+        instruction_count = self._get_instructions_count()
+        idx: int = self._get_index_containing_text("AutoExpFile")
+        _set_node_text(self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
+        instruction_line = [line for line in self.file_lines if line.startswith("Instructions ")][0]
+        _set_node_text(instruction_line, "Instructions", instruction_count, " ")
 
     def _add_smart_profile_call(self):
         microvu_system_id: str = self._get_last_microvu_system_id()
@@ -291,6 +302,7 @@ class CoonRapidsProcessor(Processor):
             self._add_smart_profile_call()
         self._update_comments()
         self._replace_prompt_section()
+        self._update_instruction_count()
         if os.path.exists(self.output_filepath):
             os.remove(self.output_filepath)
         file_directory = os.path.dirname(self.output_filepath)
@@ -349,10 +361,13 @@ class AnokaProcessor(CoonRapidsProcessor):
     def process_file(self) -> None:
         try:
             self._replace_export_filepath()
+            if self.is_profile:
+                self._add_smart_profile_call()
             self._update_comments()
             self._replace_prompt_section()
             if os.path.exists(self.output_filepath):
                 os.remove(self.output_filepath)
+            self._update_instruction_count()
             file_directory = os.path.dirname(self.output_filepath)
             if not os.path.exists(file_directory):
                 os.mkdir(file_directory)
