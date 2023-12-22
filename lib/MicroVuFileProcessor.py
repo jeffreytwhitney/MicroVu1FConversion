@@ -202,6 +202,7 @@ class CoonRapidsProcessor(Processor):
         return
 
     def _replace_prompt_section(self) -> None:
+        prompt_file: str = ""
         insert_index: int = self._get_index_containing_text("(Name \"Created")
         if not insert_index or not self.file_lines[insert_index].startswith("Txt"):
             raise ProcessorException("There is no 'Created By' line. Cannot process file.")
@@ -220,7 +221,13 @@ class CoonRapidsProcessor(Processor):
         self._delete_line_containing_text("Name \"Job #\"")
         self._delete_line_containing_text("Name \"Job#\"")
         insert_index += 1
-        prompt_file: str = os.getcwd() + os.sep + "prompt_text.txt"
+        pattern = 'prompt_text.txt'
+        for root, dirs, files in os.walk('.'):
+            for file in files:
+                if file == pattern:
+                    prompt_file = os.path.join(root, file)
+        if not prompt_file:
+            return
         with open(prompt_file, "r", encoding='utf-16-le') as f:
             prompt_lines = f.readlines()
         for line in prompt_lines:
@@ -282,14 +289,23 @@ class CoonRapidsProcessor(Processor):
         idx: int = self._get_index_containing_text("AutoExpFile")
         self.file_lines[idx] = _set_node_text(self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
         instruction_line_idx = next((i for i, l in enumerate(self.file_lines) if l.startswith("Instructions")), 0)
-        self.file_lines[instruction_line_idx] = _set_node_text(self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")
+        self.file_lines[instruction_line_idx] = _set_node_text(
+            self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")
         return
 
     def _add_smart_profile_call(self):
+        smartprofile_file: str = ""
         microvu_system_id: str = self._get_last_microvu_system_id()
         if not microvu_system_id:
             return
-        smartprofile_file: str = os.getcwd() + os.sep + "CallSmartProfile_text.txt"
+        pattern = 'CallSmartProfile_text.txt'
+        for root, dirs, files in os.walk('.'):
+            for file in files:
+                if file == pattern:
+                    smartprofile_file = os.path.join(root, file)
+        if not smartprofile_file:
+            return
+
         with open(smartprofile_file, "r") as f:
             prompt_lines = f.readlines()
         smartprofile_line = prompt_lines[0]
@@ -323,8 +339,6 @@ class CoonRapidsProcessor(Processor):
                     f.write(f"{line}")
         except Exception as e:
             raise ProcessorException(e.args[0]) from e
-
-
 
 
 class AnokaProcessor(CoonRapidsProcessor):

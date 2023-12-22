@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Finally figured out View Names. (I think), and added &quot;Process File&quot; checkbox to the screen. Testing for both Coon Rapids and Anoka files works. Need to test Profile Files next...">
+      <change afterPath="$PROJECT_DIR$/Mv.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/MicroVu1FactoryConverter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/prompt_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ui/prompt_text.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +68,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Batch.ConvertUIToPython.executor": "Run",
     "Python.Main.executor": "Run",
+    "Python.MicroVu1FactoryConverter.executor": "Run",
     "Python.MicroVuFileProcessor.executor": "Run",
     "Python.MicroVuProcessor.executor": "Run",
     "Python.MicroVuProcessor_MainWindow.executor": "Run",
@@ -82,7 +84,7 @@
     "ignore.virus.scanning.warn.message": "true",
     "last.edited.regexp": "Sample_Text",
     "last_opened_file_path": "C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/lib",
-    "settings.editor.selected.configurable": "settings.qodana"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -228,7 +230,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703167525295</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Finally figured out View Names. (I think), and added &quot;Process File&quot; checkbox to the screen. Testing for both Coon Rapids and Anoka files works. Need to test Profile Files next...">
+      <option name="closed" value="true" />
+      <created>1703188574215</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1703188574215</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
