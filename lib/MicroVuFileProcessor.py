@@ -303,23 +303,28 @@ class CoonRapidsProcessor(Processor):
         self.file_lines.append(prompt_lines[2] + "\n")
 
     def process_file(self) -> None:
-        self._replace_export_filepath()
-        if not self.is_profile:
-            self._replace_report_filepath()
-            self._replace_dimension_names()
-        else:
-            self._add_smart_profile_call()
-        self._update_comments()
-        self._replace_prompt_section()
-        self._update_instruction_count()
-        if os.path.exists(self.output_filepath):
-            os.remove(self.output_filepath)
-        file_directory = os.path.dirname(self.output_filepath)
-        if not os.path.exists(file_directory):
-            os.mkdir(file_directory)
-        with open(self.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
-            for line in self.file_lines:
-                f.write(f"{line}")
+        try:
+            self._replace_export_filepath()
+            if not self.is_profile:
+                self._replace_report_filepath()
+                self._replace_dimension_names()
+            else:
+                self._add_smart_profile_call()
+            self._update_comments()
+            self._replace_prompt_section()
+            self._update_instruction_count()
+            if os.path.exists(self.output_filepath):
+                os.remove(self.output_filepath)
+            file_directory = os.path.dirname(self.output_filepath)
+            if not os.path.exists(file_directory):
+                os.mkdir(file_directory)
+            with open(self.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
+                for line in self.file_lines:
+                    f.write(f"{line}")
+        except Exception as e:
+            raise ProcessorException(e.args[0]) from e
+
+
 
 
 class AnokaProcessor(CoonRapidsProcessor):
