@@ -4,7 +4,9 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class gui_MicroVuProcessorMainWindow(object):
     def setupUi(self, MicroVuProcessorMainWindow):
         MicroVuProcessorMainWindow.setObjectName("MicroVuProcessorMainWindow")
-        MicroVuProcessorMainWindow.resize(800, 500)
+        MicroVuProcessorMainWindow.resize(800, 410)
+        MicroVuProcessorMainWindow.setMinimumSize(QtCore.QSize(800, 410))
+        MicroVuProcessorMainWindow.setMaximumSize(QtCore.QSize(800, 410))
         self.centralwidget = QtWidgets.QWidget(parent=MicroVuProcessorMainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayoutWidget = QtWidgets.QWidget(parent=self.centralwidget)
@@ -58,15 +60,16 @@ class gui_MicroVuProcessorMainWindow(object):
         self.gridLayout.addWidget(self.txtRevNumber, 5, 2, 1, 1)
 
         self.tableWidget = QtWidgets.QTableWidget(parent=self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(20, 140, 600, 158))
-        self.tableWidget.setMinimumSize(QtCore.QSize(600, 300))
-        self.tableWidget.setMaximumSize(QtCore.QSize(500, 16777215))
+        self.tableWidget.setGeometry(QtCore.QRect(20, 160, 760, 158))
+        self.tableWidget.setMinimumSize(QtCore.QSize(760, 158))
+        self.tableWidget.setMaximumSize(QtCore.QSize(760, 158))
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setColumnCount(4)
         self.tableWidget.setRowCount(1)
-        self.tableWidget.setColumnWidth(0, 350)
+        self.tableWidget.setColumnWidth(0, 270)
         self.tableWidget.setColumnWidth(1, 100)
-        self.tableWidget.setColumnWidth(2, 100)
+        self.tableWidget.setColumnWidth(2, 270)
+        self.tableWidget.setColumnWidth(3, 100)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -76,9 +79,11 @@ class gui_MicroVuProcessorMainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setItem(0, 0, item)
         self.btnProcessFiles = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.btnProcessFiles.setGeometry(QtCore.QRect(680, 450, 100, 23))
+        self.btnProcessFiles.setGeometry(QtCore.QRect(680, 330, 100, 23))
         self.btnProcessFiles.setMaximumSize(QtCore.QSize(100, 16777215))
         self.btnProcessFiles.setEnabled(False)
         self.btnProcessFiles.setObjectName("btnProcessFiles")
@@ -87,9 +92,6 @@ class gui_MicroVuProcessorMainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MicroVuProcessorMainWindow.setStatusBar(self.statusbar)
         self.retranslateUi(MicroVuProcessorMainWindow)
-
-
-
 
     def retranslateUi(self, MicroVuProcessorMainWindow):
         _translate = QtCore.QCoreApplication.translate

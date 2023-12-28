@@ -8,11 +8,11 @@ import lib.Utilities
 from lib import Utilities
 
 
-def get_processor(input_filepath: str, op_num: str, user_initials: str, output_filepath: str, rev_number: str, is_profile: bool):
+def get_processor(input_filepath: str, op_num: str, user_initials: str, output_filepath: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
     return (
-        CoonRapidsProcessor(input_filepath, op_num, user_initials, output_filepath, rev_number, is_profile)
+        CoonRapidsProcessor(input_filepath, op_num, user_initials, output_filepath, rev_number, smartprofile_file_name, is_profile)
         if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
-        else AnokaProcessor(input_filepath, op_num, user_initials, output_filepath, rev_number, is_profile)
+        else AnokaProcessor(input_filepath, op_num, user_initials, output_filepath, rev_number, smartprofile_file_name, is_profile)
     )
 
 
@@ -61,11 +61,12 @@ def _set_node_text(line_text: str, search_value: str, set_value: str, start_deli
 
 
 class Processor(metaclass=ABCMeta):
-    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, mv_output_filepath: str, rev_number: str, is_profile: bool):
+    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, mv_output_filepath: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
         self.filepath = mv_input_filepath
         self.user_initials = user_initials
         self.input_filepath = mv_input_filepath
         self.output_filepath = mv_output_filepath
+        self.smartprofile_filepath = smartprofile_file_name
         self.op_number = op_num
         self.is_profile = is_profile
         self.rev_number = rev_number
@@ -221,7 +222,7 @@ class CoonRapidsProcessor(Processor):
         self._delete_line_containing_text("Name \"Job #\"")
         self._delete_line_containing_text("Name \"Job#\"")
         insert_index += 1
-        pattern = 'prompt_text.txt'
+        pattern = 'sp_prompt_text.txt' if self.is_profile else 'prompt_text.txt'
         for root, dirs, files in os.walk('.'):
             for file in files:
                 if file == pattern:
@@ -256,7 +257,11 @@ class CoonRapidsProcessor(Processor):
                 self.file_lines.insert(insert_index, line)
                 continue
             if line.find("(Name \"SEQUENCE\")") > 0:
-                self.file_lines.insert(insert_index, line[1:])
+                self.file_lines.insert(insert_index, line)
+                continue
+            if line.find("(Name \"SPFILENAME\")") > 0:
+                line = line.replace("<SPF>", str(self.smartprofile_filepath))
+                self.file_lines.insert(insert_index, line)
                 continue
         return
 
@@ -342,8 +347,8 @@ class CoonRapidsProcessor(Processor):
 
 
 class AnokaProcessor(CoonRapidsProcessor):
-    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, mv_output_filepath: str, rev_number: str, is_profile: bool):
-        super().__init__(mv_input_filepath, op_num, user_initials, mv_output_filepath, rev_number, is_profile)
+    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, mv_output_filepath: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
+        super().__init__(mv_input_filepath, op_num, user_initials, mv_output_filepath, rev_number, smartprofile_file_name, is_profile)
 
     def _replace_prompt_section(self) -> None:
         try:

@@ -51,6 +51,17 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         if len(self.txtRevNumber.text()) == 0:
             self.show_error_message("Rev Number field is blank.", "Error")
             return
+        for row in range(self.tableWidget.rowCount()):
+            smartprofile_file_name = self.tableWidget.item(row, 2).text()
+            checkbox = self.tableWidget.item(row, 1)
+            is_profile = (
+                    checkbox is not None
+                    and checkbox.checkState() == Qt.CheckState.Checked
+            )
+            if is_profile and len(smartprofile_file_name) == 0:
+                self.show_error_message("You need to enter a SmartProfile File Name.", "Missing Information")
+                return
+
         lib.Utilities.StoreIniValue(self.txtInitials.text(), "UserSettings", "Initials", "Settings")
         lib.Utilities.StoreIniValue(self.txtOutputFolder.text(), "Paths", "OutputRootpath", "Settings")
         self.process_files()
@@ -64,7 +75,10 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MicroVuProcessorMainWindow", "IsProfile"))
         item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("MicroVuProcessorMainWindow", "SmartProfile FileName"))
+        item = self.tableWidget.horizontalHeaderItem(3)
         item.setText(_translate("MicroVuProcessorMainWindow", "Process File"))
+
         if not os.path.exists(self.txtInputFolder.text()):
             self.show_error_message("Input directory doesn't exist.", "Error")
             return
@@ -78,6 +92,8 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 textItem = QTableWidgetItem(file)
                 textItem.setFlags(Qt.ItemFlag.ItemIsEditable)
                 self.tableWidget.setItem(row, 0, textItem)
+                sp_textItem = QTableWidgetItem("")
+                self.tableWidget.setItem(row, 2, sp_textItem)
                 chkBoxItem = QTableWidgetItem()
                 chkBoxItem.setTextAlignment(Qt.AlignmentFlag.AlignHCenter)
                 chkBoxItem.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
@@ -87,7 +103,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 chkBoxItem.setTextAlignment(Qt.AlignmentFlag.AlignHCenter)
                 chkBoxItem.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
                 chkBoxItem.setCheckState(Qt.CheckState.Checked)
-                self.tableWidget.setItem(row, 2, chkBoxItem)
+                self.tableWidget.setItem(row, 3, chkBoxItem)
             self.tableWidget.setVisible(True)
 
     def enable_process_button(self):
@@ -125,7 +141,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         output_directory = os.path.join(self.txtOutputFolder.text(), input_subdirectory)
         op_number = self.txtOpNumber.text()
         for row in range(self.tableWidget.rowCount()):
-            checkbox = self.tableWidget.item(row, 2)
+            checkbox = self.tableWidget.item(row, 3)
             process_file = (
                     checkbox is not None
                     and checkbox.checkState() == Qt.CheckState.Checked
@@ -142,7 +158,8 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 checkbox is not None
                 and checkbox.checkState() == Qt.CheckState.Checked
             )
-            file_processor = lib.MicroVuFileProcessor.get_processor(input_filepath, op_number, user_initials, output_filepath, rev_number, is_profile)
+            smartprofile_file_name = self.tableWidget.item(row, 2).text()
+            file_processor = lib.MicroVuFileProcessor.get_processor(input_filepath, op_number, user_initials, output_filepath, rev_number, smartprofile_file_name, is_profile)
             try:
                 file_processor.process_file()
             except ProcessorException as e:
