@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="1.0">
-      <change afterPath="$PROJECT_DIR$/ui/sp_prompt_text.txt" afterDir="false" />
+    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Bug Fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/MainWindow.ui" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MainWindow.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/CallSmartProfile_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ui/CallSmartProfile_text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/sp_prompt_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ui/sp_prompt_text.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -250,7 +248,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703249290027</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Bug Fix">
+      <option name="closed" value="true" />
+      <created>1703790672920</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1703790672920</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -269,6 +275,7 @@
     <MESSAGE value="starting..." />
     <MESSAGE value="Finally figured out View Names. (I think), and added &quot;Process File&quot; checkbox to the screen. Testing for both Coon Rapids and Anoka files works. Need to test Profile Files next..." />
     <MESSAGE value="1.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.0" />
+    <MESSAGE value="Bug Fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug Fix" />
   </component>
 </project>

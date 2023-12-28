@@ -313,15 +313,15 @@ class CoonRapidsProcessor(Processor):
 
         with open(smartprofile_file, "r") as f:
             prompt_lines = f.readlines()
-        smartprofile_line = prompt_lines[0]
+        smartprofile_line = prompt_lines[1]
         smartprofile_script_path = lib.Utilities.GetStoredIniValue("Paths", "SmartProfileScriptFilePath", "Settings")
         smartprofile_exe_path = lib.Utilities.GetStoredIniValue("Paths", "SmartProfileExeFilePath", "Settings")
         smartprofile_line = smartprofile_line.replace("<?SYS>", microvu_system_id)
         smartprofile_line = smartprofile_line.replace("<?EXE>", smartprofile_exe_path)
         smartprofile_line = smartprofile_line.replace("<?SCR>", smartprofile_script_path)
         self.file_lines.append(smartprofile_line)
-        self.file_lines.append(prompt_lines[1])
-        self.file_lines.append(prompt_lines[2] + "\n")
+        self.file_lines.append(prompt_lines[2])
+        self.file_lines.append(prompt_lines[3])
 
     def process_file(self) -> None:
         try:
