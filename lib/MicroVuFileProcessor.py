@@ -16,7 +16,15 @@ def get_processor(input_filepath: str, op_num: str, user_initials: str, output_f
     )
 
 
-def _parse_dimension_name(dimension_name: str) -> str:
+def _get_filepath_by_name(file_name: str) -> str:
+    for root, dirs, files in os.walk('.'):
+        for file in files:
+            if file == file_name:
+                return os.path.join(root, file)
+    return ""
+
+
+def _parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
     dim_parts = re.split("[ _Xx.-]", dimension_name)
     while "" in dim_parts:
         dim_parts.remove("")
@@ -28,17 +36,17 @@ def _parse_dimension_name(dimension_name: str) -> str:
         elif dim_part[:-1].isnumeric():
             return dim_part
     if len(dim_parts) == 2 and dim_parts[1].isnumeric():
-        return f"#{dim_parts[1]}"
+        return f"{dimension_root}{dim_parts[1]}"
     if len(dim_parts) == 2:
         last_part = dim_parts[1][:-1]
         if last_part.isnumeric():
-            return f"#{dim_parts[1]}"
+            return f"{dimension_root}{dim_parts[1]}"
     if dim_parts[1].isnumeric() and dim_parts[2].isnumeric():
         charstr = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         chars = list(charstr)
-        return f"#{dim_parts[1]}{chars[int(dim_parts[2])]}"
+        return f"{dimension_root}{dim_parts[1]}{chars[int(dim_parts[2])]}"
     if dim_parts[1].isnumeric() and dim_parts[2].isalpha() and len(dim_parts[2]) == 1:
-        return f"#{dim_parts[1]}{dim_parts[2]}"
+        return f"{dimension_root}{dim_parts[1]}{dim_parts[2]}"
     return ""
 
 
@@ -58,6 +66,20 @@ def _set_node_text(line_text: str, search_value: str, set_value: str, start_deli
     current_node: str = search_value + start_delimiter + current_value + end_delimiter
     new_node: str = search_value + start_delimiter + set_value + end_delimiter
     return line_text.replace(current_node, new_node)
+
+
+def _get_utf_encoded_file_lines(file_path: str) -> list[str]:
+    if not file_path:
+        return []
+    with open(file_path, "r", encoding='utf-16-le') as f:
+        return f.readlines()
+
+
+def _get_unencoded_file_lines(file_path: str) -> list[str]:
+    if not file_path:
+        return []
+    with open(file_path, "r") as f:
+        return f.readlines()
 
 
 class Processor(metaclass=ABCMeta):
@@ -80,10 +102,10 @@ class Processor(metaclass=ABCMeta):
 class CoonRapidsProcessor(Processor):
 
     def _load_data(self):
-        with open(self.filepath, "r", encoding='utf-16-le') as f:
-            self.file_lines = f.readlines()
-        self.part_number = self._get_part_number()
-        self.view_name = self._get_view_name()
+        self.file_lines = _get_utf_encoded_file_lines(self.filepath)
+        self.part_number: str = self._get_part_number()
+        self.view_name: str = self._get_view_name()
+        self.dimension_root: str = lib.Utilities.GetStoredIniValue("GlobalSettings", "dimension_root", "Settings")
 
     def _global_replace(self, old_value: str, new_value: str) -> None:
         quoted_old_value = f"\"{old_value}\""
@@ -94,7 +116,10 @@ class CoonRapidsProcessor(Processor):
                 self.file_lines[i] = new_line
 
     def _get_index_containing_text(self, text_to_find: str) -> int:
-        return next((i for i, l in enumerate(self.file_lines) if l.upper().find(text_to_find.upper()) > 1), 0)
+        return next(
+            (i for i, l in enumerate(self.file_lines)
+             if l.upper().find(text_to_find.upper()) > 1), 0
+        )
 
     def _does_name_already_exist(self, name_to_find: str) -> bool:
         search_text = f"(Name \"{name_to_find}\")"
@@ -152,7 +177,7 @@ class CoonRapidsProcessor(Processor):
             return ""
         view_name = self.view_name
         part_rev = f"REV{self.rev_number}"
-        report_filepath = Utilities.GetStoredIniValue("Paths", "reportingrootpath", "Settings")
+        report_filepath: str = Utilities.GetStoredIniValue("Paths", "reporting_root_path", "Settings")
         report_filepath += self.part_number
         report_filepath += f"_OP{self.op_number}"
         if len(view_name) > 0:
@@ -190,7 +215,7 @@ class CoonRapidsProcessor(Processor):
         comment_idx = self._get_index_containing_text("(Name \"Edited")
         if not comment_idx:
             return
-        new_comment = "\\r\\nConverted program to work with 1Factory. " + self.user_initials + " " + date_text + "."
+        new_comment = f"\\r\\nConverted program to work with 1Factory. {self.user_initials} {date_text}."
         current_comment = _get_node_text(self.file_lines[comment_idx], "(Txt ", "\"")
         current_comment += new_comment
         updated_comment_line = _set_node_text(self.file_lines[comment_idx], "(Txt ", current_comment, "\"")
@@ -203,15 +228,15 @@ class CoonRapidsProcessor(Processor):
         return
 
     def _replace_prompt_section(self) -> None:
-        prompt_file: str = ""
         insert_index: int = self._get_index_containing_text("(Name \"Created")
         if not insert_index or not self.file_lines[insert_index].startswith("Txt"):
             raise ProcessorException("There is no 'Created By' line. Cannot process file.")
+
         temp_idx: int = self._get_index_containing_text("(Name \"Edited")
         if not temp_idx or not self.file_lines[temp_idx].startswith("Txt"):
             raise ProcessorException("There is no 'Edited By' line. Cannot process file.")
-        if temp_idx > insert_index:
-            insert_index = temp_idx
+
+        insert_index = max(temp_idx, insert_index)
         self._delete_line_containing_text("Name \"PT #\"")
         self._delete_line_containing_text("Name \"Employee #\"")
         self._delete_line_containing_text("Name \"Machine #\"")
@@ -221,16 +246,18 @@ class CoonRapidsProcessor(Processor):
         self._delete_line_containing_text("Name \"Run-Setup\"")
         self._delete_line_containing_text("Name \"Job #\"")
         self._delete_line_containing_text("Name \"Job#\"")
+
         insert_index += 1
         pattern = 'sp_prompt_text.txt' if self.is_profile else 'prompt_text.txt'
-        for root, dirs, files in os.walk('.'):
-            for file in files:
-                if file == pattern:
-                    prompt_file = os.path.join(root, file)
+
+        prompt_file = _get_filepath_by_name(pattern)
         if not prompt_file:
-            return
-        with open(prompt_file, "r", encoding='utf-16-le') as f:
-            prompt_lines = f.readlines()
+            raise ProcessorException("Can't find 'prompt_text' file.")
+
+        prompt_lines = _get_utf_encoded_file_lines(prompt_file)
+        if not prompt_lines:
+            raise ProcessorException("Can't find 'prompt_text' file.")
+
         for line in prompt_lines:
             if line.find("(Name \"IN PROCESS\")") > 0:
                 self.file_lines.insert(insert_index, line)
@@ -272,7 +299,7 @@ class CoonRapidsProcessor(Processor):
                 if line.startswith("Calc"):
                     continue
                 old_dimension_name = _get_node_text(line, "(Name ", "\"")
-                new_dimension_name = _parse_dimension_name(old_dimension_name)
+                new_dimension_name = _parse_dimension_name(old_dimension_name, self.dimension_root)
                 if new_dimension_name == "":
                     continue
                 if self._does_name_already_exist(new_dimension_name):
@@ -299,23 +326,21 @@ class CoonRapidsProcessor(Processor):
         return
 
     def _add_smart_profile_call(self):
-        smartprofile_file: str = ""
         microvu_system_id: str = self._get_last_microvu_system_id()
         if not microvu_system_id:
             return
-        pattern = 'CallSmartProfile_text.txt'
-        for root, dirs, files in os.walk('.'):
-            for file in files:
-                if file == pattern:
-                    smartprofile_file = os.path.join(root, file)
-        if not smartprofile_file:
-            return
 
-        with open(smartprofile_file, "r") as f:
-            prompt_lines = f.readlines()
+        smartprofile_filepath = _get_filepath_by_name('CallSmartProfile_text.txt')
+        if not smartprofile_filepath:
+            raise ProcessorException("Can't find 'CallSmartProfile_text' file.")
+
+        prompt_lines = _get_unencoded_file_lines(smartprofile_filepath)
+        if not prompt_lines:
+            raise ProcessorException("Can't find 'CallSmartProfile_text' file.")
+
         smartprofile_line = prompt_lines[1]
-        smartprofile_script_path = lib.Utilities.GetStoredIniValue("Paths", "SmartProfileScriptFilePath", "Settings")
-        smartprofile_exe_path = lib.Utilities.GetStoredIniValue("Paths", "SmartProfileExeFilePath", "Settings")
+        smartprofile_script_path = lib.Utilities.GetStoredIniValue("Paths", "smart_profile_script_filepath", "Settings")
+        smartprofile_exe_path = lib.Utilities.GetStoredIniValue("Paths", "smart_profile_exe_filepath", "Settings")
         smartprofile_line = smartprofile_line.replace("<?SYS>", microvu_system_id)
         smartprofile_line = smartprofile_line.replace("<?EXE>", smartprofile_exe_path)
         smartprofile_line = smartprofile_line.replace("<?SCR>", smartprofile_script_path)
@@ -361,34 +386,54 @@ class AnokaProcessor(CoonRapidsProcessor):
         insert_idx: int = self._get_index_containing_text("(Name \"START")
         if insert_idx == 0:
             raise ProcessorException(f"Can't determine where to put the prompts. Cannot process file {Path(self.input_filepath).name}.")
+
         start_idx: int = self._get_index_containing_text("AutoExpFile")
         for idx in range(insert_idx, start_idx, -1):
             if self.file_lines[idx].startswith("Prmt"):
                 del self.file_lines[idx]
-        insert_idx: int = self._get_index_containing_text("(Name \"START")
-        prompt_file: str = os.getcwd() + os.sep + "prompt_text.txt"
-        with open(prompt_file, "r", encoding='utf-16-le') as f:
-            prompt_lines = f.readlines()
-        for line in prompt_lines[::-1]:
-            if line.find("(Name \"SEQUENCE\")") > 0:
-                self.file_lines.insert(insert_idx, line + "\n")
+        insert_index: int = self._get_index_containing_text("(Name \"START")
+        pattern = 'sp_prompt_text.txt' if self.is_profile else 'prompt_text.txt'
+
+        prompt_file = _get_filepath_by_name(pattern)
+        if not prompt_file:
+            raise ProcessorException("Can't find 'prompt_text' file.")
+
+        prompt_lines = _get_utf_encoded_file_lines(prompt_file)
+        if not prompt_lines:
+            raise ProcessorException("Can't find 'prompt_text' file.")
+
+        for line in prompt_lines:
             if line.find("(Name \"IN PROCESS\")") > 0:
-                self.file_lines.insert(insert_idx, line)
+                self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"MACHINE\")") > 0:
-                self.file_lines.insert(insert_idx, line)
+                self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"JOB\")") > 0:
-                self.file_lines.insert(insert_idx, line)
+                self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"EMPLOYEE\")") > 0:
-                self.file_lines.insert(insert_idx, line)
+                self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"OPERATION\")") > 0:
                 line = line.replace("<O>", str(self.op_number))
-                self.file_lines.insert(insert_idx, line)
+                self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"REV LETTER\")") > 0:
                 line = line.replace("<R>", str(self.rev_number))
-                self.file_lines.insert(insert_idx, line)
+                self.file_lines.insert(insert_index, line)
+                continue
             if line.find("(Name \"PT\")") > 0:
                 line = line.replace("<P>", str(self.part_number))
-                self.file_lines.insert(insert_idx, line)
+                self.file_lines.insert(insert_index, line)
+                continue
+            if line.find("(Name \"SEQUENCE\")") > 0:
+                self.file_lines.insert(insert_index, line)
+                continue
+            if line.find("(Name \"SPFILENAME\")") > 0:
+                line = line.replace("<SPF>", str(self.smartprofile_filepath))
+                self.file_lines.insert(insert_index, line)
+                continue
         return
 
     def process_file(self) -> None:

@@ -20,8 +20,8 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.btnSelectOutputFolder.clicked.connect(self.btnSelectOutputFolder_clicked)
         self.btnProcessFiles.clicked.connect(self.btnProcessFiles_clicked)
         self.user_initials = lib.Utilities.GetStoredIniValue("UserSettings", "Initials", "Settings")
-        self.input_rootpath = lib.Utilities.GetStoredIniValue("Paths", "InputRootpath", "Settings")
-        self.output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "OutputRootpath", "Settings")
+        self.input_rootpath = lib.Utilities.GetStoredIniValue("Paths", "Input_Rootpath", "Settings")
+        self.output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "Output_Rootpath", "Settings")
         self.txtOutputFolder.setText(self.output_rootpath)
         self.txtInitials.setText(self.user_initials)
 
@@ -63,10 +63,10 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 return
 
         lib.Utilities.StoreIniValue(self.txtInitials.text(), "UserSettings", "Initials", "Settings")
-        lib.Utilities.StoreIniValue(self.txtOutputFolder.text(), "Paths", "OutputRootpath", "Settings")
+        lib.Utilities.StoreIniValue(self.txtOutputFolder.text(), "Paths", "output_rootpath", "Settings")
         self.process_files()
 
-    def load_files(self):
+    def load_files(self) -> None:
         self.tableWidget.setSortingEnabled(False)
         self.tableWidget.verticalHeader().setVisible(False)
         _translate = QtCore.QCoreApplication.translate

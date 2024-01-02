@@ -7,8 +7,8 @@
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Bug Fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/CallSmartProfile_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ui/CallSmartProfile_text.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/sp_prompt_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ui/sp_prompt_text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -256,7 +256,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703790672920</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Bug Fix">
+      <option name="closed" value="true" />
+      <created>1703791255109</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1703791255109</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
