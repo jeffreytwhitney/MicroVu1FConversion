@@ -26,30 +26,13 @@ def _get_filepath_by_name(file_name: str) -> str:
     return ""
 
 
-def _parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
-    dim_parts = re.split("[ _Xx.-]", dimension_name)
-    while "" in dim_parts:
-        dim_parts.remove("")
-    if len(dim_parts) == 1:
-        dim_part = dim_parts[0]
-        dim_part = dim_part.upper().replace("INSP", "").replace("ITEM", "")
-        if dim_part.isnumeric():
-            return dim_part
-        elif dim_part[:-1].isnumeric():
-            return dim_part
-    if len(dim_parts) == 2 and dim_parts[1].isnumeric():
-        return f"{dimension_root}{dim_parts[1]}"
-    if len(dim_parts) == 2:
-        last_part = dim_parts[1][:-1]
-        if last_part.isnumeric():
-            return f"{dimension_root}{dim_parts[1]}"
-    if dim_parts[1].isnumeric() and dim_parts[2].isnumeric():
-        charstr = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-        chars = list(charstr)
-        return f"{dimension_root}{dim_parts[1]}{chars[int(dim_parts[2])]}"
-    if dim_parts[1].isnumeric() and dim_parts[2].isalpha() and len(dim_parts[2]) == 1:
-        return f"{dimension_root}{dim_parts[1]}{dim_parts[2]}"
-    return ""
+def _get_microvu_version_from_filepath(program_filepath):
+    if program_filepath.find("\\311\\") != -1:
+        return "311"
+    if program_filepath.find("\\341\\") != -1:
+        return "341"
+    if program_filepath.find("\\420\\") != -1:
+        return "420"
 
 
 def _get_utf_encoded_file_lines(file_path: str) -> list[str]:
@@ -64,70 +47,6 @@ def _get_unencoded_file_lines(file_path: str) -> list[str]:
         return []
     with open(file_path, "r") as f:
         return f.readlines()
-
-
-def _get_increment_filename(file_name: str, increment: int) -> str:
-    file_stem = Path(file_name).stem
-    file_extension = Path(file_name).suffix
-    return f"{file_stem}-{increment}{file_extension}"
-
-
-def _get_output_directory(program_filepath: str) -> str:
-    output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "output_rootpath", "Settings")
-    microvu_version = _get_microvu_version_from_filepath(program_filepath)
-    parts = Path(program_filepath).parts
-    machine_type_idx = parts.index(microvu_version)
-    program_idx = parts.index(microvu_version) + 2
-    program_directory = parts[program_idx]
-    for i in range(program_idx + 1, len(parts) - 1):
-        program_directory = os.path.join(program_directory, parts[i])
-    machine_type_directory = parts[machine_type_idx]
-    parent_directory = Path(machine_type_directory, program_directory)
-    return str(Path(output_rootpath, parent_directory))
-
-
-def _get_output_filepath(program_filepath: str) -> str:
-    output_directory = _get_output_directory(program_filepath)
-    file_name = Path(program_filepath).name
-    return str(Path(output_directory, file_name))
-
-
-def _get_microvu_version_from_filepath(program_filepath):
-    if program_filepath.find("\\311\\") != -1:
-        return "311"
-    if program_filepath.find("\\341\\") != -1:
-        return "341"
-    if program_filepath.find("\\420\\") != -1:
-        return "420"
-
-
-def _get_archive_directory(program_filepath: str) -> str:
-    archive_root_directory = lib.Utilities.GetStoredIniValue("Paths", "archive_root_directory", "Settings")
-    microvu_version = _get_microvu_version_from_filepath(program_filepath)
-    parts = Path(program_filepath).parts
-    machine_type_idx = parts.index(microvu_version)
-    program_idx = parts.index(microvu_version) + 2
-    program_directory = parts[program_idx]
-    for i in range(program_idx + 1, len(parts) - 1):
-        program_directory = os.path.join(program_directory, parts[i])
-    machine_type_directory = parts[machine_type_idx]
-    parent_directory = Path(program_directory, machine_type_directory)
-    return str(Path(archive_root_directory, parent_directory))
-
-
-def _get_archive_filepath(program_filepath: str) -> str:
-    archive_directory = _get_archive_directory(program_filepath)
-    archive_filename = Path(program_filepath).name
-    archive_filepath = os.path.join(archive_directory, archive_filename)
-    if os.path.exists(archive_filepath):
-        increment = 0
-        while True:
-            increment += 1
-            increment_filename = _get_increment_filename(archive_filename, increment)
-            archive_filepath = os.path.join(archive_directory, increment_filename)
-            if not os.path.exists(archive_filepath):
-                break
-    return archive_filepath
 
 
 class Processor(metaclass=ABCMeta):
@@ -148,8 +67,6 @@ class Processor(metaclass=ABCMeta):
 
 
 class CoonRapidsProcessor(Processor):
-    archive_filepath: str
-    output_filepath: str
     dimension_root: str
 
     def _load_data(self):
@@ -177,66 +94,6 @@ class CoonRapidsProcessor(Processor):
     def _does_name_already_exist(self, name_to_find: str) -> bool:
         search_text = f"(Name \"{name_to_find}\")"
         return any(line.find(search_text) > 1 for line in self.file_lines)
-
-    def _get_part_number(self) -> str:
-        filename = Path(self.input_filepath).stem
-        parts = re.split("[ _]", filename)
-        return parts[0]
-
-    def _get_view_name(self) -> str:
-        rev_begin_idx = 0
-        rev_end_idx = 0
-        view_name = ""
-
-        filename = Path(self.input_filepath).stem
-        filename_parts = re.split("[ _]", filename)
-        count_of_parts = len(filename_parts)
-        if count_of_parts == 1:
-            return ""
-        for x in range(len(filename_parts)):
-            if filename_parts[x].upper().startswith("REV"):
-                rev_begin_idx = x
-                if filename_parts[rev_begin_idx].upper() == "REV":
-                    rev_end_idx = rev_begin_idx + 1
-                else:
-                    rev_end_idx = rev_begin_idx
-
-        if rev_begin_idx == 0:
-            for part in range(1, len(filename_parts)):
-                view_name += f"{filename_parts[part]} "
-        elif rev_begin_idx == 1 and rev_end_idx < count_of_parts - 1:
-            for part in range(rev_end_idx, len(filename_parts)):
-                view_name += f"{filename_parts[part]} "
-        else:
-            for part in range(1, rev_end_idx):
-                view_name += f"{filename_parts[part]} "
-        return view_name.strip()
-
-    def _get_export_filepath(self) -> str:
-        if self.is_profile:
-            return "C:\\TEXT\\OUTPUT.txt"
-        part_rev = f"REV{self.rev_number}"
-        export_filepath = "C:\\Users\\Public\\CURL\\in\\"
-        export_filepath += self.part_number
-        export_filepath += f"_OP{self.op_number}"
-        if len(self.view_name) > 0:
-            export_filepath += f"_{self.view_name}"
-        export_filepath += f"_{part_rev}"
-        export_filepath += "_.csv"
-        return export_filepath
-
-    def _get_report_filepath(self) -> str:
-        if self.is_profile:
-            return ""
-        view_name = self.view_name
-        part_rev = f"REV{self.rev_number}"
-        report_filepath: str = Utilities.GetStoredIniValue("Paths", "reporting_root_path", "Settings")
-        report_filepath += self.part_number
-        report_filepath += f"_OP{self.op_number}"
-        if len(view_name) > 0:
-            report_filepath += f"_{view_name}"
-        report_filepath += f"_{part_rev}_.pdf"
-        return report_filepath
 
     def _replace_export_filepath(self) -> None:
         line_idx = self._get_index_containing_text("AutoExpFile")
@@ -536,6 +393,32 @@ class MicroVuProgram:
         self.rev_number = rev_number
 
     @staticmethod
+    def _parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
+        dim_parts = re.split("[ _Xx.-]", dimension_name)
+        while "" in dim_parts:
+            dim_parts.remove("")
+        if len(dim_parts) == 1:
+            dim_part = dim_parts[0]
+            dim_part = dim_part.upper().replace("INSP", "").replace("ITEM", "")
+            if dim_part.isnumeric():
+                return dim_part
+            elif dim_part[:-1].isnumeric():
+                return dim_part
+        if len(dim_parts) == 2 and dim_parts[1].isnumeric():
+            return f"{dimension_root}{dim_parts[1]}"
+        if len(dim_parts) == 2:
+            last_part = dim_parts[1][:-1]
+            if last_part.isnumeric():
+                return f"{dimension_root}{dim_parts[1]}"
+        if dim_parts[1].isnumeric() and dim_parts[2].isnumeric():
+            charstr = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            chars = list(charstr)
+            return f"{dimension_root}{dim_parts[1]}{chars[int(dim_parts[2])]}"
+        if dim_parts[1].isnumeric() and dim_parts[2].isalpha() and len(dim_parts[2]) == 1:
+            return f"{dimension_root}{dim_parts[1]}{dim_parts[2]}"
+        return ""
+
+    @staticmethod
     def _get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
         if not end_delimiter:
             end_delimiter = start_delimiter
@@ -554,20 +437,106 @@ class MicroVuProgram:
         new_node: str = search_value + start_delimiter + set_value + end_delimiter
         return line_text.replace(current_node, new_node)
 
+    @staticmethod
+    def _get_increment_filename(file_name: str, increment: int) -> str:
+        file_stem = Path(file_name).stem
+        file_extension = Path(file_name).suffix
+        return f"{file_stem}-{increment}{file_extension}"
+
+    @property
+    def part_number(self) -> str:
+        filename = Path(self.filepath).stem
+        parts = re.split("[ _]", filename)
+        return parts[0]
+
+    @property
+    def view_name(self) -> str:
+        rev_begin_idx = 0
+        rev_end_idx = 0
+        view_name = ""
+
+        filename = Path(self.filepath).stem
+        filename_parts = re.split("[ _]", filename)
+        count_of_parts = len(filename_parts)
+        if count_of_parts == 1:
+            return ""
+        for x in range(len(filename_parts)):
+            if filename_parts[x].upper().startswith("REV"):
+                rev_begin_idx = x
+                if filename_parts[rev_begin_idx].upper() == "REV":
+                    rev_end_idx = rev_begin_idx + 1
+                else:
+                    rev_end_idx = rev_begin_idx
+
+        if rev_begin_idx == 0:
+            for part in range(1, len(filename_parts)):
+                view_name += f"{filename_parts[part]} "
+        elif rev_begin_idx == 1 and rev_end_idx < count_of_parts - 1:
+            for part in range(rev_end_idx, len(filename_parts)):
+                view_name += f"{filename_parts[part]} "
+        else:
+            for part in range(1, rev_end_idx):
+                view_name += f"{filename_parts[part]} "
+        return view_name.strip()
+
+    @property
+    def export_filepath(self) -> str:
+        part_rev = f"REV{self.rev_number}"
+        export_filepath = "C:\\Users\\Public\\CURL\\in\\"
+        export_filepath += self.part_number
+        export_filepath += f"_OP{self.op_number}"
+        if len(self.view_name) > 0:
+            export_filepath += f"_{self.view_name}"
+        export_filepath += f"_{part_rev}"
+        export_filepath += "_.csv"
+        return export_filepath
+
+    @property
+    def report_filepath(self) -> str:
+        view_name = self.view_name
+        part_rev = f"REV{self.rev_number}"
+        report_filepath: str = Utilities.GetStoredIniValue("Paths", "reporting_root_path", "Settings")
+        report_filepath += self.part_number
+        report_filepath += f"_OP{self.op_number}"
+        if len(view_name) > 0:
+            report_filepath += f"_{view_name}"
+        report_filepath += f"_{part_rev}_.pdf"
+        return report_filepath
+
+    @property
+    def output_directory(self) -> str:
+        output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "output_rootpath", "Settings")
+        microvu_version = _get_microvu_version_from_filepath(self.filepath)
+        parts = Path(self.filepath).parts
+        machine_type_idx = parts.index(microvu_version)
+        program_idx = parts.index(microvu_version) + 2
+        program_directory = parts[program_idx]
+        for i in range(program_idx + 1, len(parts) - 1):
+            program_directory = os.path.join(program_directory, parts[i])
+        machine_type_directory = parts[machine_type_idx]
+        parent_directory = Path(machine_type_directory, program_directory)
+        return str(Path(output_rootpath, parent_directory))
+
+    @property
+    def output_filepath(self) -> str:
+        output_directory = self.output_directory
+        file_name = Path(self.filepath).name
+        return str(Path(output_directory, file_name))
+
     @property
     def is_writable(self) -> bool:
         return True
 
     @property
     def archive_filepath(self) -> str:
-        archive_directory = _get_archive_directory()
+        archive_directory = self.archive_directory
         archive_filename = Path(self.filepath).name
         archive_filepath = os.path.join(archive_directory, archive_filename)
         if os.path.exists(archive_filepath):
             increment = 0
             while True:
                 increment += 1
-                increment_filename = _get_increment_filename(archive_filename, increment)
+                increment_filename = MicroVuProgram._get_increment_filename(archive_filename, increment)
                 archive_filepath = os.path.join(archive_directory, increment_filename)
                 if not os.path.exists(archive_filepath):
                     break
@@ -592,3 +561,11 @@ class SmartProfileMicroVuProgram(MicroVuProgram):
     def __init__(self, input_filepath: str, op_number: str, rev_number: str, smartprofile_file_name: str):
         super().__init__(input_filepath, op_number, rev_number)
         self.smartprofile_file_name = smartprofile_file_name
+
+    @property
+    def export_filepath(self) -> str:
+        return "C:\\TEXT\\OUTPUT.txt"
+
+    @property
+    def report_filepath(self) -> str:
+        return ""
