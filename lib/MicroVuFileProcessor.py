@@ -9,7 +9,8 @@ import lib.Utilities
 from lib import Utilities
 
 
-def get_processor(input_filepath: str, op_num: str, user_initials: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
+def get_processor(input_filepath: str, op_num: str, user_initials: str, rev_number: str, smartprofile_file_name: str,
+                  is_profile: bool):
     return (
         CoonRapidsProcessor(input_filepath, op_num, user_initials, rev_number, smartprofile_file_name, is_profile)
         if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
@@ -49,24 +50,6 @@ def _parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
     if dim_parts[1].isnumeric() and dim_parts[2].isalpha() and len(dim_parts[2]) == 1:
         return f"{dimension_root}{dim_parts[1]}{dim_parts[2]}"
     return ""
-
-
-def _get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
-    if not end_delimiter:
-        end_delimiter = start_delimiter
-    title_index: int = line_text.upper().find(search_value.upper())
-    begin_index: int = line_text.find(start_delimiter, title_index + len(search_value))
-    end_index: int = line_text.find(end_delimiter, begin_index + 1)
-    if end_index == -1:
-        end_index = len(line_text)
-    return line_text[begin_index + 1:end_index].strip()
-
-
-def _set_node_text(line_text: str, search_value: str, set_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
-    current_value: str = _get_node_text(line_text, search_value, start_delimiter, end_delimiter)
-    current_node: str = search_value + start_delimiter + current_value + end_delimiter
-    new_node: str = search_value + start_delimiter + set_value + end_delimiter
-    return line_text.replace(current_node, new_node)
 
 
 def _get_utf_encoded_file_lines(file_path: str) -> list[str]:
@@ -148,7 +131,8 @@ def _get_archive_filepath(program_filepath: str) -> str:
 
 
 class Processor(metaclass=ABCMeta):
-    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
+    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, rev_number: str,
+                 smartprofile_file_name: str, is_profile: bool):
         self.filepath = mv_input_filepath
         self.user_initials = user_initials
         self.input_filepath = mv_input_filepath
@@ -454,7 +438,8 @@ class CoonRapidsProcessor(Processor):
 
 
 class AnokaProcessor(CoonRapidsProcessor):
-    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
+    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, rev_number: str,
+                 smartprofile_file_name: str, is_profile: bool):
         super().__init__(mv_input_filepath, op_num, user_initials, rev_number, smartprofile_file_name, is_profile)
 
     def _replace_prompt_section(self) -> None:
@@ -541,3 +526,69 @@ class ProcessorException(Exception):
 
 class OutputFileExistsError(Exception):
     pass
+
+
+class MicroVuProgram:
+
+    def __init__(self, input_filepath: str, op_number: str, rev_number: str):
+        self.filepath = input_filepath
+        self.op_number = op_number
+        self.rev_number = rev_number
+
+    @staticmethod
+    def _get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
+        if not end_delimiter:
+            end_delimiter = start_delimiter
+        title_index: int = line_text.upper().find(search_value.upper())
+        begin_index: int = line_text.find(start_delimiter, title_index + len(search_value))
+        end_index: int = line_text.find(end_delimiter, begin_index + 1)
+        if end_index == -1:
+            end_index = len(line_text)
+        return line_text[begin_index + 1:end_index].strip()
+
+    @staticmethod
+    def _set_node_text(line_text: str, search_value: str, set_value: str, start_delimiter: str,
+                       end_delimiter: str = "") -> str:
+        current_value: str = MicroVuProgram._get_node_text(line_text, search_value, start_delimiter, end_delimiter)
+        current_node: str = search_value + start_delimiter + current_value + end_delimiter
+        new_node: str = search_value + start_delimiter + set_value + end_delimiter
+        return line_text.replace(current_node, new_node)
+
+    @property
+    def is_writable(self) -> bool:
+        return True
+
+    @property
+    def archive_filepath(self) -> str:
+        archive_directory = _get_archive_directory()
+        archive_filename = Path(self.filepath).name
+        archive_filepath = os.path.join(archive_directory, archive_filename)
+        if os.path.exists(archive_filepath):
+            increment = 0
+            while True:
+                increment += 1
+                increment_filename = _get_increment_filename(archive_filename, increment)
+                archive_filepath = os.path.join(archive_directory, increment_filename)
+                if not os.path.exists(archive_filepath):
+                    break
+        return archive_filepath
+
+    @property
+    def archive_directory(self) -> str:
+        archive_root_directory = lib.Utilities.GetStoredIniValue("Paths", "archive_root_directory", "Settings")
+        microvu_version = _get_microvu_version_from_filepath(self.filepath)
+        parts = Path(self.filepath).parts
+        machine_type_idx = parts.index(microvu_version)
+        program_idx = parts.index(microvu_version) + 2
+        program_directory = parts[program_idx]
+        for i in range(program_idx + 1, len(parts) - 1):
+            program_directory = os.path.join(program_directory, parts[i])
+        machine_type_directory = parts[machine_type_idx]
+        parent_directory = Path(program_directory, machine_type_directory)
+        return str(Path(archive_root_directory, parent_directory))
+
+
+class SmartProfileMicroVuProgram(MicroVuProgram):
+    def __init__(self, input_filepath: str, op_number: str, rev_number: str, smartprofile_file_name: str):
+        super().__init__(input_filepath, op_number, rev_number)
+        self.smartprofile_file_name = smartprofile_file_name
