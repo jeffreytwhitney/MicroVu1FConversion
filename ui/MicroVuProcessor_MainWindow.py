@@ -5,7 +5,7 @@ from pathlib import Path
 
 import lib.Utilities
 import lib.MicroVuFileProcessor
-from lib.MicroVuFileProcessor import ProcessorException
+from lib.MicroVuFileProcessor import ProcessorException, OutputFileExistsError
 from ui.gui_MicroVuProcessor_MainWindow import gui_MicroVuProcessorMainWindow
 from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import Qt
@@ -17,22 +17,15 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         super().__init__()
         self.setupUi(self)
         self.btnSelectInputFolder.clicked.connect(self.btnSelectInputFolder_clicked)
-        self.btnSelectOutputFolder.clicked.connect(self.btnSelectOutputFolder_clicked)
         self.btnProcessFiles.clicked.connect(self.btnProcessFiles_clicked)
         self.user_initials = lib.Utilities.GetStoredIniValue("UserSettings", "Initials", "Settings")
         self.input_rootpath = lib.Utilities.GetStoredIniValue("Paths", "Input_Rootpath", "Settings")
         self.output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "Output_Rootpath", "Settings")
-        self.txtOutputFolder.setText(self.output_rootpath)
         self.txtInitials.setText(self.user_initials)
 
     def btnSelectInputFolder_clicked(self):
         input_folder = self.get_directory_via_dialog("Select Input Folder", self.input_rootpath)
         self.txtInputFolder.setText(input_folder)
-        self.enable_process_button()
-
-    def btnSelectOutputFolder_clicked(self):
-        output_folder = self.get_directory_via_dialog("Select Output Folder", self.output_rootpath)
-        self.txtOutputFolder.setText(output_folder)
         self.enable_process_button()
 
     def btnProcessFiles_clicked(self):
@@ -44,9 +37,6 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
             return
         if len(self.txtInputFolder.text()) == 0:
             self.show_error_message("Input Folder field is blank.", "Error")
-            return
-        if len(self.txtOutputFolder.text()) == 0:
-            self.show_error_message("Output Folder field is blank.", "Error")
             return
         if len(self.txtRevNumber.text()) == 0:
             self.show_error_message("Rev Number field is blank.", "Error")
@@ -63,7 +53,6 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 return
 
         lib.Utilities.StoreIniValue(self.txtInitials.text(), "UserSettings", "Initials", "Settings")
-        lib.Utilities.StoreIniValue(self.txtOutputFolder.text(), "Paths", "output_rootpath", "Settings")
         self.process_files()
 
     def load_files(self) -> None:
@@ -107,7 +96,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
             self.tableWidget.setVisible(True)
 
     def enable_process_button(self):
-        if len(self.txtOutputFolder.text()) > 0 and len(self.txtInputFolder.text()) > 0:
+        if len(self.txtInputFolder.text()) > 0:
             self.load_files()
             self.btnProcessFiles.setEnabled(True)
         else:
@@ -136,9 +125,6 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
 
     def process_files(self):
         input_directory = self.txtInputFolder.text()
-        directory_parts = input_directory.split("\\")
-        input_subdirectory = directory_parts[-2] if directory_parts[-1] == "" else directory_parts[-1]
-        output_directory = os.path.join(self.txtOutputFolder.text(), input_subdirectory)
         op_number = self.txtOpNumber.text()
         for row in range(self.tableWidget.rowCount()):
             checkbox = self.tableWidget.item(row, 3)
@@ -150,7 +136,6 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 continue
             file_name = self.tableWidget.item(row, 0).text()
             input_filepath = str(os.path.join(input_directory, file_name))
-            output_filepath = str(os.path.join(str(output_directory), file_name))
             user_initials = self.txtInitials.text()
             checkbox = self.tableWidget.item(row, 1)
             rev_number = self.txtRevNumber.text()
@@ -159,13 +144,20 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 and checkbox.checkState() == Qt.CheckState.Checked
             )
             smartprofile_file_name = self.tableWidget.item(row, 2).text()
-            file_processor = lib.MicroVuFileProcessor.get_processor(input_filepath, op_number, user_initials, output_filepath, rev_number, smartprofile_file_name, is_profile)
+            file_processor = lib.MicroVuFileProcessor.get_processor(input_filepath, op_number, user_initials, rev_number, smartprofile_file_name, is_profile)
             try:
                 file_processor.process_file()
             except ProcessorException as e:
                 error_message = e.args[0]
                 self.show_error_message(error_message, "Processing Error")
                 continue
+            except OutputFileExistsError as e:
+                error_message = e.args[0]
+                self.show_error_message(error_message, "Output File Already Exists")
+                return
+        self.txtInputFolder.setText("")
+        self.txtOpNumber.setText("")
+        self.txtRevNumber.setText("")
         self.show_message("Done!", "Done!")
 
 

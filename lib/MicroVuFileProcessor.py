@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 from pathlib import Path
@@ -8,11 +9,11 @@ import lib.Utilities
 from lib import Utilities
 
 
-def get_processor(input_filepath: str, op_num: str, user_initials: str, output_filepath: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
+def get_processor(input_filepath: str, op_num: str, user_initials: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
     return (
-        CoonRapidsProcessor(input_filepath, op_num, user_initials, output_filepath, rev_number, smartprofile_file_name, is_profile)
+        CoonRapidsProcessor(input_filepath, op_num, user_initials, rev_number, smartprofile_file_name, is_profile)
         if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
-        else AnokaProcessor(input_filepath, op_num, user_initials, output_filepath, rev_number, smartprofile_file_name, is_profile)
+        else AnokaProcessor(input_filepath, op_num, user_initials, rev_number, smartprofile_file_name, is_profile)
     )
 
 
@@ -82,12 +83,75 @@ def _get_unencoded_file_lines(file_path: str) -> list[str]:
         return f.readlines()
 
 
+def _get_increment_filename(file_name: str, increment: int) -> str:
+    file_stem = Path(file_name).stem
+    file_extension = Path(file_name).suffix
+    return f"{file_stem}-{increment}{file_extension}"
+
+
+def _get_output_directory(program_filepath: str) -> str:
+    output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "output_rootpath", "Settings")
+    microvu_version = _get_microvu_version_from_filepath(program_filepath)
+    parts = Path(program_filepath).parts
+    machine_type_idx = parts.index(microvu_version)
+    program_idx = parts.index(microvu_version) + 2
+    program_directory = parts[program_idx]
+    for i in range(program_idx + 1, len(parts) - 1):
+        program_directory = os.path.join(program_directory, parts[i])
+    machine_type_directory = parts[machine_type_idx]
+    parent_directory = Path(machine_type_directory, program_directory)
+    return str(Path(output_rootpath, parent_directory))
+
+
+def _get_output_filepath(program_filepath: str) -> str:
+    output_directory = _get_output_directory(program_filepath)
+    file_name = Path(program_filepath).name
+    return str(Path(output_directory, file_name))
+
+
+def _get_microvu_version_from_filepath(program_filepath):
+    if program_filepath.find("\\311\\") != -1:
+        return "311"
+    if program_filepath.find("\\341\\") != -1:
+        return "341"
+    if program_filepath.find("\\420\\") != -1:
+        return "420"
+
+
+def _get_archive_directory(program_filepath: str) -> str:
+    archive_root_directory = lib.Utilities.GetStoredIniValue("Paths", "archive_root_directory", "Settings")
+    microvu_version = _get_microvu_version_from_filepath(program_filepath)
+    parts = Path(program_filepath).parts
+    machine_type_idx = parts.index(microvu_version)
+    program_idx = parts.index(microvu_version) + 2
+    program_directory = parts[program_idx]
+    for i in range(program_idx + 1, len(parts) - 1):
+        program_directory = os.path.join(program_directory, parts[i])
+    machine_type_directory = parts[machine_type_idx]
+    parent_directory = Path(program_directory, machine_type_directory)
+    return str(Path(archive_root_directory, parent_directory))
+
+
+def _get_archive_filepath(program_filepath: str) -> str:
+    archive_directory = _get_archive_directory(program_filepath)
+    archive_filename = Path(program_filepath).name
+    archive_filepath = os.path.join(archive_directory, archive_filename)
+    if os.path.exists(archive_filepath):
+        increment = 0
+        while True:
+            increment += 1
+            increment_filename = _get_increment_filename(archive_filename, increment)
+            archive_filepath = os.path.join(archive_directory, increment_filename)
+            if not os.path.exists(archive_filepath):
+                break
+    return archive_filepath
+
+
 class Processor(metaclass=ABCMeta):
-    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, mv_output_filepath: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
+    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
         self.filepath = mv_input_filepath
         self.user_initials = user_initials
         self.input_filepath = mv_input_filepath
-        self.output_filepath = mv_output_filepath
         self.smartprofile_filepath = smartprofile_file_name
         self.op_number = op_num
         self.is_profile = is_profile
@@ -100,11 +164,16 @@ class Processor(metaclass=ABCMeta):
 
 
 class CoonRapidsProcessor(Processor):
+    archive_filepath: str
+    output_filepath: str
+    dimension_root: str
 
     def _load_data(self):
         self.file_lines = _get_utf_encoded_file_lines(self.filepath)
         self.part_number: str = self._get_part_number()
         self.view_name: str = self._get_view_name()
+        self.output_filepath = _get_output_filepath(self.input_filepath)
+        self.archive_filepath = _get_archive_filepath(self.input_filepath)
         self.dimension_root: str = lib.Utilities.GetStoredIniValue("GlobalSettings", "dimension_root", "Settings")
 
     def _global_replace(self, old_value: str, new_value: str) -> None:
@@ -348,6 +417,24 @@ class CoonRapidsProcessor(Processor):
         self.file_lines.append(prompt_lines[2])
         self.file_lines.append(prompt_lines[3])
 
+    def _archive_file(self):
+        if os.path.exists(self.output_filepath):
+            file_name = Path(self.output_filepath).name
+            dir_name = os.path.dirname(self.output_filepath)
+            raise OutputFileExistsError(
+                f"File '{file_name}' already exists in output directory '{dir_name}'."
+            )
+        os.makedirs(_get_archive_directory(self.filepath), exist_ok=True)
+        os.makedirs(_get_output_directory(self.filepath), exist_ok=True)
+        shutil.copy(self.filepath, self.archive_filepath)
+        with open(self.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
+            for line in self.file_lines:
+                f.write(f"{line}")
+        old_directory = os.path.dirname(self.filepath)
+        os.remove(self.filepath)
+        if len(os.listdir(old_directory)) == 0:
+            os.rmdir(old_directory)
+
     def process_file(self) -> None:
         try:
             self._replace_export_filepath()
@@ -359,21 +446,16 @@ class CoonRapidsProcessor(Processor):
             self._update_comments()
             self._replace_prompt_section()
             self._update_instruction_count()
-            if os.path.exists(self.output_filepath):
-                os.remove(self.output_filepath)
-            file_directory = os.path.dirname(self.output_filepath)
-            if not os.path.exists(file_directory):
-                os.mkdir(file_directory)
-            with open(self.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
-                for line in self.file_lines:
-                    f.write(f"{line}")
+            self._archive_file()
+        except OutputFileExistsError as e:
+            raise OutputFileExistsError(e.args[0]) from e
         except Exception as e:
             raise ProcessorException(e.args[0]) from e
 
 
 class AnokaProcessor(CoonRapidsProcessor):
-    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, mv_output_filepath: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
-        super().__init__(mv_input_filepath, op_num, user_initials, mv_output_filepath, rev_number, smartprofile_file_name, is_profile)
+    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, rev_number: str, smartprofile_file_name: str, is_profile: bool):
+        super().__init__(mv_input_filepath, op_num, user_initials, rev_number, smartprofile_file_name, is_profile)
 
     def _replace_prompt_section(self) -> None:
         try:
@@ -446,15 +528,16 @@ class AnokaProcessor(CoonRapidsProcessor):
             if os.path.exists(self.output_filepath):
                 os.remove(self.output_filepath)
             self._update_instruction_count()
-            file_directory = os.path.dirname(self.output_filepath)
-            if not os.path.exists(file_directory):
-                os.mkdir(file_directory)
-            with open(self.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
-                for line in self.file_lines:
-                    f.write(f"{line}")
+            self._archive_file()
+        except OutputFileExistsError as e:
+            raise OutputFileExistsError(e.args[0]) from e
         except Exception as e:
             raise ProcessorException(e.args[0]) from e
 
 
 class ProcessorException(Exception):
+    pass
+
+
+class OutputFileExistsError(Exception):
     pass
