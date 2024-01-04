@@ -291,6 +291,9 @@ class MicroVuProgram:
         current_line = self.file_lines[line_index]
         self.file_lines[line_index] = MicroVuProgram.set_node_text(current_line, "(Name ", feature_name, "\"")
 
+    def insert_line(self, line_index: int, line: str) -> None:
+        self.file_lines.insert(line_index, line)
+
 
 class SmartProfileMicroVuProgram(MicroVuProgram):
     def __init__(self, input_filepath: str, op_number: str, rev_number: str, smartprofile_file_name: str):
