@@ -286,7 +286,7 @@ class MicroVuProgram:
         return
 
     def update_feature_name(self, line_index: int, feature_name: str) -> None:
-        if MicroVuProgram._does_name_already_exist(feature_name):
+        if self._does_name_already_exist(feature_name):
             return
         current_line = self.file_lines[line_index]
         self.file_lines[line_index] = MicroVuProgram.set_node_text(current_line, "(Name ", feature_name, "\"")
