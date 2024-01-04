@@ -4,7 +4,8 @@ import shutil
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 from pathlib import Path
-from typing import List, Type
+from typing import List
+
 import lib.Utilities
 from lib import Utilities
 from lib.MicroVuProgram import MicroVuProgram, MicroVuException, DimensionName
