@@ -9,12 +9,11 @@ import lib.Utilities
 from lib import Utilities
 
 
-def get_processor(input_filepath: str, op_num: str, user_initials: str, rev_number: str, smartprofile_file_name: str,
-                  is_profile: bool):
+def get_processor(user_initials: str):
     return (
-        CoonRapidsProcessor(input_filepath, op_num, user_initials, rev_number, smartprofile_file_name, is_profile)
+        CoonRapidsProcessor(user_initials)
         if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
-        else AnokaProcessor(input_filepath, op_num, user_initials, rev_number, smartprofile_file_name, is_profile)
+        else AnokaProcessor(user_initials)
     )
 
 
@@ -26,13 +25,7 @@ def _get_filepath_by_name(file_name: str) -> str:
     return ""
 
 
-def _get_microvu_version_from_filepath(program_filepath):
-    if program_filepath.find("\\311\\") != -1:
-        return "311"
-    if program_filepath.find("\\341\\") != -1:
-        return "341"
-    if program_filepath.find("\\420\\") != -1:
-        return "420"
+
 
 
 def _get_utf_encoded_file_lines(file_path: str) -> list[str]:
@@ -50,50 +43,18 @@ def _get_unencoded_file_lines(file_path: str) -> list[str]:
 
 
 class Processor(metaclass=ABCMeta):
-    def __init__(self, mv_input_filepath: str, op_num: str, user_initials: str, rev_number: str,
-                 smartprofile_file_name: str, is_profile: bool):
-        self.filepath = mv_input_filepath
+    dimension_root: str
+
+    def __init__(self, user_initials: str):
         self.user_initials = user_initials
-        self.input_filepath = mv_input_filepath
-        self.smartprofile_filepath = smartprofile_file_name
-        self.op_number = op_num
-        self.is_profile = is_profile
-        self.rev_number = rev_number
-        self._load_data()
+        self.dimension_root: str = lib.Utilities.GetStoredIniValue("GlobalSettings", "dimension_root", "Settings")
 
     @abstractmethod
-    def _load_data(self):
+    def process_file(self) -> None:
         pass
 
 
 class CoonRapidsProcessor(Processor):
-    dimension_root: str
-
-    def _load_data(self):
-        self.file_lines = _get_utf_encoded_file_lines(self.filepath)
-        self.part_number: str = self._get_part_number()
-        self.view_name: str = self._get_view_name()
-        self.output_filepath = _get_output_filepath(self.input_filepath)
-        self.archive_filepath = _get_archive_filepath(self.input_filepath)
-        self.dimension_root: str = lib.Utilities.GetStoredIniValue("GlobalSettings", "dimension_root", "Settings")
-
-    def _global_replace(self, old_value: str, new_value: str) -> None:
-        quoted_old_value = f"\"{old_value}\""
-        quoted_new_value = f"\"{new_value}\""
-        for i, l in enumerate(self.file_lines):
-            if l.find(quoted_old_value) > 0:
-                new_line = l.replace(quoted_old_value, quoted_new_value)
-                self.file_lines[i] = new_line
-
-    def _get_index_containing_text(self, text_to_find: str) -> int:
-        return next(
-            (i for i, l in enumerate(self.file_lines)
-             if l.upper().find(text_to_find.upper()) > 1), 0
-        )
-
-    def _does_name_already_exist(self, name_to_find: str) -> bool:
-        search_text = f"(Name \"{name_to_find}\")"
-        return any(line.find(search_text) > 1 for line in self.file_lines)
 
     def _replace_export_filepath(self) -> None:
         line_idx = self._get_index_containing_text("AutoExpFile")
@@ -130,12 +91,6 @@ class CoonRapidsProcessor(Processor):
         current_comment += new_comment
         updated_comment_line = _set_node_text(self.file_lines[comment_idx], "(Txt ", current_comment, "\"")
         self.file_lines[comment_idx] = updated_comment_line
-
-    def _delete_line_containing_text(self, text_to_find: str) -> None:
-        idx_to_delete = self._get_index_containing_text(text_to_find)
-        if idx_to_delete > 0:
-            del self.file_lines[idx_to_delete]
-        return
 
     def _replace_prompt_section(self) -> None:
         insert_index: int = self._get_index_containing_text("(Name \"Created")
@@ -215,25 +170,6 @@ class CoonRapidsProcessor(Processor):
                 if self._does_name_already_exist(new_dimension_name):
                     continue
                 self.file_lines[i] = _set_node_text(line, "(Name ", new_dimension_name, "\"")
-
-    def _get_last_microvu_system_id(self) -> str:
-        last_system_reference_line = [line for line in self.file_lines if line.upper().find("(SYS ") > 1][-1]
-        if last_system_reference_line.startswith("Sys 1"):
-            return _get_node_text(last_system_reference_line, "Sys 1", " ")
-        else:
-            return _get_node_text(last_system_reference_line, "(Sys", " ", ")")
-
-    def _get_instructions_count(self) -> str:
-        return str(len([line for line in self.file_lines if line.find("(Name ") > 1]))
-
-    def _update_instruction_count(self) -> None:
-        instruction_count = self._get_instructions_count()
-        idx: int = self._get_index_containing_text("AutoExpFile")
-        self.file_lines[idx] = _set_node_text(self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
-        instruction_line_idx = next((i for i, l in enumerate(self.file_lines) if l.startswith("Instructions")), 0)
-        self.file_lines[instruction_line_idx] = _set_node_text(
-            self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")
-        return
 
     def _add_smart_profile_call(self):
         microvu_system_id: str = self._get_last_microvu_system_id()
@@ -387,13 +323,8 @@ class OutputFileExistsError(Exception):
 
 class MicroVuProgram:
 
-    def __init__(self, input_filepath: str, op_number: str, rev_number: str):
-        self.filepath = input_filepath
-        self.op_number = op_number
-        self.rev_number = rev_number
-
     @staticmethod
-    def _parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
+    def parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
         dim_parts = re.split("[ _Xx.-]", dimension_name)
         while "" in dim_parts:
             dim_parts.remove("")
@@ -419,7 +350,7 @@ class MicroVuProgram:
         return ""
 
     @staticmethod
-    def _get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
+    def get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
         if not end_delimiter:
             end_delimiter = start_delimiter
         title_index: int = line_text.upper().find(search_value.upper())
@@ -430,18 +361,67 @@ class MicroVuProgram:
         return line_text[begin_index + 1:end_index].strip()
 
     @staticmethod
-    def _set_node_text(line_text: str, search_value: str, set_value: str, start_delimiter: str,
-                       end_delimiter: str = "") -> str:
-        current_value: str = MicroVuProgram._get_node_text(line_text, search_value, start_delimiter, end_delimiter)
+    def set_node_text(line_text: str, search_value: str, set_value: str, start_delimiter: str,
+                      end_delimiter: str = "") -> str:
+        current_value: str = MicroVuProgram.get_node_text(line_text, search_value, start_delimiter, end_delimiter)
         current_node: str = search_value + start_delimiter + current_value + end_delimiter
         new_node: str = search_value + start_delimiter + set_value + end_delimiter
         return line_text.replace(current_node, new_node)
 
     @staticmethod
-    def _get_increment_filename(file_name: str, increment: int) -> str:
+    def get_increment_filename(file_name: str, increment: int) -> str:
         file_stem = Path(file_name).stem
         file_extension = Path(file_name).suffix
         return f"{file_stem}-{increment}{file_extension}"
+
+    @staticmethod
+    def get_microvu_version_from_filepath(program_filepath):
+        if program_filepath.find("\\311\\") != -1:
+            return "311"
+        if program_filepath.find("\\341\\") != -1:
+            return "341"
+        if program_filepath.find("\\420\\") != -1:
+            return "420"
+
+    def __init__(self, input_filepath: str, op_number: str, rev_number: str):
+        self.filepath = input_filepath
+        self.file_lines = _get_utf_encoded_file_lines(self.filepath)
+        self.op_number = op_number
+        self.rev_number = rev_number
+
+    def _get_index_containing_text(self, text_to_find: str) -> int:
+        return next(
+            (i for i, l in enumerate(self.file_lines)
+             if l.upper().find(text_to_find.upper()) > 1), 0
+        )
+
+    def _get_last_microvu_system_id(self) -> str:
+        last_system_reference_line = [line for line in self.file_lines if line.upper().find("(SYS ") > 1][-1]
+        if last_system_reference_line.startswith("Sys 1"):
+            return MicroVuProgram.get_node_text(last_system_reference_line, "Sys 1", " ")
+        else:
+            return MicroVuProgram.get_node_text(last_system_reference_line, "(Sys", " ", ")")
+
+    def _get_instructions_count(self) -> str:
+        return str(len([line for line in self.file_lines if line.find("(Name ") > 1]))
+
+    def _delete_line_containing_text(self, text_to_find: str) -> None:
+        idx_to_delete = self._get_index_containing_text(text_to_find)
+        if idx_to_delete > 0:
+            del self.file_lines[idx_to_delete]
+        return
+
+    def _global_replace(self, old_value: str, new_value: str) -> None:
+        quoted_old_value = f"\"{old_value}\""
+        quoted_new_value = f"\"{new_value}\""
+        for i, l in enumerate(self.file_lines):
+            if l.find(quoted_old_value) > 0:
+                new_line = l.replace(quoted_old_value, quoted_new_value)
+                self.file_lines[i] = new_line
+
+    def _does_name_already_exist(self, name_to_find: str) -> bool:
+        search_text = f"(Name \"{name_to_find}\")"
+        return any(line.find(search_text) > 1 for line in self.file_lines)
 
     @property
     def part_number(self) -> str:
@@ -506,7 +486,7 @@ class MicroVuProgram:
     @property
     def output_directory(self) -> str:
         output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "output_rootpath", "Settings")
-        microvu_version = _get_microvu_version_from_filepath(self.filepath)
+        microvu_version = MicroVuProgram.get_microvu_version_from_filepath(self.filepath)
         parts = Path(self.filepath).parts
         machine_type_idx = parts.index(microvu_version)
         program_idx = parts.index(microvu_version) + 2
@@ -536,7 +516,7 @@ class MicroVuProgram:
             increment = 0
             while True:
                 increment += 1
-                increment_filename = MicroVuProgram._get_increment_filename(archive_filename, increment)
+                increment_filename = MicroVuProgram.get_increment_filename(archive_filename, increment)
                 archive_filepath = os.path.join(archive_directory, increment_filename)
                 if not os.path.exists(archive_filepath):
                     break
@@ -545,7 +525,7 @@ class MicroVuProgram:
     @property
     def archive_directory(self) -> str:
         archive_root_directory = lib.Utilities.GetStoredIniValue("Paths", "archive_root_directory", "Settings")
-        microvu_version = _get_microvu_version_from_filepath(self.filepath)
+        microvu_version = MicroVuProgram.get_microvu_version_from_filepath(self.filepath)
         parts = Path(self.filepath).parts
         machine_type_idx = parts.index(microvu_version)
         program_idx = parts.index(microvu_version) + 2
@@ -555,6 +535,16 @@ class MicroVuProgram:
         machine_type_directory = parts[machine_type_idx]
         parent_directory = Path(program_directory, machine_type_directory)
         return str(Path(archive_root_directory, parent_directory))
+
+    def update_instruction_count(self) -> None:
+        instruction_count = self._get_instructions_count()
+        idx: int = self._get_index_containing_text("AutoExpFile")
+        self.file_lines[idx] = MicroVuProgram.set_node_text(
+            self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
+        instruction_line_idx = next((i for i, l in enumerate(self.file_lines) if l.startswith("Instructions")), 0)
+        self.file_lines[instruction_line_idx] = MicroVuProgram.set_node_text(
+            self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")
+        return
 
 
 class SmartProfileMicroVuProgram(MicroVuProgram):
