@@ -73,7 +73,6 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.enable_process_button()
 
     def _table_item_doubleclicked(self, row, column):
-
         self._show_message(f"{row}", "Hi")
 
     # Public Methods
