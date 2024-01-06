@@ -192,6 +192,10 @@ class MicroVuProgram:
         self.file_lines[line_idx] = updated_line_text
 
     @property
+    def filename(self) -> str:
+        return Path(self._filepath).name
+
+    @property
     def filepath(self) -> str:
         return self._filepath
 

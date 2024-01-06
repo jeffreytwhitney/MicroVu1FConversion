@@ -12,14 +12,6 @@ from lib.MicroVuProgram import MicroVuProgram, MicroVuException, DimensionName
 from lib.Utilities import get_unencoded_file_lines, get_utf_encoded_file_lines, get_filepath_by_name
 
 
-def get_processor(user_initials: str):
-    return (
-        CoonRapidsProcessor(user_initials)
-        if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
-        else AnokaProcessor(user_initials)
-    )
-
-
 class Processor(metaclass=ABCMeta):
     _dimension_root: str
     _microvu_programs: List[MicroVuProgram] = []
@@ -64,6 +56,10 @@ class Processor(metaclass=ABCMeta):
 
     def add_micro_vu_program(self, micro_vu: MicroVuProgram):
         self._microvu_programs.append(micro_vu)
+
+    def add_micro_vu_programs(self, micro_vus: list[MicroVuProgram]):
+        for micro_vu in micro_vus:
+            self._microvu_programs.append(micro_vu)
 
 
 class CoonRapidsProcessor(Processor):
@@ -314,6 +310,14 @@ class AnokaProcessor(CoonRapidsProcessor):
         #         self.file_lines.insert(insert_index, line)
         #         continue
         # return
+
+
+def get_processor(user_initials: str) -> Processor:
+    return (
+        CoonRapidsProcessor(user_initials)
+        if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
+        else AnokaProcessor(user_initials)
+    )
 
 
 class ProcessorException(Exception):
