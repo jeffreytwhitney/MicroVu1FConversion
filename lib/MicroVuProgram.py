@@ -2,7 +2,7 @@ import lib.Utilities
 import os
 import re
 
-from lib.Utilities import get_utf_encoded_file_lines, get_filepath_by_name
+from lib.Utilities import get_utf_encoded_file_lines
 from pathlib import Path
 
 
