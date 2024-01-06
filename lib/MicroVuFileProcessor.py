@@ -14,9 +14,9 @@ from lib.Utilities import get_unencoded_file_lines, get_utf_encoded_file_lines, 
 
 def get_processor(user_initials: str):
     return (
-            CoonRapidsProcessor(user_initials)
-            if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
-            else AnokaProcessor(user_initials)
+        CoonRapidsProcessor(user_initials)
+        if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
+        else AnokaProcessor(user_initials)
     )
 
 
@@ -77,6 +77,12 @@ class CoonRapidsProcessor(Processor):
         if not micro_vu.is_smartprofile:
             return
 
+        existing_smartprofile_call_index = micro_vu.get_existing_smartprofile_call_index
+        if existing_smartprofile_call_index > -1:
+            micro_vu.file_lines[existing_smartprofile_call_index] = micro_vu.file_lines[
+                existing_smartprofile_call_index].replace("UniversalSmartProfile.py", "OneFactorySP.py")
+            return
+
         smartprofile_call_insertion_index = micro_vu.smartprofile_call_insertion_index
         if smartprofile_call_insertion_index == -1:
             return
@@ -108,7 +114,7 @@ class CoonRapidsProcessor(Processor):
             file_name = Path(micro_vu.output_filepath).name
             dir_name = os.path.dirname(micro_vu.output_filepath)
             raise ProcessorException(
-                    f"File '{file_name}' already exists in output directory '{dir_name}'."
+                f"File '{file_name}' already exists in output directory '{dir_name}'."
             )
         os.makedirs(micro_vu.archive_directory, exist_ok=True)
         os.makedirs(micro_vu.output_directory, exist_ok=True)

@@ -77,7 +77,7 @@ class MicroVuProgram:
     def _get_index_containing_text(self, text_to_find: str) -> int:
         return next(
                 (i for i, l in enumerate(self.file_lines)
-                 if l.upper().find(text_to_find.upper()) > 1), 0
+                 if l.upper().find(text_to_find.upper()) > 1), -1
         )
 
     def _get_instructions_count(self) -> str:
@@ -198,6 +198,10 @@ class MicroVuProgram:
     @property
     def has_calculators(self) -> bool:
         return self._has_calculators
+
+    @property
+    def get_existing_smartprofile_call_index(self) -> int:
+        return self._get_index_containing_text("SmartProfile.exe")
 
     @property
     def is_smartprofile(self) -> bool:

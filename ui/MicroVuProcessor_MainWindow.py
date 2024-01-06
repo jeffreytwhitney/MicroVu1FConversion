@@ -73,7 +73,18 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.enable_process_button()
 
     def _table_item_doubleclicked(self, row, column):
-        self._show_message(f"{row}", "Hi")
+        if column != 2:
+            return
+        if user_result := self._get_filepath_via_dialog(
+            "Select a SmartProfile file",
+            "Smart Profile Files (*.spp)",
+            self.smart_profile_directory,
+        ):
+            smartprofile_filepath = user_result[0]
+            smartprofile_filename = Path(smartprofile_filepath).name
+            self.tableWidget.item(row, column).setText(smartprofile_filename)
+        else:
+            return
 
     # Public Methods
     def clear_form(self):
@@ -169,7 +180,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
 
             file_name = self.tableWidget.item(row, 0).text()
             input_filepath = str(os.path.join(input_directory, file_name))
-            smartprofile_file_name = self.tableWidget.item(row, 2).text()
+            smartprofile_file_name = Path(self.tableWidget.item(row, 2).text()).stem
             micro_vu = MicroVuProgram.MicroVuProgram(input_filepath, op_number, rev_number, smartprofile_file_name)
 
             checkbox = self.tableWidget.item(row, 1)
