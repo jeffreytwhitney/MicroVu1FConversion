@@ -239,7 +239,8 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         if not self.check_micro_vus_for_calculators(micro_vus):
             return
 
-        processor: Processor = get_processor(self.user_initials).add_micro_vu_programs(micro_vus)
+        processor = (get_processor(self.user_initials))
+        processor.add_micro_vu_programs(micro_vus)
 
         try:
             processor.process_files()
@@ -260,6 +261,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         def __init__(self, micro_vus: list[MicroVuProgram], table_widget: QtWidgets.QTableWidget):
             self._micro_vus = micro_vus
             self._table_widget = table_widget
+            self._validate_micro_vus()
 
         # Internal Methods
         def _validate_micro_vus(self):

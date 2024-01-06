@@ -312,12 +312,11 @@ class AnokaProcessor(CoonRapidsProcessor):
         # return
 
 
-def get_processor(user_initials: str) -> Processor:
-    return (
-        CoonRapidsProcessor(user_initials)
-        if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids"
-        else AnokaProcessor(user_initials)
-    )
+def get_processor(user_initials: str):
+    if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids":
+        return CoonRapidsProcessor(user_initials)
+    else:
+        return AnokaProcessor(user_initials)
 
 
 class ProcessorException(Exception):
