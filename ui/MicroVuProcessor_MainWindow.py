@@ -7,10 +7,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMessageBox, QFileDialog, QTableWidgetItem
 
 import lib.Utilities
-from lib.MicroVuProgram import MicroVuProgram
-from lib.MicroVuFileProcessor import Processor, get_processor
-
 from lib.MicroVuFileProcessor import ProcessorException
+from lib.MicroVuFileProcessor import get_processor
+from lib.MicroVuProgram import MicroVuProgram
 from ui.gui_MicroVuProcessor_MainWindow import gui_MicroVuProcessorMainWindow
 
 
