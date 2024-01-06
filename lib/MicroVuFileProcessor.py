@@ -62,10 +62,6 @@ class Processor(metaclass=ABCMeta):
     def micro_vu_programs(self) -> list[MicroVuProgram]:
         return self._microvu_programs
 
-    @property
-    def add_hash_to_beginning_of_file(self) -> bool:
-        return False
-
     def add_micro_vu_program(self, micro_vu: MicroVuProgram):
         self._microvu_programs.append(micro_vu)
 
