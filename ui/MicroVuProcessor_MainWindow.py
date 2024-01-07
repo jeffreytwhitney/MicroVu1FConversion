@@ -13,7 +13,51 @@ from lib.MicroVuProgram import MicroVuProgram
 from ui.gui_MicroVuProcessor_MainWindow import gui_MicroVuProcessorMainWindow
 
 
+class TableWrapperRow:
+    micro_vu_name: str
+    is_profile: bool
+    smartprofile_filename: str
+    process_file: bool
+
+
+class TableWrapper:
+    _table_widget: QtWidgets.QTableWidget
+    _rows: list[TableWrapperRow]
+
+    def __init__(self, table_widget: QtWidgets.QTableWidget):
+        self._table_widget = table_widget
+        self._load_rows()
+
+    def _load_rows(self):
+        self._rows = []
+        for table_row in range(self._table_widget.rowCount()):
+            wrapper_row = TableWrapperRow()
+
+            wrapper_row.micro_vu_name = self._table_widget.item(table_row, 0).text()
+
+            checkbox = self._table_widget.item(table_row, 1)
+            wrapper_row.is_profile = (
+                    checkbox is not None
+                    and checkbox.checkState() == Qt.CheckState.Checked
+            )
+
+            wrapper_row.smartprofile_filename = self._table_widget.item(table_row, 2).text()
+
+            checkbox = self._table_widget.item(table_row, 3)
+            wrapper_row.process_file = (
+                    checkbox is not None
+                    and checkbox.checkState() == Qt.CheckState.Checked
+            )
+            self._rows.append(wrapper_row)
+
+    @property
+    def rows(self) -> list[TableWrapperRow]:
+        return self._rows
+
+
 class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMainWindow):
+
+    _micro_vus: list[MicroVuProgram] = []
 
     # Dunder Methods
     def __init__(self):
@@ -22,6 +66,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.btnSelectInputFolder.clicked.connect(self._btnSelectInputFolder_clicked)
         self.btnProcessFiles.clicked.connect(self._btnProcessFiles_clicked)
         self.tableWidget.cellDoubleClicked.connect(self._table_item_doubleclicked)
+        self.chkSelectAll.stateChanged.connect(self._chkSelectAll_stateChanged)
         self.user_initials = lib.Utilities.GetStoredIniValue("UserSettings", "Initials", "Settings")
         self.input_rootpath = lib.Utilities.GetStoredIniValue("Paths", "Input_Rootpath", "Settings")
         self.output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "Output_Rootpath", "Settings")
@@ -60,6 +105,10 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         msg_box.exec()
 
     # Event Methods
+    def _chkSelectAll_stateChanged(self):
+        checkstate = self.chkSelectAll.checkState()
+        self.set_process_checkboxes_checkstate(checkstate)
+
     def _btnProcessFiles_clicked(self):
         if not self.is_form_valid:
             return
@@ -98,10 +147,6 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
 
     # Public Properties
     @property
-    def are_calculators_in_microvus(self) -> bool:
-        return False
-
-    @property
     def is_form_valid(self) -> bool:
         if len(self.txtOpNumber.text()) == 0:
             self._show_error_message("Op Number field is blank.", "Error")
@@ -123,23 +168,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
 
     @property
     def micro_vus(self) -> list[MicroVuProgram]:
-        micro_vus: list[MicroVuProgram] = []
-
-        for row in range(self.tableWidget.rowCount()):
-            checkbox = self.tableWidget.item(row, 3)
-            process_file = (
-                    checkbox is not None
-                    and checkbox.checkState() == Qt.CheckState.Checked
-            )
-            if not process_file:
-                continue
-
-            file_name = self.tableWidget.item(row, 0).text()
-            input_filepath = str(os.path.join(self.input_directory, file_name))
-            smartprofile_file_name = Path(self.tableWidget.item(row, 2).text()).stem
-            micro_vu = MicroVuProgram(input_filepath, self.op_number, self.rev_number, smartprofile_file_name)
-            micro_vus.append(micro_vu)
-        return micro_vus
+        return self._micro_vus
 
     @property
     def op_number(self) -> str:
@@ -176,6 +205,14 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.txtOpNumber.setText("")
         self.txtRevNumber.setText("")
         self.tableWidget.setRowCount(0)
+        self._micro_vus.clear()
+
+    def set_process_checkboxes_checkstate(self, check_state: Qt.CheckState) -> None:
+        for table_row in range(self.tableWidget.rowCount()):
+            checkbox = self.tableWidget.item(table_row, 3)
+            if checkbox is None:
+                continue
+            checkbox.setCheckState(check_state)
 
     def enable_process_button(self):
         if len(self.txtInputFolder.text()) > 0:
@@ -183,6 +220,26 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
             self.btnProcessFiles.setEnabled(True)
         else:
             self.btnProcessFiles.setEnabled(False)
+
+    def load_micro_vus(self) -> None:
+        micro_vus: list[MicroVuProgram] = []
+
+        for row in range(self.tableWidget.rowCount()):
+            checkbox = self.tableWidget.item(row, 3)
+            process_file = (
+                    checkbox is not None
+                    and checkbox.checkState() == Qt.CheckState.Checked
+            )
+            if not process_file:
+                continue
+
+            file_name = self.tableWidget.item(row, 0).text()
+            input_filepath = str(os.path.join(self.input_directory, file_name))
+            smartprofile_file_name = Path(self.tableWidget.item(row, 2).text()).stem
+            micro_vu = MicroVuProgram(input_filepath, self.op_number, self.rev_number, smartprofile_file_name)
+            micro_vus.append(micro_vu)
+        self._micro_vus.clear()
+        self._micro_vus = micro_vus
 
     def load_table_widget(self) -> None:
         self.tableWidget.setRowCount(1)
@@ -223,23 +280,27 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 chkBoxItem.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
                 chkBoxItem.setCheckState(Qt.CheckState.Checked)
                 self.tableWidget.setItem(row, 3, chkBoxItem)
+            self.chkSelectAll.setChecked(True)
+            self.chkSelectAll.setVisible(True)
             self.tableWidget.setVisible(True)
 
     def process_files(self):
-        micro_vus = self.micro_vus
-        if not micro_vus:
+        self.load_micro_vus()
+        if not self.micro_vus:
             return
 
-        validator = self.MicroVuValidator(micro_vus, self.tableWidget)
+        table_wrapper = TableWrapper(self.tableWidget)
+
+        validator = self.MicroVuValidator(self.micro_vus, table_wrapper)
         if not validator.is_valid:
             self._show_error_message(validator.validation_message, "Invalid Entry")
             return
 
-        if not self.check_micro_vus_for_calculators(micro_vus):
+        if not self.check_micro_vus_for_calculators(self.micro_vus):
             return
 
-        processor = (get_processor(self.user_initials))
-        processor.add_micro_vu_programs(micro_vus)
+        processor = get_processor(self.user_initials)
+        processor.add_micro_vu_programs(self.micro_vus)
 
         try:
             processor.process_files()
@@ -252,46 +313,34 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
     class MicroVuValidator:
 
         _micro_vus: list[MicroVuProgram]
-        _table_widget: QtWidgets.QTableWidget
+        _table_wrapper: TableWrapper
         _is_valid: bool = False
         _validation_message: str = ""
 
         # Dunder Methods
-        def __init__(self, micro_vus: list[MicroVuProgram], table_widget: QtWidgets.QTableWidget):
+        def __init__(self, micro_vus: list[MicroVuProgram], table_wrapper: TableWrapper):
             self._micro_vus = micro_vus
-            self._table_widget = table_widget
+            self._table_wrapper = table_wrapper
             self._validate_micro_vus()
 
         # Internal Methods
         def _validate_micro_vus(self):
             validation_message: str = ""
 
-            for row in range(self._table_widget.rowCount()):
-                checkbox = self._table_widget.item(row, 3)
-                process_file = (
-                        checkbox is not None
-                        and checkbox.checkState() == Qt.CheckState.Checked
-                )
-                if not process_file:
+            for row in self._table_wrapper.rows:
+                if not row.process_file:
                     continue
 
-                file_name = self._table_widget.item(row, 0).text()
-                micro_vu = next((mv for mv in self._micro_vus if mv.filename == file_name), None)
-
+                micro_vu = next((mv for mv in self._micro_vus if mv.filename == row.micro_vu_name), None)
                 if not micro_vu:
                     continue
 
-                checkbox = self._table_widget.item(row, 1)
-                user_entered_is_profile = (
-                        checkbox is not None
-                        and checkbox.checkState() == Qt.CheckState.Checked
-                )
-                if micro_vu.is_smartprofile and not user_entered_is_profile:
-                    validation_message += f"File '{file_name}' is a SmartProfile program. You need to check the 'IsProfile' checkbox and add the name of the SmartProfile project. \r\n"
-                if user_entered_is_profile and not micro_vu.is_smartprofile:
-                    validation_message += f"File '{file_name}' was designated as a SmartProfile program. It is not one. \r\n"
+                if micro_vu.is_smartprofile and not row.is_profile:
+                    validation_message += f"File '{row.micro_vu_name}' is a SmartProfile program. You need to check the 'IsProfile' checkbox and add the name of the SmartProfile project. \r\n"
+                if row.is_profile and not micro_vu.is_smartprofile:
+                    validation_message += f"File '{row.micro_vu_name}' was designated as a SmartProfile program. It is not one. \r\n"
                 if not micro_vu.can_write_to_output_file:
-                    validation_message += f"File '{file_name}' already exists in the output folder. \r\n"
+                    validation_message += f"File '{row.micro_vu_name}' already exists in the output folder. \r\n"
 
             if not validation_message:
                 self._is_valid = True

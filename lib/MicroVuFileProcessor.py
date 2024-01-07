@@ -314,9 +314,12 @@ class AnokaProcessor(CoonRapidsProcessor):
 
 def get_processor(user_initials: str):
     if Utilities.GetStoredIniValue("Location", "Site", "Settings") == "CoonRapids":
-        return CoonRapidsProcessor(user_initials)
+        processor = CoonRapidsProcessor(user_initials)
     else:
-        return AnokaProcessor(user_initials)
+        processor = AnokaProcessor(user_initials)
+
+    processor.micro_vu_programs.clear()
+    return processor
 
 
 class ProcessorException(Exception):

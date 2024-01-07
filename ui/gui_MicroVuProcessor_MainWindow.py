@@ -9,6 +9,14 @@ class gui_MicroVuProcessorMainWindow(object):
         MicroVuProcessorMainWindow.setMaximumSize(QtCore.QSize(800, 410))
         self.centralwidget = QtWidgets.QWidget(parent=MicroVuProcessorMainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        self.chkSelectAll = QtWidgets.QCheckBox(self.centralwidget)
+        self.chkSelectAll.setVisible(False)
+        self.chkSelectAll.setChecked(True)
+        self.chkSelectAll.setGeometry(QtCore.QRect(665, 130, 70, 17))
+        self.chkSelectAll.setText("")
+        self.chkSelectAll.setObjectName("chkSelectAll")
+
         self.gridLayoutWidget = QtWidgets.QWidget(parent=self.centralwidget)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(20, 30, 761, 90))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")

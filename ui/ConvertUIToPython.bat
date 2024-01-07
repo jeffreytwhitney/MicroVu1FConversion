@@ -1,1 +1,1 @@
-pyuic6 -x ./ui/MainWindow.ui -o ./ui/MainWindowTemp.py
+pyuic6 -x MainWindow.ui -o MainWindowTemp.py
