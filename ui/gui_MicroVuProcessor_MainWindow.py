@@ -3,6 +3,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 class gui_MicroVuProcessorMainWindow(object):
     def setupUi(self, MicroVuProcessorMainWindow):
+
         MicroVuProcessorMainWindow.setObjectName("MicroVuProcessorMainWindow")
         MicroVuProcessorMainWindow.resize(800, 410)
         MicroVuProcessorMainWindow.setMinimumSize(QtCore.QSize(800, 410))

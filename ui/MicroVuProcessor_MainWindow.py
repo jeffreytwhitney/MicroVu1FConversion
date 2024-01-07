@@ -360,7 +360,10 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
 
 
 def main():
+    stylesheet_filepath = lib.Utilities.get_filepath_by_name("MacOS.qss")
+    styleSheet = lib.Utilities.get_file_as_string(stylesheet_filepath)
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyleSheet(styleSheet)
     ui = MicroVuProcessorMainWindow()
     ui.show()
     sys.exit(app.exec())

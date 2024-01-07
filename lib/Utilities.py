@@ -64,3 +64,8 @@ def get_filepath_by_name(file_name: str) -> str:
             if file == file_name:
                 return os.path.join(root, file)
     return ""
+
+
+def get_file_as_string(file_path: str):
+    with open(file_path, "r") as f:
+        return str(f.read())
