@@ -1,4 +1,4 @@
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtCore, QtWidgets
 
 
 class gui_MicroVuProcessorMainWindow(object):
@@ -8,13 +8,15 @@ class gui_MicroVuProcessorMainWindow(object):
         MicroVuProcessorMainWindow.resize(800, 410)
         MicroVuProcessorMainWindow.setMinimumSize(QtCore.QSize(800, 410))
         MicroVuProcessorMainWindow.setMaximumSize(QtCore.QSize(800, 410))
+        MicroVuProcessorMainWindow.setWindowTitle("MicroVu 1Factory Processor")
+
         self.centralwidget = QtWidgets.QWidget(parent=MicroVuProcessorMainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
         self.chkSelectAll = QtWidgets.QCheckBox(self.centralwidget)
         self.chkSelectAll.setVisible(False)
         self.chkSelectAll.setChecked(True)
-        self.chkSelectAll.setGeometry(QtCore.QRect(665, 130, 70, 17))
+        self.chkSelectAll.setGeometry(QtCore.QRect(660, 130, 70, 17))
         self.chkSelectAll.setText("")
         self.chkSelectAll.setObjectName("chkSelectAll")
 
@@ -29,17 +31,21 @@ class gui_MicroVuProcessorMainWindow(object):
 
         self.label = QtWidgets.QLabel(parent=self.gridLayoutWidget)
         self.label.setObjectName("label")
+        self.label.setText("Input Folder:  ")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+
         self.txtInputFolder = QtWidgets.QLineEdit(parent=self.gridLayoutWidget)
         self.txtInputFolder.setObjectName("txtInputFolder")
         self.gridLayout.addWidget(self.txtInputFolder, 0, 2, 1, 1)
         self.btnSelectInputFolder = QtWidgets.QToolButton(parent=self.gridLayoutWidget)
         self.btnSelectInputFolder.setObjectName("btnSelectInputFolder")
+        self.btnSelectInputFolder.setText("...")
         self.gridLayout.addWidget(self.btnSelectInputFolder, 0, 3, 1, 1)
         self.txtInputFolder.setReadOnly(True)
 
         self.label_3 = QtWidgets.QLabel(parent=self.gridLayoutWidget)
         self.label_3.setObjectName("label_3")
+        self.label_3.setText("Initials:  ")
         self.gridLayout.addWidget(self.label_3, 1, 0, 1, 1)
         self.txtInitials = QtWidgets.QLineEdit(parent=self.gridLayoutWidget)
         self.txtInitials.setMaximumSize(QtCore.QSize(50, 16777215))
@@ -48,6 +54,7 @@ class gui_MicroVuProcessorMainWindow(object):
 
         self.OpNumberLabel = QtWidgets.QLabel(self.gridLayoutWidget)
         self.OpNumberLabel.setObjectName("OpNumberLabel")
+        self.OpNumberLabel.setText("Op Number:")
         self.gridLayout.addWidget(self.OpNumberLabel, 2, 0, 1, 1)
         self.txtOpNumber = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.txtOpNumber.setMaximumSize(QtCore.QSize(50, 16777215))
@@ -56,6 +63,7 @@ class gui_MicroVuProcessorMainWindow(object):
 
         self.LabelRevNumber = QtWidgets.QLabel(parent=self.gridLayoutWidget)
         self.LabelRevNumber.setObjectName("LabelRevNumber")
+        self.LabelRevNumber.setText("Rev:")
         self.gridLayout.addWidget(self.LabelRevNumber, 3, 0, 1, 1)
         self.txtRevNumber = QtWidgets.QLineEdit(parent=self.gridLayoutWidget)
         self.txtRevNumber.setMaximumSize(QtCore.QSize(50, 16777215))
@@ -73,6 +81,7 @@ class gui_MicroVuProcessorMainWindow(object):
         self.tableWidget.setColumnWidth(1, 100)
         self.tableWidget.setColumnWidth(2, 270)
         self.tableWidget.setColumnWidth(3, 100)
+
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
@@ -85,24 +94,18 @@ class gui_MicroVuProcessorMainWindow(object):
         self.tableWidget.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setItem(0, 0, item)
+        self.tableWidget.setVisible(False)
+
         self.btnProcessFiles = QtWidgets.QPushButton(parent=self.centralwidget)
         self.btnProcessFiles.setGeometry(QtCore.QRect(680, 330, 100, 23))
-        self.btnProcessFiles.setMaximumSize(QtCore.QSize(100, 16777215))
         self.btnProcessFiles.setEnabled(False)
         self.btnProcessFiles.setObjectName("btnProcessFiles")
+        self.btnProcessFiles.setText("Execute")
+
         MicroVuProcessorMainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(parent=MicroVuProcessorMainWindow)
         self.statusbar.setObjectName("statusbar")
         MicroVuProcessorMainWindow.setStatusBar(self.statusbar)
-        self.retranslateUi(MicroVuProcessorMainWindow)
 
-    def retranslateUi(self, MicroVuProcessorMainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MicroVuProcessorMainWindow.setWindowTitle(_translate("MicroVuProcessorMainWindow", "MicroVu 1Factory Processor"))
-        self.btnSelectInputFolder.setText(_translate("MicroVuProcessorMainWindow", "..."))
-        self.label.setText(_translate("MicroVuProcessorMainWindow", "Input Folder:  "))
-        self.label_3.setText(_translate("MicroVuProcessorMainWindow", "Initials:  "))
-        self.OpNumberLabel.setText(_translate("MicroVuProcessorMainWindow", "Op Number:"))
-        self.LabelRevNumber.setText(_translate("MicroVuProcessorMainWindow", "Rev:"))
-        self.btnProcessFiles.setText(_translate("MicroVuProcessorMainWindow", "Execute"))
-        self.tableWidget.setVisible(False)
+
+

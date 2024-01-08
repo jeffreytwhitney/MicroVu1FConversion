@@ -2,13 +2,12 @@ import os
 import sys
 from pathlib import Path
 
-from PyQt6 import QtWidgets, QtCore
+from PyQt6 import QtWidgets
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMessageBox, QFileDialog, QTableWidgetItem
 
 import lib.Utilities
-from lib.MicroVuFileProcessor import ProcessorException
-from lib.MicroVuFileProcessor import get_processor
+from lib.MicroVuFileProcessor import ProcessorException, get_processor
 from lib.MicroVuProgram import MicroVuProgram
 from ui.gui_MicroVuProcessor_MainWindow import gui_MicroVuProcessorMainWindow
 
@@ -218,7 +217,6 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.tableWidget.setRowCount(0)
         self._micro_vus.clear()
 
-
     def set_process_checkboxes_checkstate(self, check_state: Qt.CheckState) -> None:
         for table_row in range(self.tableWidget.rowCount()):
             checkbox = self.tableWidget.item(table_row, 3)
@@ -257,15 +255,14 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.tableWidget.setRowCount(1)
         self.tableWidget.setSortingEnabled(False)
         self.tableWidget.verticalHeader().setVisible(False)
-        _translate = QtCore.QCoreApplication.translate
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MicroVuProcessorMainWindow", "MicroVuName"))
+        item.setText("MicroVuName")
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MicroVuProcessorMainWindow", "IsProfile"))
+        item.setText("IsProfile")
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("MicroVuProcessorMainWindow", "SmartProfile FileName"))
+        item.setText("SmartProfile FileName")
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("MicroVuProcessorMainWindow", "Process File"))
+        item.setText("Process File")
 
         if not os.path.exists(self.txtInputFolder.text()):
             self._show_error_message("Input directory doesn't exist.", "Error")
@@ -292,6 +289,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 chkBoxItem.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
                 chkBoxItem.setCheckState(Qt.CheckState.Checked)
                 self.tableWidget.setItem(row, 3, chkBoxItem)
+                self.tableWidget.setRowHeight(row, 20)
             self.chkSelectAll.setChecked(True)
             self.chkSelectAll.setVisible(True)
             self.tableWidget.setVisible(True)
@@ -319,11 +317,12 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         except ProcessorException as e:
             self._show_error_message(e.args[0], "Processing Error")
             return
-        self.clear_form()
+
         if not self.micro_vus_with_calculators:
             self._show_message("Done!", "Done!")
         else:
             self._show_message(self.calculator_micro_vu_warning, "Done!")
+        self.clear_form()
 
     class MicroVuValidator:
 

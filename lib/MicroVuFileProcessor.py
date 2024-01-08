@@ -119,6 +119,27 @@ class CoonRapidsProcessor(Processor):
         if len(os.listdir(old_directory)) == 0:
             os.rmdir(old_directory)
 
+    def _delete_old_prompts(self, micro_vu):
+        micro_vu.delete_line_containing_text("Name \"PT #\"")
+        micro_vu.delete_line_containing_text("Name \"Employee #\"")
+        micro_vu.delete_line_containing_text("Name \"Machine #\"")
+        micro_vu.delete_line_containing_text("Name \"PT#\"")
+        micro_vu.delete_line_containing_text("Name \"Employee#\"")
+        micro_vu.delete_line_containing_text("Name \"Machine#\"")
+        micro_vu.delete_line_containing_text("Name \"Run-Setup\"")
+        micro_vu.delete_line_containing_text("Name \"Job #\"")
+        micro_vu.delete_line_containing_text("Name \"Job#\"")
+            
+    def _get_new_prompts(self, micro_vu: MicroVuProgram) -> list[str]:
+        pattern = 'sp_prompt_text.txt' if micro_vu.is_smartprofile else 'prompt_text.txt'
+
+        prompt_file = get_filepath_by_name(pattern)
+        if not prompt_file:
+            return []
+
+        prompt_lines = get_utf_encoded_file_lines(prompt_file)
+        return prompt_lines or []
+
     def _replace_dimension_names(self, micro_vu: MicroVuProgram) -> None:
         if micro_vu.is_smartprofile:
             return
@@ -146,28 +167,13 @@ class CoonRapidsProcessor(Processor):
         insert_index = micro_vu.prompt_insertion_index
         if insert_index == -1:
             raise ProcessorException("There is either no 'Edited By' or 'Created By' line. Cannot process file.")
-
-        micro_vu.delete_line_containing_text("Name \"PT #\"")
-        micro_vu.delete_line_containing_text("Name \"Employee #\"")
-        micro_vu.delete_line_containing_text("Name \"Machine #\"")
-        micro_vu.delete_line_containing_text("Name \"PT#\"")
-        micro_vu.delete_line_containing_text("Name \"Employee#\"")
-        micro_vu.delete_line_containing_text("Name \"Machine#\"")
-        micro_vu.delete_line_containing_text("Name \"Run-Setup\"")
-        micro_vu.delete_line_containing_text("Name \"Job #\"")
-        micro_vu.delete_line_containing_text("Name \"Job#\"")
-
         insert_index += 1
-
-        pattern = 'sp_prompt_text.txt' if micro_vu.is_smartprofile else 'prompt_text.txt'
-
-        prompt_file = get_filepath_by_name(pattern)
-        if not prompt_file:
-            raise ProcessorException("Can't find 'prompt_text' file.")
-
-        prompt_lines = get_utf_encoded_file_lines(prompt_file)
+        
+        prompt_lines = self._get_new_prompts(micro_vu)
         if not prompt_lines:
             raise ProcessorException("Can't find 'prompt_text' file.")
+        
+        self._delete_old_prompts(micro_vu)
 
         for line in prompt_lines:
             if line.find("(Name \"IN PROCESS\")") > 0:
@@ -235,7 +241,7 @@ class CoonRapidsProcessor(Processor):
                 self._replace_report_filepath(micro_vu)
                 if not micro_vu.is_smartprofile:
                     self._replace_dimension_names(micro_vu)
-                if micro_vu.is_smartprofile:
+                else:
                     self._add_smart_profile_call(micro_vu)
                 self._update_comments(micro_vu)
                 self._replace_prompt_section(micro_vu)
