@@ -56,7 +56,6 @@ class TableWrapper:
 
 
 class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMainWindow):
-
     _micro_vus: list[MicroVuProgram] = []
 
     # Dunder Methods
@@ -147,6 +146,15 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
 
     # Public Properties
     @property
+    def calculator_micro_vu_warning(self) -> str:
+        if not (calculator_micro_vus := self.micro_vus_with_calculators):
+            return ""
+        return_message: str = "The following programs have calculators in them:\r\n"
+        for micro_vu in calculator_micro_vus:
+            return_message += f"{micro_vu.filename}\r\n"
+        return return_message.strip()
+
+    @property
     def is_form_valid(self) -> bool:
         if len(self.txtOpNumber.text()) == 0:
             self._show_error_message("Op Number field is blank.", "Error")
@@ -171,6 +179,10 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         return self._micro_vus
 
     @property
+    def micro_vus_with_calculators(self) -> list[MicroVuProgram]:
+        return [m for m in self.micro_vus if m.has_calculators]
+
+    @property
     def op_number(self) -> str:
         return self.txtOpNumber.text()
 
@@ -191,13 +203,12 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         if not micro_vus:
             return False
 
-        for micro_vu in micro_vus:
-            if micro_vu.has_calculators:
-                user_reply = self._get_user_response(f"File '{micro_vu.filename}' has calculators in it. Do you wish to continue processing?", "Do you wish to continue?")
-                if user_reply == QMessageBox.StandardButton.No:
-                    return False
-                if user_reply == QMessageBox.StandardButton.YesToAll:
-                    return True
+        for micro_vu in self.micro_vus_with_calculators:
+            user_reply = self._get_user_response(f"File '{micro_vu.filename}' has calculators in it. Do you wish to continue processing?", "Do you wish to continue?")
+            if user_reply == QMessageBox.StandardButton.No:
+                return False
+            if user_reply == QMessageBox.StandardButton.YesToAll:
+                return True
         return True
 
     def clear_form(self):
@@ -206,6 +217,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.txtRevNumber.setText("")
         self.tableWidget.setRowCount(0)
         self._micro_vus.clear()
+
 
     def set_process_checkboxes_checkstate(self, check_state: Qt.CheckState) -> None:
         for table_row in range(self.tableWidget.rowCount()):
@@ -308,7 +320,10 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
             self._show_error_message(e.args[0], "Processing Error")
             return
         self.clear_form()
-        self._show_message("Done!", "Done!")
+        if not self.micro_vus_with_calculators:
+            self._show_message("Done!", "Done!")
+        else:
+            self._show_message(self.calculator_micro_vu_warning, "Done!")
 
     class MicroVuValidator:
 
