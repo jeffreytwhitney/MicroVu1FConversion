@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Refactoring">
-      <change beforePath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/MacOS.qss" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MacOS.qss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MicroVu1FactoryConverter.py" beforeDir="false" afterPath="$PROJECT_DIR$/MicroVu1FactoryConverter.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -342,7 +336,15 @@
       <option name="project" value="LOCAL" />
       <updated>1704486520894</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Refactoring">
+      <option name="closed" value="true" />
+      <created>1704724145598</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1704724145598</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="UnknownFeatures">
