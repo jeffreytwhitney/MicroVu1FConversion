@@ -69,3 +69,9 @@ def get_filepath_by_name(file_name: str) -> str:
 def get_file_as_string(file_path: str):
     with open(file_path, "r") as f:
         return str(f.read())
+
+
+def write_lines_to_file(output_filepath: str, file_lines: list[str], encoding='utf-8', newline='\n'):
+    with open(output_filepath, 'w+', encoding=f'{encoding}', newline=f'{newline}') as f:
+        for line in file_lines:
+            f.write(f"{line}")
