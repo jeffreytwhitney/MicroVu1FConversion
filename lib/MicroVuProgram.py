@@ -227,15 +227,13 @@ class MicroVuProgram:
     def output_directory(self) -> str:
         output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "output_rootpath", "Settings")
         microvu_version = MicroVuProgram.get_microvu_version_from_filepath(self._filepath)
+        output_rootpath = output_rootpath.replace("<mvv>", microvu_version)
         parts = Path(self._filepath).parts
-        machine_type_idx = parts.index(microvu_version)
         program_idx = parts.index(microvu_version) + 2
         program_directory = parts[program_idx]
         for i in range(program_idx + 1, len(parts) - 1):
             program_directory = os.path.join(program_directory, parts[i])
-        machine_type_directory = parts[machine_type_idx]
-        parent_directory = Path(machine_type_directory, program_directory)
-        return str(Path(output_rootpath, parent_directory))
+        return str(Path(output_rootpath, program_directory))
 
     @property
     def output_filepath(self) -> str:
