@@ -62,6 +62,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         super().__init__()
         self.setupUi(self)
         self.btnSelectInputFolder.clicked.connect(self._btnSelectInputFolder_clicked)
+        self.btnSelectOutputFolder.clicked.connect(self._btnSelectOutputFolder_clicked)
         self.btnProcessFiles.clicked.connect(self._btnProcessFiles_clicked)
         self.tableWidget.cellDoubleClicked.connect(self._table_item_doubleclicked)
         self.chkSelectAll.stateChanged.connect(self._chkSelectAll_stateChanged)
@@ -70,12 +71,13 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         self.output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "Output_Rootpath", "Settings")
         self.smart_profile_directory = lib.Utilities.GetStoredIniValue("Paths", "smart_profile_directory", "Settings")
         self.txtInitials.setText(self.user_initials)
+        self.txtOutputFolder.setText(self.output_rootpath)
 
     # Internal Methods
     def _get_directory_via_dialog(self, title, default_directory=""):
         dialog = QFileDialog()
         return_path = dialog.getExistingDirectory(self, title, default_directory)
-        return str(Path(return_path).absolute()) + "\\"
+        return "" if return_path == "" else str(Path(return_path).absolute()) + "\\"
 
     def _get_filepath_via_dialog(self, title: str, file_type: str, default_directory: str) -> str:
         dialog = QFileDialog()
@@ -122,11 +124,17 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 return
 
         lib.Utilities.StoreIniValue(self.txtInitials.text(), "UserSettings", "Initials", "Settings")
+        lib.Utilities.StoreIniValue(self.txtOutputFolder.text(), "Paths", "output_rootpath", "Settings")
         self.process_files()
 
     def _btnSelectInputFolder_clicked(self):
         input_folder = self._get_directory_via_dialog("Select Input Folder", self.input_rootpath)
         self.txtInputFolder.setText(input_folder)
+        self.enable_process_button()
+
+    def _btnSelectOutputFolder_clicked(self):
+        output_folder = self._get_directory_via_dialog("Select Output Folder", self.output_rootpath)
+        self.txtOutputFolder.setText(output_folder)
         self.enable_process_button()
 
     def _table_item_doubleclicked(self, row, column):
@@ -225,11 +233,12 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
             checkbox.setCheckState(check_state)
 
     def enable_process_button(self):
-        if len(self.txtInputFolder.text()) > 0:
+        if len(self.txtInputFolder.text()) > 0 and len(self.txtOutputFolder.text()) > 0 and len(self.txtInitials.text()) > 0:
             self.load_table_widget()
             self.btnProcessFiles.setEnabled(True)
         else:
             self.btnProcessFiles.setEnabled(False)
+            self.tableWidget.setRowCount(0)
 
     def load_micro_vus(self) -> None:
         micro_vus: list[MicroVuProgram] = []
@@ -292,6 +301,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
                 self.tableWidget.setRowHeight(row, 20)
             self.chkSelectAll.setChecked(True)
             self.chkSelectAll.setVisible(True)
+            self.setEnabled(True)
             self.tableWidget.setVisible(True)
 
     def process_files(self):

@@ -1,6 +1,5 @@
 import os
 import re
-import shutil
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 from pathlib import Path
@@ -101,23 +100,17 @@ class CoonRapidsProcessor(Processor):
         micro_vu.file_lines.append(prompt_lines[2])
         micro_vu.file_lines.append(prompt_lines[3])
 
-    def _archive_file(self, micro_vu: MicroVuProgram) -> None:
+    def _write_file_to_harddrive(self, micro_vu: MicroVuProgram) -> None:
         if os.path.exists(micro_vu.output_filepath):
             file_name = Path(micro_vu.output_filepath).name
             dir_name = os.path.dirname(micro_vu.output_filepath)
             raise ProcessorException(
-                f"File '{file_name}' already exists in output directory '{dir_name}'."
+                    f"File '{file_name}' already exists in output directory '{dir_name}'."
             )
-        os.makedirs(micro_vu.archive_directory, exist_ok=True)
         os.makedirs(micro_vu.output_directory, exist_ok=True)
-        shutil.copy(micro_vu.filepath, micro_vu.archive_filepath)
         with open(micro_vu.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
             for line in micro_vu.file_lines:
                 f.write(f"{line}")
-        old_directory = os.path.dirname(micro_vu.filepath)
-        os.remove(micro_vu.filepath)
-        if len(os.listdir(old_directory)) == 0:
-            os.rmdir(old_directory)
 
     def _delete_old_prompts(self, micro_vu):
         micro_vu.delete_line_containing_text("Name \"PT #\"")
@@ -129,7 +122,7 @@ class CoonRapidsProcessor(Processor):
         micro_vu.delete_line_containing_text("Name \"Run-Setup\"")
         micro_vu.delete_line_containing_text("Name \"Job #\"")
         micro_vu.delete_line_containing_text("Name \"Job#\"")
-            
+
     def _get_new_prompts(self, micro_vu: MicroVuProgram) -> list[str]:
         pattern = 'sp_prompt_text.txt' if micro_vu.is_smartprofile else 'prompt_text.txt'
 
@@ -168,11 +161,11 @@ class CoonRapidsProcessor(Processor):
         if insert_index == -1:
             raise ProcessorException("There is either no 'Edited By' or 'Created By' line. Cannot process file.")
         insert_index += 1
-        
+
         prompt_lines = self._get_new_prompts(micro_vu)
         if not prompt_lines:
             raise ProcessorException("Can't find 'prompt_text' file.")
-        
+
         self._delete_old_prompts(micro_vu)
 
         for line in prompt_lines:
@@ -246,7 +239,7 @@ class CoonRapidsProcessor(Processor):
                 self._update_comments(micro_vu)
                 self._replace_prompt_section(micro_vu)
                 micro_vu.update_instruction_count()
-                self._archive_file(micro_vu)
+                self._write_file_to_harddrive(micro_vu)
         except Exception as e:
             raise ProcessorException(e.args[0]) from e
 

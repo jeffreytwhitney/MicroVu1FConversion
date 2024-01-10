@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Refactoring">
+      <change afterPath="$PROJECT_DIR$/ui/DimensionNameEntryDialog.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ui/DimensionNameEntryDialog.ui" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ui/gui_DimensionNameEntryDialog.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuProgram.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,12 +72,14 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Batch.ConvertUIToPython.executor": "Run",
+    "Python.DimensionNameEntryDialog.executor": "Run",
     "Python.Main.executor": "Run",
     "Python.MicroVu1FactoryConverter.executor": "Run",
-    "Python.MicroVuFileProcessor.executor": "Debug",
+    "Python.MicroVuFileProcessor.executor": "Run",
     "Python.MicroVuProcessor.executor": "Run",
     "Python.MicroVuProcessor_MainWindow.executor": "Run",
     "Python.MicroVuProgram.executor": "Run",
+    "Python.gui_DimensionNameEntryDialog.executor": "Run",
     "Python.gui_MicroVuProcessor_MainWindow.executor": "Run",
     "Python.mvFileProcessor.executor": "Run",
     "Python.scratch.executor": "Run",
@@ -84,7 +92,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last.edited.regexp": "Sample_Text",
-    "last_opened_file_path": "C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/lib/Utilities.py",
+    "last_opened_file_path": "C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/ui",
     "settings.editor.selected.configurable": "editor.preferences.folding"
   }
 }]]></component>
@@ -93,8 +101,8 @@
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\ui" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\OneDrive\Projects\Automation\MicroVu1FConversion\ui" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\ui" />
+      <recent name="D:\OneDrive\Projects\Automation\MicroVu1FConversion\ui" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\lib" />
     </key>
   </component>
@@ -370,7 +378,15 @@
       <option name="project" value="LOCAL" />
       <updated>1704806392119</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Refactoring">
+      <option name="closed" value="true" />
+      <created>1704891094053</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1704891094053</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -395,16 +411,5 @@
     <MESSAGE value="Bug Fix" />
     <MESSAGE value="Refactoring" />
     <option name="LAST_COMMIT_MESSAGE" value="Refactoring" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/lib/MicroVuProgram.py</url>
-          <line>227</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

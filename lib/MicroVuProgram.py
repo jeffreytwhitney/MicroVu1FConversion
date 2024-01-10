@@ -1,9 +1,10 @@
-import lib.Utilities
 import os
 import re
-
-from lib.Utilities import get_utf_encoded_file_lines
 from pathlib import Path
+from typing import List
+
+import lib.Utilities
+from lib.Utilities import get_utf_encoded_file_lines
 
 
 class DimensionName:
@@ -24,6 +25,7 @@ class MicroVuProgram:
     _op_num: str
     _rev_num: str
     _smartprofile_projectname: str
+    _manual_dimension_names: List[DimensionName] = []
 
     # Static Methods
     @staticmethod
@@ -107,35 +109,6 @@ class MicroVuProgram:
 
     # Properties
     @property
-    def archive_directory(self) -> str:
-        archive_root_directory = lib.Utilities.GetStoredIniValue("Paths", "archive_root_directory", "Settings")
-        microvu_version = MicroVuProgram.get_microvu_version_from_filepath(self._filepath)
-        parts = Path(self._filepath).parts
-        machine_type_idx = parts.index(microvu_version)
-        program_idx = parts.index(microvu_version) + 2
-        program_directory = parts[program_idx]
-        for i in range(program_idx + 1, len(parts) - 1):
-            program_directory = os.path.join(program_directory, parts[i])
-        machine_type_directory = parts[machine_type_idx]
-        parent_directory = Path(program_directory, machine_type_directory)
-        return str(Path(archive_root_directory, parent_directory))
-
-    @property
-    def archive_filepath(self) -> str:
-        archive_directory = self.archive_directory
-        archive_filename = Path(self._filepath).name
-        archive_filepath = os.path.join(archive_directory, archive_filename)
-        if os.path.exists(archive_filepath):
-            increment = 0
-            while True:
-                increment += 1
-                increment_filename = MicroVuProgram.get_increment_filename(archive_filename, increment)
-                archive_filepath = os.path.join(archive_directory, increment_filename)
-                if not os.path.exists(archive_filepath):
-                    break
-        return archive_filepath
-
-    @property
     def can_write_to_output_file(self) -> bool:
         return not os.path.exists(self.output_filepath)
 
@@ -156,10 +129,11 @@ class MicroVuProgram:
     def dimension_names(self) -> list[DimensionName]:
         if self.is_smartprofile:
             return []
+        if self._manual_dimension_names:
+            return self._manual_dimension_names
         dimensions: list[DimensionName] = []
-        matches = ["(Name \"ITEM", "(Name \"INSP"]
         for i, line in enumerate(self.file_lines):
-            if any(x in line for x in matches):
+            if line.find("(PropLabels ") > -1:
                 if line.startswith("Calc"):
                     continue
                 old_dimension_name = MicroVuProgram.get_node_text(line, "(Name ", "\"")
@@ -220,6 +194,14 @@ class MicroVuProgram:
             return MicroVuProgram.get_node_text(last_system_reference_line, "(Sys", " ", ")")
 
     @property
+    def manual_dimension_names(self) -> List[DimensionName]:
+        return self._manual_dimension_names
+
+    @manual_dimension_names.setter
+    def manual_dimension_names(self, names: List[DimensionName]):
+        self._manual_dimension_names = names
+
+    @property
     def op_number(self) -> str:
         return self._op_num
 
@@ -227,7 +209,6 @@ class MicroVuProgram:
     def output_directory(self) -> str:
         output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "output_rootpath", "Settings")
         microvu_version = MicroVuProgram.get_microvu_version_from_filepath(self._filepath)
-        output_rootpath = output_rootpath.replace("<mvv>", microvu_version)
         parts = Path(self._filepath).parts
         program_idx = parts.index(microvu_version) + 2
         program_directory = parts[program_idx]
