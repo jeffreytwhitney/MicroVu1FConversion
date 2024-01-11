@@ -1,11 +1,11 @@
 import sys
+from collections.abc import Callable
 from typing import List
 
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import QTableWidgetItem, QMessageBox
-from PyQt6.uic.properties import QtGui
 
 import lib.Utilities
 from lib.MicroVuProgram import MicroVuProgram, DimensionName
@@ -15,6 +15,8 @@ from ui.gui_DimensionNameEntryDialog import gui_DimensionNameEntryDialog
 class DimensionNameEntryDialog(QtWidgets.QMainWindow, gui_DimensionNameEntryDialog):
     _manual_dimension_names: List[DimensionName]
     _micro_vu: MicroVuProgram
+    _save_callback: Callable[MicroVuProgram]
+    _cancel_callback: Callable[]
 
     # Dunder Methods
     def __init__(self, mv: MicroVuProgram):
@@ -28,6 +30,13 @@ class DimensionNameEntryDialog(QtWidgets.QMainWindow, gui_DimensionNameEntryDial
     def _btnOK_clicked(self):
         if not self._validate_table():
             return
+        self._micro_vu.manual_dimension_names = self._manual_dimension_names
+        if callable(self._save_callback):
+            self._save_callback(self._micro_vu)
+
+    def _btnCancel_clicked(self):
+        if callable(self._cancel_callback):
+            self._cancel_callback()
 
     # Internal Methods
     def _get_user_response(self, message: str, title: str) -> QMessageBox.StandardButton:
@@ -101,7 +110,6 @@ class DimensionNameEntryDialog(QtWidgets.QMainWindow, gui_DimensionNameEntryDial
         if not self._manual_dimension_names:
             return
 
-
         self.btnOK.clicked.connect(self._btnOK_clicked)
 
         self.dimensionTable.setRowCount(len(self._manual_dimension_names))
@@ -120,6 +128,12 @@ class DimensionNameEntryDialog(QtWidgets.QMainWindow, gui_DimensionNameEntryDial
             self.dimensionTable.setItem(row, 1, new_name_item)
             self.dimensionTable.setRowHeight(row, 20)
         self.dimensionTable.setVisible(True)
+
+    def set_form_save_callback(self, func: Callable[MicroVuProgram]):
+        _save_callback = func
+
+    def form_cancelled(self, func: Callable):
+        _cancel_callback = func
 
     # Properties
     @property
