@@ -2,13 +2,10 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 
 
 class gui_DimensionNameEntryDialog(object):
-    _title: str
-
-    def __init__(self):
-        super().__init__()
+    title: str
 
     def set_form_title(self, value: str):
-        self._title = value
+        self.title = value
 
     def setupUi(self, DimensionNameEntryDialog):
         DimensionNameEntryDialog.setWindowTitle("Enter Balloon Numbers")
@@ -19,7 +16,7 @@ class gui_DimensionNameEntryDialog(object):
         DimensionNameEntryDialog.setMaximumSize(QtCore.QSize(700, 800))
 
         self.title_Label = QtWidgets.QLabel(parent=DimensionNameEntryDialog)
-        self.title_Label.setText(self._title)
+        self.title_Label.setText(self.title)
         self.title_Label.setGeometry(QtCore.QRect(10, 10, 700, 21))
         font = QtGui.QFont()
         font.setPointSize(11)
