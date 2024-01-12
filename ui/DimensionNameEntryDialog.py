@@ -5,6 +5,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import QTableWidgetItem, QMessageBox, QWidget
 
+import lib.Utilities
 from lib.MicroVuProgram import MicroVuProgram, DimensionName
 
 
@@ -176,8 +177,10 @@ class DimensionNameEntryDialog(QtWidgets.QDialog):
         return True
 
     def _update_manual_dimension_names(self):
+        dimension_root = lib.Utilities.GetStoredIniValue("GlobalSettings", "dimension_root", "Settings")
+
         for row in range(self.dimensionTable.rowCount()):
-            self.manual_dimension_names[row].name = self.dimensionTable.item(row, 1).text()
+            self.manual_dimension_names[row].name = dimension_root + self.dimensionTable.item(row, 1).text().upper()
 
     # Properties
     @property
