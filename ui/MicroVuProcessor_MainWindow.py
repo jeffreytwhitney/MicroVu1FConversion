@@ -4,11 +4,12 @@ from pathlib import Path
 
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QMessageBox, QFileDialog, QTableWidgetItem
+from PyQt6.QtWidgets import QMessageBox, QFileDialog, QTableWidgetItem, QDialog
 
 import lib.Utilities
 from lib.MicroVuFileProcessor import ProcessorException, get_processor
 from lib.MicroVuProgram import MicroVuProgram
+from ui.DimensionNameEntryDialog import DimensionNameEntryDialog
 from ui.gui_MicroVuProcessor_MainWindow import gui_MicroVuProcessorMainWindow
 
 
@@ -151,6 +152,18 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
         else:
             return
 
+    def _update_micro_vu_dimension_names(self) -> bool:
+
+        for micro_vu in self._micro_vus:
+            if micro_vu.is_smartprofile:
+                continue
+            dialog = DimensionNameEntryDialog(self, micro_vu)
+            result = dialog.exec()
+            if result == QDialog.DialogCode.Rejected:
+                return False
+            micro_vu.manual_dimension_names = dialog.manual_dimension_names
+        return True
+
     # Public Properties
     @property
     def calculator_micro_vu_warning(self) -> str:
@@ -180,6 +193,11 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
     @property
     def input_directory(self) -> str:
         return self.txtInputFolder.text()
+
+    @property
+    def hand_edit_dimension_names(self) -> bool:
+        value = lib.Utilities.GetStoredIniValue("GlobalSettings", "hand_edit_dimension_names", "Settings")
+        return value == "True"
 
     @property
     def micro_vus(self) -> list[MicroVuProgram]:
@@ -320,6 +338,10 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
             return
 
         processor = get_processor(self.user_initials)
+
+        if self.hand_edit_dimension_names and not self._update_micro_vu_dimension_names():
+            return
+
         processor.add_micro_vu_programs(self.micro_vus)
 
         try:

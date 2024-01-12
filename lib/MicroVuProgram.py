@@ -76,12 +76,6 @@ class MicroVuProgram:
         search_text = f"(Name \"{name_to_find}\")"
         return any(line.find(search_text) > 1 for line in self.file_lines)
 
-    def _get_index_containing_text(self, text_to_find: str) -> int:
-        return next(
-                (i for i, l in enumerate(self.file_lines)
-                 if l.upper().find(text_to_find.upper()) > 1), -1
-        )
-
     def _get_instructions_count(self) -> str:
         return str(len([line for line in self.file_lines if line.find("(Name ") > 1]))
 
@@ -102,7 +96,7 @@ class MicroVuProgram:
         self._has_calculators = any(calcs)
 
     def _set_smartprofile(self) -> None:
-        line_idx = self._get_index_containing_text("AutoExpFile")
+        line_idx = self.get_index_containing_text("AutoExpFile")
         existing_export_filename = Path(MicroVuProgram.get_node_text(
                 self.file_lines[line_idx], "AutoExpFile", "\"")).stem.upper()
         self._is_smartprofile = existing_export_filename == "OUTPUT"
@@ -114,14 +108,14 @@ class MicroVuProgram:
 
     @property
     def comment(self) -> str:
-        if comment_idx := self._get_index_containing_text("(Name \"Edited"):
+        if comment_idx := self.get_index_containing_text("(Name \"Edited"):
             return MicroVuProgram.get_node_text(self.file_lines[comment_idx], "(Txt ", "\"")
         else:
             return ""
 
     @comment.setter
     def comment(self, value: str) -> None:
-        if line_idx := self._get_index_containing_text("(Name \"Edited"):
+        if line_idx := self.get_index_containing_text("(Name \"Edited"):
             updated_comment_line = MicroVuProgram.set_node_text(self.file_lines[line_idx], "(Txt ", value, "\"")
             self.file_lines[line_idx] = updated_comment_line
 
@@ -136,6 +130,8 @@ class MicroVuProgram:
             if line.find("(PropLabels ") > -1:
                 if line.startswith("Calc"):
                     continue
+                if line.startswith("Prmt"):
+                    continue
                 old_dimension_name = MicroVuProgram.get_node_text(line, "(Name ", "\"")
                 dimension = DimensionName(i, old_dimension_name)
                 dimensions.append(dimension)
@@ -145,14 +141,14 @@ class MicroVuProgram:
     def export_filepath(self) -> str:
         if self.is_smartprofile:
             return "C:\\TEXT\\OUTPUT.txt"
-        if line_idx := self._get_index_containing_text("AutoExpFile"):
+        if line_idx := self.get_index_containing_text("AutoExpFile"):
             return MicroVuProgram.get_node_text(self.file_lines[line_idx], "AutoExpFile", "\"")
         else:
             return ""
 
     @export_filepath.setter
     def export_filepath(self, value: str) -> None:
-        line_idx = self._get_index_containing_text("AutoExpFile")
+        line_idx = self.get_index_containing_text("AutoExpFile")
         if not line_idx:
             return
         line_text = self.file_lines[line_idx]
@@ -179,7 +175,7 @@ class MicroVuProgram:
 
     @property
     def get_existing_smartprofile_call_index(self) -> int:
-        return self._get_index_containing_text("SmartProfile.exe")
+        return self.get_index_containing_text("SmartProfile.exe")
 
     @property
     def is_smartprofile(self) -> bool:
@@ -230,11 +226,11 @@ class MicroVuProgram:
 
     @property
     def prompt_insertion_index(self) -> int:
-        insert_index: int = self._get_index_containing_text("(Name \"Created")
+        insert_index: int = self.get_index_containing_text("(Name \"Created")
         if not insert_index or not self.file_lines[insert_index].startswith("Txt"):
             return -1
 
-        temp_idx: int = self._get_index_containing_text("(Name \"Edited")
+        temp_idx: int = self.get_index_containing_text("(Name \"Edited")
         if not temp_idx or not self.file_lines[temp_idx].startswith("Txt"):
             return -1
         return max(temp_idx, insert_index)
@@ -243,14 +239,14 @@ class MicroVuProgram:
     def report_filepath(self) -> str:
         if self.is_smartprofile:
             return ""
-        if line_idx := self._get_index_containing_text("AutoRptFileName"):
+        if line_idx := self.get_index_containing_text("AutoRptFileName"):
             return MicroVuProgram.get_node_text(self.file_lines[line_idx], "AutoRptFileName", "\"")
         else:
             return ""
 
     @report_filepath.setter
     def report_filepath(self, value: str) -> None:
-        line_idx = self._get_index_containing_text("AutoRptFileName")
+        line_idx = self.get_index_containing_text("AutoRptFileName")
         if not line_idx:
             return
         line_text = self.file_lines[line_idx]
@@ -304,9 +300,15 @@ class MicroVuProgram:
 
     # Public Methods
     def delete_line_containing_text(self, text_to_find: str) -> None:
-        idx_to_delete = self._get_index_containing_text(text_to_find)
+        idx_to_delete = self.get_index_containing_text(text_to_find)
         if idx_to_delete > 0:
             del self.file_lines[idx_to_delete]
+
+    def get_index_containing_text(self, text_to_find: str) -> int:
+        return next(
+                (i for i, l in enumerate(self.file_lines)
+                 if l.upper().find(text_to_find.upper()) > 1), -1
+        )
 
     def insert_line(self, line_index: int, line: str) -> None:
         self.file_lines.insert(line_index, line)
@@ -323,7 +325,7 @@ class MicroVuProgram:
 
     def update_instruction_count(self) -> None:
         instruction_count = self._get_instructions_count()
-        idx: int = self._get_index_containing_text("AutoExpFile")
+        idx: int = self.get_index_containing_text("AutoExpFile")
         self.file_lines[idx] = MicroVuProgram.set_node_text(
                 self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
         instruction_line_idx = next((i for i, l in enumerate(self.file_lines) if l.startswith("Instructions")), 0)

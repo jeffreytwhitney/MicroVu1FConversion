@@ -256,59 +256,58 @@ class AnokaProcessor(CoonRapidsProcessor):
         return
 
     def _anoka_replace_prompt_section(self, micro_vu: MicroVuProgram) -> None:
-        pass
-        # insert_idx: int = self._get_index_containing_text("(Name \"START")
-        # if insert_idx == 0:
-        #     raise ProcessorException(f"Can't determine where to put the prompts. Cannot process file {Path(self.input_filepath).name}.")
-        #
-        # start_idx: int = self._get_index_containing_text("AutoExpFile")
-        # for idx in range(insert_idx, start_idx, -1):
-        #     if self.file_lines[idx].startswith("Prmt"):
-        #         del self.file_lines[idx]
-        # insert_index: int = self._get_index_containing_text("(Name \"START")
-        # pattern = 'sp_prompt_text.txt' if self.is_profile else 'prompt_text.txt'
-        #
-        # prompt_file = _get_filepath_by_name(pattern)
-        # if not prompt_file:
-        #     raise ProcessorException("Can't find 'prompt_text' file.")
-        #
-        # prompt_lines = _get_utf_encoded_file_lines(prompt_file)
-        # if not prompt_lines:
-        #     raise ProcessorException("Can't find 'prompt_text' file.")
-        #
-        # for line in prompt_lines:
-        #     if line.find("(Name \"IN PROCESS\")") > 0:
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        #     if line.find("(Name \"MACHINE\")") > 0:
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        #     if line.find("(Name \"JOB\")") > 0:
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        #     if line.find("(Name \"EMPLOYEE\")") > 0:
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        #     if line.find("(Name \"OPERATION\")") > 0:
-        #         line = line.replace("<O>", str(self.op_number))
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        #     if line.find("(Name \"REV LETTER\")") > 0:
-        #         line = line.replace("<R>", str(self.rev_number))
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        #     if line.find("(Name \"PT\")") > 0:
-        #         line = line.replace("<P>", str(self.part_number))
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        #     if line.find("(Name \"SEQUENCE\")") > 0:
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        #     if line.find("(Name \"SPFILENAME\")") > 0:
-        #         line = line.replace("<SPF>", str(self.smartprofile_filepath))
-        #         self.file_lines.insert(insert_index, line)
-        #         continue
-        # return
+        insert_idx: int = micro_vu.get_index_containing_text("(Name \"START")
+        if insert_idx == 0:
+            raise ProcessorException(f"Can't determine where to put the prompts. Cannot process file {micro_vu.filename}.")
+
+        start_idx: int = micro_vu.get_index_containing_text("AutoExpFile")
+        for idx in range(insert_idx, start_idx, -1):
+            if micro_vu.file_lines[idx].startswith("Prmt"):
+                del micro_vu.file_lines[idx]
+
+        insert_index: int = micro_vu.get_index_containing_text("(Name \"START")
+
+        prompt_lines = self._get_new_prompts(micro_vu)
+        if not prompt_lines:
+            raise ProcessorException("Can't find 'prompt_text' file.")
+
+        for line in prompt_lines:
+            if line.find("(Name \"IN PROCESS\")") > 0:
+                micro_vu.insert_line(insert_index, line)
+                continue
+            if line.find("(Name \"MACHINE\")") > 0:
+                micro_vu.insert_line(insert_index, line)
+                continue
+            if line.find("(Name \"JOB\")") > 0:
+                micro_vu.insert_line(insert_index, line)
+                continue
+            if line.find("(Name \"EMPLOYEE\")") > 0:
+                micro_vu.insert_line(insert_index, line)
+                continue
+            if line.find("(Name \"OPERATION\")") > 0:
+                line = line.replace("<O>", str(micro_vu.op_number))
+                micro_vu.insert_line(insert_index, line)
+                continue
+            if line.find("(Name \"REV LETTER\")") > 0:
+                line = line.replace("<R>", str(micro_vu.rev_number))
+                micro_vu.insert_line(insert_index, line)
+                continue
+            if line.find("(Name \"PT\")") > 0:
+                line = line.replace("<P>", str(micro_vu.part_number))
+                micro_vu.insert_line(insert_index, line)
+                continue
+            if line.find("(Name \"SEQUENCE\")") > 0:
+                micro_vu.insert_line(insert_index, line)
+                continue
+            if line.find("(Name \"SPFILENAME\")") > 0:
+                try:
+                    smartprofile_projectname = micro_vu.smartprofile_projectname
+                except MicroVuException as e:
+                    raise ProcessorException(e.args[0]) from e
+                line = line.replace("<SPF>", smartprofile_projectname)
+                micro_vu.insert_line(insert_index, line)
+                continue
+        return
 
 
 def get_processor(user_initials: str):
