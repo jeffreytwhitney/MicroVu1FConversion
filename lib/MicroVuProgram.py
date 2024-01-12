@@ -29,21 +29,6 @@ class MicroVuProgram:
 
     # Static Methods
     @staticmethod
-    def get_increment_filename(file_name: str, increment: int) -> str:
-        file_stem = Path(file_name).stem
-        file_extension = Path(file_name).suffix
-        return f"{file_stem}-{increment}{file_extension}"
-
-    @staticmethod
-    def get_microvu_version_from_filepath(program_filepath):
-        if program_filepath.find("\\311\\") != -1:
-            return "311"
-        if program_filepath.find("\\341\\") != -1:
-            return "341"
-        if program_filepath.find("\\420\\") != -1:
-            return "420"
-
-    @staticmethod
     def get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
         if not end_delimiter:
             end_delimiter = start_delimiter
@@ -98,7 +83,7 @@ class MicroVuProgram:
     def _set_smartprofile(self) -> None:
         line_idx = self.get_index_containing_text("AutoExpFile")
         existing_export_filename = Path(MicroVuProgram.get_node_text(
-                self.file_lines[line_idx], "AutoExpFile", "\"")).stem.upper()
+            self.file_lines[line_idx], "AutoExpFile", "\"")).stem.upper()
         self._is_smartprofile = existing_export_filename == "OUTPUT"
 
     # Properties
@@ -204,13 +189,8 @@ class MicroVuProgram:
     @property
     def output_directory(self) -> str:
         output_rootpath = lib.Utilities.GetStoredIniValue("Paths", "output_rootpath", "Settings")
-        microvu_version = MicroVuProgram.get_microvu_version_from_filepath(self._filepath)
-        parts = Path(self._filepath).parts
-        program_idx = parts.index(microvu_version) + 2
-        program_directory = parts[program_idx]
-        for i in range(program_idx + 1, len(parts) - 1):
-            program_directory = os.path.join(program_directory, parts[i])
-        return str(Path(output_rootpath, program_directory))
+        parent_directory = Path(self._filepath).parts[-2]
+        return str(Path(output_rootpath, parent_directory))
 
     @property
     def output_filepath(self) -> str:
@@ -306,8 +286,8 @@ class MicroVuProgram:
 
     def get_index_containing_text(self, text_to_find: str) -> int:
         return next(
-                (i for i, l in enumerate(self.file_lines)
-                 if l.upper().find(text_to_find.upper()) > 1), -1
+            (i for i, l in enumerate(self.file_lines)
+             if l.upper().find(text_to_find.upper()) > 1), -1
         )
 
     def insert_line(self, line_index: int, line: str) -> None:
@@ -327,7 +307,7 @@ class MicroVuProgram:
         instruction_count = self._get_instructions_count()
         idx: int = self.get_index_containing_text("AutoExpFile")
         self.file_lines[idx] = MicroVuProgram.set_node_text(
-                self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
+            self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
         instruction_line_idx = next((i for i, l in enumerate(self.file_lines) if l.startswith("Instructions")), 0)
         self.file_lines[instruction_line_idx] = MicroVuProgram.set_node_text(
-                self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")
+            self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")
