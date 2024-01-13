@@ -3,6 +3,8 @@ import os
 
 
 def GetIniFilePath(ini_file_name):
+    if config_env_variable := os.getenv('MICRO_VU_CONVERTER_CONFIG_LOCATION'):
+        return config_env_variable
     current_dir = os.path.dirname(__file__)
     return current_dir + "\\" + ini_file_name + ".ini"
 
@@ -33,15 +35,6 @@ def StoreIniValue(ini_value, ini_section, ini_key, ini_filename):
     config.set(ini_section, ini_key, ini_value)
     with open(ini_file_path, "w") as conf:
         config.write(conf)
-
-
-def GetMicroVuFolderSubDirectory(directory_to_check):
-    if directory_to_check.find("\\311\\") != -1:
-        return "311"
-    if directory_to_check.find("\\341\\") != -1:
-        return "341"
-    if directory_to_check.find("\\420\\") != -1:
-        return "420"
 
 
 def get_unencoded_file_lines(file_path: str) -> list[str]:
