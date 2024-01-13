@@ -1,6 +1,10 @@
 import configparser
 import os
 
+import pytest
+
+from lib.MicroVuProgram import MicroVuProgram
+
 
 def _delete_all_files_in_output_directory():
     for root, dirs, files in os.walk(_get_output_root_path()):
@@ -85,156 +89,129 @@ def teardown_module():
     _delete_all_files_in_output_directory()
 
 
-def test_get_node_text(self):
-    self.fail()
+# Fixtures
+@pytest.fixture(scope="module")
+def micro_vu() -> MicroVuProgram:
+    input_path = _get_input_root_path()
+    micro_vu_filepath = str(os.path.join(input_path, "446007 END VIEW.iwp"))
+    return MicroVuProgram(micro_vu_filepath, "10", "A", "")
 
 
-def test_set_node_text(self):
-    self.fail()
+def test_can_write_to_output_file(micro_vu):
+    assert micro_vu.can_write_to_output_file == True
 
 
-def test__does_name_already_exist(self):
-    self.fail()
+def test_comment(micro_vu):
+    pass
 
 
-def test__get_instructions_count(self):
-    self.fail()
+def test_set_comment(micro_vu):
+    pass
 
 
-def test__global_replace(self):
-    self.fail()
+def test_dimension_names(micro_vu):
+    pass
 
 
-def test__postinit(self):
-    self.fail()
+def test_export_filepath(micro_vu):
+    pass
 
 
-def test__set_has_calculators(self):
-    self.fail()
+def test_set_export_filepath(micro_vu):
+    pass
 
 
-def test__set_smartprofile(self):
-    self.fail()
+def test_filename(micro_vu):
+    assert micro_vu.filename == "446007 END VIEW.iwp"
 
 
-def test_can_write_to_output_file(self):
-    self.fail()
+def test_filepath(micro_vu):
+    pass
 
 
-def test_comment(self):
-    self.fail()
+def test_has_calculators(micro_vu):
+    pass
 
 
-def test_set_comment(self):
-    self.fail()
+def test_get_existing_smartprofile_call_index(micro_vu):
+    pass
 
 
-def test_dimension_names(self):
-    self.fail()
+def test_is_smartprofile(micro_vu):
+    pass
 
 
-def test_export_filepath(self):
-    self.fail()
+def test_last_microvu_system_id(micro_vu):
+    assert micro_vu.last_microvu_system_id == "1FB10DB0"
 
 
-def test_set_export_filepath(self):
-    self.fail()
+def test_manual_dimension_names(micro_vu):
+    pass
 
 
-def test_filename(self):
-    self.fail()
+def test_set_manual_dimension_names(micro_vu):
+    pass
 
 
-def test_filepath(self):
-    self.fail()
+def test_op_number(micro_vu):
+    assert micro_vu.op_number == "10"
 
 
-def test_has_calculators(self):
-    self.fail()
+def test_output_directory(micro_vu):
+    pass
 
 
-def test_get_existing_smartprofile_call_index(self):
-    self.fail()
+def test_output_filepath(micro_vu):
+    pass
 
 
-def test_is_smartprofile(self):
-    self.fail()
+def test_part_number(micro_vu):
+    assert micro_vu.part_number == "446007"
 
 
-def test_last_microvu_system_id(self):
-    self.fail()
+def test_prompt_insertion_index(micro_vu):
+    assert micro_vu.prompt_insertion_index == 11
 
 
-def test_manual_dimension_names(self):
-    self.fail()
+def test_report_filepath(micro_vu):
+    pass
 
 
-def test_set_manual_dimension_names(self):
-    self.fail()
+def test_set_report_filepath(micro_vu):
+    pass
 
 
-def test_op_number(self):
-    self.fail()
+def test_rev_number(micro_vu):
+    assert micro_vu.rev_number == "A"
 
 
-def test_output_directory(self):
-    self.fail()
+def test_smartprofile_call_insertion_index(micro_vu):
+    pass
 
 
-def test_output_filepath(self):
-    self.fail()
+def test_smartprofile_projectname(micro_vu):
+    pass
 
 
-def test_part_number(self):
-    self.fail()
+def test_view_name(micro_vu):
+    assert micro_vu.view_name == "END VIEW"
 
 
-def test_prompt_insertion_index(self):
-    self.fail()
+def test_delete_line_containing_text(micro_vu):
+    pass
 
 
-def test_report_filepath(self):
-    self.fail()
+def test_get_index_containing_text(micro_vu):
+    pass
 
 
-def test_set_report_filepath(self):
-    self.fail()
+def test_insert_line(micro_vu):
+    pass
 
 
-def test_rev_number(self):
-    self.fail()
+def test_update_feature_name(micro_vu):
+    pass
 
 
-def test_smartprofile_call_insertion_index(self):
-    self.fail()
-
-
-def test_smartprofile_projectname(self):
-    self.fail()
-
-
-def test_view_name(self):
-    self.fail()
-
-
-def test_delete_line_containing_text(self):
-    self.fail()
-
-
-def test_get_index_containing_text(self):
-    self.fail()
-
-
-def test_insert_line(self):
-    self.fail()
-
-
-def test_update_feature_name(self):
-    self.fail()
-
-
-def test_update_instruction_count():
-    assert fail
-
-
-
+def test_update_instruction_count(micro_vu):
+    pass

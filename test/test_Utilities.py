@@ -77,6 +77,7 @@ def _store_ini_value(ini_value, ini_section, ini_key):
         config.write(conf)
 
 
+# Set up and Tear Down
 def setup_module():
     config_filepath = _get_filepath_by_name("TESTSettings.ini")
     os.environ['MICRO_VU_CONVERTER_CONFIG_LOCATION'] = config_filepath
