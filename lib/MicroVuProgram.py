@@ -133,6 +133,8 @@ class MicroVuProgram:
 
     @export_filepath.setter
     def export_filepath(self, value: str) -> None:
+        if self.is_smartprofile:
+            value = "C:\\TEXT\\OUTPUT.txt"
         line_idx = self.get_index_containing_text("AutoExpFile")
         if not line_idx:
             return
@@ -226,6 +228,8 @@ class MicroVuProgram:
 
     @report_filepath.setter
     def report_filepath(self, value: str) -> None:
+        if self.is_smartprofile:
+            value = ""
         line_idx = self.get_index_containing_text("AutoRptFileName")
         if not line_idx:
             return

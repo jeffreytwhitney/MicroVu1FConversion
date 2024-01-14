@@ -67,11 +67,11 @@ def _get_unencoded_file_lines(file_path: str) -> list[str]:
 
 
 def _get_input_filepath():
-    return str(os.path.join(_get_input_root_path(), "446007 END VIEW.iwp"))
+    return str(os.path.join(_get_input_root_path(), "446007 ITEM 1 PROFILE.iwp"))
 
 
 def _get_output_filepath():
-    return str(os.path.join(_get_output_directory(), "446007 END VIEW.iwp"))
+    return str(os.path.join(_get_output_directory(), "446007 ITEM 1 PROFILE.iwp"))
 
 
 def _store_ini_value(ini_value, ini_section, ini_key):
@@ -145,11 +145,11 @@ def test_set_export_filepath(micro_vu):
 
 
 def test_filename(micro_vu):
-    assert micro_vu.filename == "446007 END VIEW.iwp"
+    assert micro_vu.filename == "446007 ITEM 1 PROFILE.iwp"
 
 
 def test_filepath(micro_vu):
-    assert micro_vu.filepath == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Input\\446007 END VIEW.iwp"
+    assert micro_vu.filepath == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Input\\446007 ITEM 1 PROFILE.iwp"
 
 
 def test_has_calculators(micro_vu):
@@ -184,7 +184,7 @@ def test_output_directory(micro_vu):
 
 
 def test_output_filepath(micro_vu):
-    assert micro_vu.output_filepath == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Output\\Input\\446007 END VIEW.iwp"
+    assert micro_vu.output_filepath == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Output\\Input\\446007 ITEM 1 PROFILE.iwp"
 
 
 def test_part_number(micro_vu):
@@ -197,9 +197,7 @@ def test_prompt_insertion_index(micro_vu):
 
 def test_report_filepath(micro_vu):
     micro_vu.report_filepath = "dave"
-    assert micro_vu.report_filepath == "dave"
-    micro_vu.report_filepath = "S:\\Micro-Vu\\446007 END VIEW_REV G_.pdf"
-    assert micro_vu.report_filepath == "S:\\Micro-Vu\\446007 END VIEW_REV G_.pdf"
+    assert not micro_vu.report_filepath
 
 
 def test_rev_number(micro_vu):
