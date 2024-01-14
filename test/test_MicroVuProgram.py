@@ -98,7 +98,7 @@ def micro_vu() -> MicroVuProgram:
 
 
 def test_can_write_to_output_file(micro_vu):
-    assert micro_vu.can_write_to_output_file == True
+    assert micro_vu.can_write_to_output_file is True
 
 
 def test_comment(micro_vu):
@@ -130,7 +130,7 @@ def test_filepath(micro_vu):
 
 
 def test_has_calculators(micro_vu):
-    assert micro_vu.has_calculators == False
+    assert micro_vu.has_calculators is False
 
 
 def test_get_existing_smartprofile_call_index(micro_vu):
@@ -138,7 +138,7 @@ def test_get_existing_smartprofile_call_index(micro_vu):
 
 
 def test_is_smartprofile(micro_vu):
-    assert micro_vu.is_smartprofile == False
+    assert micro_vu.is_smartprofile is False
 
 
 def test_last_microvu_system_id(micro_vu):
