@@ -126,19 +126,19 @@ def test_filename(micro_vu):
 
 
 def test_filepath(micro_vu):
-    pass
+    assert micro_vu.filepath == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Input\\446007 END VIEW.iwp"
 
 
 def test_has_calculators(micro_vu):
-    pass
+    assert micro_vu.has_calculators == False
 
 
 def test_get_existing_smartprofile_call_index(micro_vu):
-    pass
+    assert micro_vu.get_existing_smartprofile_call_index == -1
 
 
 def test_is_smartprofile(micro_vu):
-    pass
+    assert micro_vu.is_smartprofile == False
 
 
 def test_last_microvu_system_id(micro_vu):
@@ -158,11 +158,11 @@ def test_op_number(micro_vu):
 
 
 def test_output_directory(micro_vu):
-    pass
+    assert micro_vu.output_directory == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Output\\Input"
 
 
 def test_output_filepath(micro_vu):
-    pass
+    assert micro_vu.output_filepath == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Output\\Input\\446007 END VIEW.iwp"
 
 
 def test_part_number(micro_vu):
@@ -174,11 +174,10 @@ def test_prompt_insertion_index(micro_vu):
 
 
 def test_report_filepath(micro_vu):
-    pass
-
-
-def test_set_report_filepath(micro_vu):
-    pass
+    micro_vu.report_filepath = "dave"
+    assert micro_vu.report_filepath == "dave"
+    micro_vu.report_filepath = "S:\\Micro-Vu\\446007 END VIEW_REV G_.pdf"
+    assert micro_vu.report_filepath == "S:\\Micro-Vu\\446007 END VIEW_REV G_.pdf"
 
 
 def test_rev_number(micro_vu):
@@ -186,11 +185,11 @@ def test_rev_number(micro_vu):
 
 
 def test_smartprofile_call_insertion_index(micro_vu):
-    pass
+    assert micro_vu.smartprofile_call_insertion_index == -1
 
 
-def test_smartprofile_projectname(micro_vu):
-    pass
+def test_blank_smartprofile_projectname(micro_vu):
+    assert micro_vu.smartprofile_projectname == ""
 
 
 def test_view_name(micro_vu):
@@ -202,7 +201,7 @@ def test_delete_line_containing_text(micro_vu):
 
 
 def test_get_index_containing_text(micro_vu):
-    pass
+    assert micro_vu.get_index_containing_text("(Name \"Employee #") == 13
 
 
 def test_insert_line(micro_vu):
@@ -210,8 +209,12 @@ def test_insert_line(micro_vu):
 
 
 def test_update_feature_name(micro_vu):
-    pass
+    micro_vu.update_feature_name(54, "Farfignugen")
+    assert micro_vu.file_lines[54].find("Farfignugen") > -1
+    micro_vu.update_feature_name(54, "D_DATUM")
+    assert micro_vu.file_lines[54].find("D_DATUM") > -1
 
 
 def test_update_instruction_count(micro_vu):
-    pass
+    micro_vu.update_instruction_count()
+    assert micro_vu.file_lines[3].find("Instructions 54") > -1
