@@ -102,23 +102,29 @@ def test_can_write_to_output_file(micro_vu):
 
 
 def test_comment(micro_vu):
-    pass
+    assert micro_vu.comment == "Edited By and Comments: UPDATED THE LIGHTING BECAUSE OF THE SOFTWARE UPDATED SB 10/6/2021."
 
 
 def test_set_comment(micro_vu):
-    pass
+    micro_vu.comment = "bob"
+    assert micro_vu.comment == "bob"
+    micro_vu.comment = "Edited By and Comments: UPDATED THE LIGHTING BECAUSE OF THE SOFTWARE UPDATED SB 10/6/2021."
+    assert micro_vu.comment == "Edited By and Comments: UPDATED THE LIGHTING BECAUSE OF THE SOFTWARE UPDATED SB 10/6/2021."
 
 
 def test_dimension_names(micro_vu):
-    pass
+    assert len(micro_vu.dimension_names) == 9
 
 
 def test_export_filepath(micro_vu):
-    pass
+    assert micro_vu.export_filepath == "C:\\spcdata\\mvexport.txt"
 
 
 def test_set_export_filepath(micro_vu):
-    pass
+    micro_vu.export_filepath = "bob"
+    assert micro_vu.export_filepath == "bob"
+    micro_vu.export_filepath = "C:\\spcdata\\mvexport.txt"
+    assert micro_vu.export_filepath == "C:\\spcdata\\mvexport.txt"
 
 
 def test_filename(micro_vu):
@@ -197,7 +203,10 @@ def test_view_name(micro_vu):
 
 
 def test_delete_line_containing_text(micro_vu):
-    pass
+    number_of_lines = len(micro_vu.file_lines)
+    micro_vu.insert_line(10, "Prmt 0 1EFD3AA8 (Name \"Farfignugen #\") (ExpProps Ans) (Txt \"Farfignugen\")")
+    micro_vu.delete_line_containing_text("Farfignugen")
+    assert len(micro_vu.file_lines) == number_of_lines
 
 
 def test_get_index_containing_text(micro_vu):
@@ -205,7 +214,9 @@ def test_get_index_containing_text(micro_vu):
 
 
 def test_insert_line(micro_vu):
-    pass
+    micro_vu.insert_line(10, "Farfignugen")
+    assert micro_vu.file_lines[10].find("Farfignugen") > -1
+    del micro_vu.file_lines[10]
 
 
 def test_update_feature_name(micro_vu):
