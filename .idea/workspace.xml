@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Refactoring">
-      <change afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/UnencodedFile.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/dude.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test_MicroVuProgram.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test_Utilities.py" afterDir="false" />
+    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Version 1.1">
       <change beforePath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,42 +63,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Batch.ConvertUIToPython.executor": "Run",
-    "Python tests.Python tests in test_MicroVuProgram.py.executor": "Debug",
-    "Python tests.Python tests in test_Utilities.py.executor": "Run",
-    "Python.DimensionNameEntryDialog.executor": "Run",
-    "Python.Learning.executor": "Run",
-    "Python.Main.executor": "Run",
-    "Python.MicroVu1FactoryConverter.executor": "Run",
-    "Python.MicroVuFileProcessor.executor": "Run",
-    "Python.MicroVuProcessor.executor": "Run",
-    "Python.MicroVuProcessor_MainWindow.executor": "Run",
-    "Python.MicroVuProgram.executor": "Run",
-    "Python.dude.executor": "Debug",
-    "Python.gui_DimensionNameEntryDialog.executor": "Run",
-    "Python.gui_MicroVuProcessor_MainWindow.executor": "Run",
-    "Python.mvFileProcessor.executor": "Run",
-    "Python.scratch.executor": "Run",
-    "Python.scratch_1.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.CodyProjectSettingsMigration": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last.edited.regexp": "Sample_Text",
-    "last_opened_file_path": "D:/OneDrive/Projects/Automation/MicroVu1FConversion/test",
-    "settings.editor.selected.configurable": "editor.preferences.folding"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Batch.ConvertUIToPython.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in test_Utilities.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DimensionNameEntryDialog.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVu1FactoryConverter.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVuFileProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVuProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVuProcessor_MainWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVuProgram.executor&quot;: &quot;Run&quot;,
+    &quot;Python.TestDialog.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui_DimensionNameEntryDialog.executor&quot;: &quot;Run&quot;,
+    &quot;Python.gui_MicroVuProcessor_MainWindow.executor&quot;: &quot;Run&quot;,
+    &quot;Python.mvFileProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scratch.executor&quot;: &quot;Run&quot;,
+    &quot;Python.scratch_1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.CodyProjectSettingsMigration&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last.edited.regexp&quot;: &quot;Sample_Text&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/test&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.folding&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\OneDrive\Projects\Automation\MicroVu1FConversion\test" />
+      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\ui" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -111,6 +105,51 @@
       <recent name="D:\OneDrive\Projects\Automation\MicroVu1FConversion\ui" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\lib" />
     </key>
+  </component>
+  <component name="RunManager" selected="Python.MicroVu1FactoryConverter">
+    <configuration name="MicroVu1FactoryConverter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MicroVu1FConversion" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MicroVu1FactoryConverter.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests in test" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="MicroVu1FConversion" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/test&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.MicroVu1FactoryConverter" />
+        <item itemvalue="Python tests.Python tests in test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -402,13 +441,45 @@
     </task>
     <task id="LOCAL-00035" summary="Refactoring">
       <option name="closed" value="true" />
-      <created>1705102143928</created>
+      <created>1704980871503</created>
       <option name="number" value="00035" />
       <option name="presentableId" value="LOCAL-00035" />
       <option name="project" value="LOCAL" />
-      <updated>1705102143928</updated>
+      <updated>1704980871503</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Refactoring">
+      <option name="closed" value="true" />
+      <created>1705004815204</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1705004815204</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Refactoring">
+      <option name="closed" value="true" />
+      <created>1705072830618</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1705072830618</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Refactoring">
+      <option name="closed" value="true" />
+      <created>1705076057264</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1705076057264</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Refactoring">
+      <option name="closed" value="true" />
+      <created>1705084872178</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1705084872178</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -438,9 +509,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test/test_MicroVuProgram.py</url>
-          <line>15</line>
-          <option name="timeStamp" value="6" />
+          <url>file://$PROJECT_DIR$/test/test_Utilities.py</url>
+          <line>138</line>
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
