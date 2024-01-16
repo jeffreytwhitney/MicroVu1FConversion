@@ -67,11 +67,11 @@ def _get_unencoded_file_lines(file_path: str) -> list[str]:
 
 
 def _get_input_filepath():
-    return str(os.path.join(_get_input_root_path(), "446007 ITEM 1 PROFILE.iwp"))
+    return str(os.path.join(_get_input_root_path(), "110047396A0_OPFAI_REVA_SP.iwp"))
 
 
 def _get_output_filepath():
-    return str(os.path.join(_get_output_directory(), "446007 ITEM 1 PROFILE.iwp"))
+    return str(os.path.join(_get_output_directory(), "110047396A0_OPFAI_REVA_SP.iwp"))
 
 
 def _store_ini_value(ini_value, ini_section, ini_key):
@@ -108,7 +108,7 @@ def teardown_module():
 # Fixtures
 @pytest.fixture(scope="module")
 def micro_vu() -> MicroVuProgram:
-    return MicroVuProgram(_get_input_filepath(), "10", "A", "446007 ITEM 1 PROFILE.spp")
+    return MicroVuProgram(_get_input_filepath(), "10", "A", "110047396A0_OPFAI_REVA_SP.iwp")
 
 
 def test_can_write_to_output_file(micro_vu):
@@ -119,15 +119,15 @@ def test_can_write_to_output_file(micro_vu):
 
 
 def test_comment(micro_vu):
-    assert micro_vu.comment == "Edited By and Comments: UPDATED THE LIGHTING FOR THE SOFTWARE CHANGE SB 10/6/2021."
+    assert micro_vu.comment == ""
 
 
 def test_set_comment(micro_vu):
-    assert micro_vu.comment == "Edited By and Comments: UPDATED THE LIGHTING FOR THE SOFTWARE CHANGE SB 10/6/2021."
+    assert micro_vu.comment == ""
     micro_vu.comment = "bob"
     assert micro_vu.comment == "bob"
-    micro_vu.comment = "Edited By and Comments: UPDATED THE LIGHTING FOR THE SOFTWARE CHANGE SB 10/6/2021."
-    assert micro_vu.comment == "Edited By and Comments: UPDATED THE LIGHTING FOR THE SOFTWARE CHANGE SB 10/6/2021."
+    micro_vu.comment = ""
+    assert micro_vu.comment == ""
 
 
 def test_dimension_names(micro_vu):
@@ -146,7 +146,7 @@ def test_set_export_filepath(micro_vu):
 
 
 def test_filename(micro_vu):
-    assert micro_vu.filename == "446007 ITEM 1 PROFILE.iwp"
+    assert micro_vu.filename == "110047396A0_OPFAI_REVA_SP.iwp"
 
 
 def test_filepath(micro_vu):
@@ -166,7 +166,7 @@ def test_is_smartprofile(micro_vu):
 
 
 def test_last_microvu_system_id(micro_vu):
-    assert micro_vu.last_microvu_system_id == "1F41F120"
+    assert micro_vu.last_microvu_system_id == "220E9D70"
 
 
 def test_manual_dimension_names(micro_vu):
@@ -189,11 +189,11 @@ def test_output_filepath(micro_vu):
 
 
 def test_part_number(micro_vu):
-    assert micro_vu.part_number == "446007"
+    assert micro_vu.part_number == "110047396A0"
 
 
 def test_prompt_insertion_index(micro_vu):
-    assert micro_vu.prompt_insertion_index == 11
+    assert micro_vu.prompt_insertion_index == 5
 
 
 def test_report_filepath(micro_vu):
@@ -207,15 +207,15 @@ def test_rev_number(micro_vu):
 
 
 def test_smartprofile_call_insertion_index(micro_vu):
-    assert micro_vu.smartprofile_call_insertion_index == 323
+    assert micro_vu.smartprofile_call_insertion_index == 605
 
 
 def test_smartprofile_projectname(micro_vu):
-    assert micro_vu.smartprofile_projectname == "446007 ITEM 1 PROFILE.spp"
+    assert micro_vu.smartprofile_projectname == "110047396A0_OPFAI_REVA_SP.iwp"
 
 
 def test_view_name(micro_vu):
-    assert micro_vu.view_name == "ITEM 1 PROFILE"
+    assert micro_vu.view_name == "OPFAI"
 
 
 def test_delete_line_containing_text(micro_vu):
@@ -226,7 +226,7 @@ def test_delete_line_containing_text(micro_vu):
 
 
 def test_get_index_containing_text(micro_vu):
-    assert micro_vu.get_index_containing_text("(Name \"Employee #") == 13
+    assert micro_vu.get_index_containing_text("(Name \"Employee") == 6
 
 
 def test_insert_line(micro_vu):
@@ -245,7 +245,7 @@ def test_update_feature_name(micro_vu):
 def test_update_instruction_count(micro_vu):
     micro_vu.insert_line(10, "Prmt 0 1EFD3AA8 (Name \"Farfignugen #\") (ExpProps Ans) (Txt \"Farfignugen\")")
     micro_vu.update_instruction_count()
-    assert micro_vu.file_lines[3].find("Instructions 59") > -1
+    assert micro_vu.file_lines[3].find("Instructions 133") > -1
     micro_vu.delete_line_containing_text("Farfignugen")
     micro_vu.update_instruction_count()
-    assert micro_vu.file_lines[3].find("Instructions 58") > -1
+    assert micro_vu.file_lines[3].find("Instructions 132") > -1

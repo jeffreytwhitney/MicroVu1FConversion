@@ -82,9 +82,17 @@ class MicroVuProgram:
 
     def _set_smartprofile(self) -> None:
         line_idx = self.get_index_containing_text("AutoExpFile")
+        existing_export_filepath = str(Path(MicroVuProgram.get_node_text(
+            self.file_lines[line_idx], "AutoExpFile", "\""))).upper()
         existing_export_filename = Path(MicroVuProgram.get_node_text(
             self.file_lines[line_idx], "AutoExpFile", "\"")).stem.upper()
-        self._is_smartprofile = existing_export_filename == "OUTPUT"
+        if existing_export_filename == "OUTPUT":
+            self._is_smartprofile = True
+            return
+        if "C:\\MICROVU\\POINTCLOUDS\\" in existing_export_filepath:
+            self._is_smartprofile = True
+            return
+        self._is_smartprofile = False
 
     # Properties
     @property
@@ -94,15 +102,21 @@ class MicroVuProgram:
     @property
     def comment(self) -> str:
         if comment_idx := self.get_index_containing_text("(Name \"Edited"):
-            return MicroVuProgram.get_node_text(self.file_lines[comment_idx], "(Txt ", "\"")
+            if " (Txt " in self.file_lines[comment_idx]:
+                return MicroVuProgram.get_node_text(self.file_lines[comment_idx], "(Txt ", "\"")
+            else:
+                return ""
         else:
             return ""
 
     @comment.setter
     def comment(self, value: str) -> None:
         if line_idx := self.get_index_containing_text("(Name \"Edited"):
-            updated_comment_line = MicroVuProgram.set_node_text(self.file_lines[line_idx], "(Txt ", value, "\"")
-            self.file_lines[line_idx] = updated_comment_line
+            if " (Txt " in self.file_lines[line_idx]:
+                updated_comment_line = MicroVuProgram.set_node_text(self.file_lines[line_idx], "(Txt ", value, "\"")
+                self.file_lines[line_idx] = updated_comment_line
+            else:
+                self.file_lines[line_idx] = f'{self.file_lines[line_idx][:-2]} (Txt \"{value}\")\n'
 
     @property
     def dimension_names(self) -> list[DimensionName]:
