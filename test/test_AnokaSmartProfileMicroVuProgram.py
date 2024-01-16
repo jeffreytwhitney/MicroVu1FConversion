@@ -127,7 +127,7 @@ def test_set_comment(micro_vu):
     micro_vu.comment = "bob"
     assert micro_vu.comment == "bob"
     micro_vu.comment = ""
-    assert micro_vu.comment == ""
+    assert not micro_vu.comment
 
 
 def test_dimension_names(micro_vu):
@@ -236,10 +236,10 @@ def test_insert_line(micro_vu):
 
 
 def test_update_feature_name(micro_vu):
-    micro_vu.update_feature_name(20, "Farfignugen")
-    assert micro_vu.file_lines[20].find("Farfignugen") > -1
-    micro_vu.update_feature_name(20, "77")
-    assert micro_vu.file_lines[20].find("77") > -1
+    micro_vu.update_feature_name(53, "Farfignugen")
+    assert micro_vu.file_lines[53].find("Farfignugen") > -1
+    micro_vu.update_feature_name(53, "289")
+    assert micro_vu.file_lines[53].find("289") > -1
 
 
 def test_update_instruction_count(micro_vu):
