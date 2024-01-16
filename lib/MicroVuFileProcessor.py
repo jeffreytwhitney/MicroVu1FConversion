@@ -143,7 +143,7 @@ class CoonRapidsProcessor(Processor):
 
     def _replace_export_filepath(self, micro_vu: MicroVuProgram) -> None:
         if micro_vu.is_smartprofile:
-            micro_vu.report_filepath = "C:\\TEXT\\OUTPUT.txt"
+            micro_vu.export_filepath = "C:\\TEXT\\OUTPUT.txt"
             return
         part_rev = f"REV{micro_vu.rev_number}"
         export_filepath: str = "C:\\Users\\Public\\CURL\\in\\"

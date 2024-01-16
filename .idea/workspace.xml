@@ -4,15 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Version 1.1">
-      <change afterPath="$PROJECT_DIR$/test/test_AnokaSmartProfileMicroVuProgram.py" afterDir="false" />
+    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="will have to fix some stuff for anoka.">
       <change beforePath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MicroVu1FConversion.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuProgram.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_SmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_SmartProfileMicroVuProgram.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,19 +69,11 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Batch.ConvertUIToPython.executor": "Run",
-    "Python tests.Python tests for test_AnokaSmartProfileMicroVuProgram.test_comment.executor": "Run",
-    "Python tests.Python tests for test_AnokaSmartProfileMicroVuProgram.test_is_smartprofile.executor": "Run",
-    "Python tests.Python tests for test_AnokaSmartProfileMicroVuProgram.test_last_microvu_system_id.executor": "Run",
-    "Python tests.Python tests for test_AnokaSmartProfileMicroVuProgram.test_part_number.executor": "Run",
-    "Python tests.Python tests for test_AnokaSmartProfileMicroVuProgram.test_prompt_insertion_index.executor": "Run",
-    "Python tests.Python tests for test_AnokaSmartProfileMicroVuProgram.test_set_comment.executor": "Run",
-    "Python tests.Python tests for test_AnokaSmartProfileMicroVuProgram.test_smartprofile_call_insertion_index.executor": "Run",
-    "Python tests.Python tests for test_AnokaSmartProfileMicroVuProgram.test_view_name.executor": "Run",
     "Python tests.Python tests in test.executor": "Run",
     "Python tests.Python tests in test_Utilities.py.executor": "Run",
     "Python.DimensionNameEntryDialog.executor": "Run",
     "Python.Main.executor": "Run",
-    "Python.MicroVu1FactoryConverter.executor": "Debug",
+    "Python.MicroVu1FactoryConverter.executor": "Run",
     "Python.MicroVuFileProcessor.executor": "Run",
     "Python.MicroVuProcessor.executor": "Run",
     "Python.MicroVuProcessor_MainWindow.executor": "Run",
@@ -99,17 +89,15 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "deletionFromPopupRequiresConfirmation": "false",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last.edited.regexp": "Sample_Text",
-    "last_opened_file_path": "D:/OneDrive/Projects/Automation/MicroVu1FConversion/test",
+    "last_opened_file_path": "C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/test",
     "settings.editor.selected.configurable": "editor.preferences.folding"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\OneDrive\Projects\Automation\MicroVu1FConversion\test" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\ui" />
     </key>
@@ -157,10 +145,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Python.MicroVu1FactoryConverter" />
-      <item itemvalue="Python tests.Python tests in test" />
-    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.MicroVu1FactoryConverter" />
@@ -504,7 +488,31 @@
       <option name="project" value="LOCAL" />
       <updated>1705343309531</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="will have to fix some stuff for anoka.">
+      <option name="closed" value="true" />
+      <created>1705350723403</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1705350723403</updated>
+    </task>
+    <task id="LOCAL-00042" summary="will have to fix some stuff for anoka.">
+      <option name="closed" value="true" />
+      <created>1705350738219</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1705350738219</updated>
+    </task>
+    <task id="LOCAL-00043" summary="will have to fix some stuff for anoka.">
+      <option name="closed" value="true" />
+      <created>1705402896883</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1705402896883</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -529,7 +537,8 @@
     <MESSAGE value="Bug Fix" />
     <MESSAGE value="Refactoring" />
     <MESSAGE value="Version 1.1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version 1.1" />
+    <MESSAGE value="will have to fix some stuff for anoka." />
+    <option name="LAST_COMMIT_MESSAGE" value="will have to fix some stuff for anoka." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

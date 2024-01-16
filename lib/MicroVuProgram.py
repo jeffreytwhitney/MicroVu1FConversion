@@ -11,7 +11,7 @@ class DimensionName:
 
     def __init__(self, index: int, name: str):
         self.index = index
-        self.name = name
+        self.name = name.upper()
 
 
 class MicroVuException(Exception):
@@ -116,7 +116,7 @@ class MicroVuProgram:
                 updated_comment_line = MicroVuProgram.set_node_text(self.file_lines[line_idx], "(Txt ", value, "\"")
                 self.file_lines[line_idx] = updated_comment_line
             else:
-                self.file_lines[line_idx] = f'{self.file_lines[line_idx][:-2]} (Txt \"{value}\")\n'
+                self.file_lines[line_idx] = f'{self.file_lines[line_idx][:-2]} (Txt \"{value[4:]}\")\n'
 
     @property
     def dimension_names(self) -> list[DimensionName]:
