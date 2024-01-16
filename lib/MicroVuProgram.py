@@ -116,7 +116,11 @@ class MicroVuProgram:
                 updated_comment_line = MicroVuProgram.set_node_text(self.file_lines[line_idx], "(Txt ", value, "\"")
                 self.file_lines[line_idx] = updated_comment_line
             else:
-                self.file_lines[line_idx] = f'{self.file_lines[line_idx][:-2]} (Txt \"{value[4:]}\")\n'
+                if value.startswith("\r\n"):
+                    new_line = f'{self.file_lines[line_idx][:-2]} (Txt \"{value[4:]}\")\n'
+                else:
+                    new_line = f'{self.file_lines[line_idx][:-2]} (Txt \"{value}\")\n'
+                self.file_lines[line_idx] = new_line
 
     @property
     def dimension_names(self) -> list[DimensionName]:
