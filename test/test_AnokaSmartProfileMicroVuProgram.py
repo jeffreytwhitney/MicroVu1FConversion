@@ -125,6 +125,7 @@ def test_comment(micro_vu):
 def test_set_comment(micro_vu):
     assert micro_vu.comment == ""
     micro_vu.comment = "bob"
+    assert micro_vu.file_lines[5] == "Txt 0 22119100 (Name \"Edited by & comments\" (Txt \"bob\")\n"
     assert micro_vu.comment == "bob"
     micro_vu.comment = ""
     assert not micro_vu.comment
