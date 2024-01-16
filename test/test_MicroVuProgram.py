@@ -149,7 +149,7 @@ def test_filename(micro_vu):
 
 
 def test_filepath(micro_vu):
-    assert micro_vu.filepath == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Input\\446007 END VIEW.iwp"
+    assert micro_vu.filepath == _get_input_filepath()
 
 
 def test_has_calculators(micro_vu):
@@ -180,11 +180,11 @@ def test_op_number(micro_vu):
 
 
 def test_output_directory(micro_vu):
-    assert micro_vu.output_directory == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Output\\Input"
+    assert micro_vu.output_directory == _get_output_directory()
 
 
 def test_output_filepath(micro_vu):
-    assert micro_vu.output_filepath == "D:\\OneDrive\\Projects\\Automation\\MicroVu1FConversion\\test\\Output\\Input\\446007 END VIEW.iwp"
+    assert micro_vu.output_filepath == _get_output_filepath()
 
 
 def test_part_number(micro_vu):
