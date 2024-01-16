@@ -14,6 +14,14 @@ def _delete_all_files_in_output_directory():
             os.unlink(filespec)
 
 
+def _get_dot_filepath_by_name(file_name: str) -> str:
+    for root, dirs, files in os.walk('.'):
+        for file in files:
+            if file == file_name:
+                return os.path.join(root, file)
+    return ""
+
+
 def _get_filepath_by_name(file_name: str) -> str:
     current_dir = os.path.dirname(__file__)
     for root, dirs, files in os.walk(current_dir):
@@ -23,12 +31,8 @@ def _get_filepath_by_name(file_name: str) -> str:
     return ""
 
 
-def _get_dot_filepath_by_name(file_name: str) -> str:
-    for root, dirs, files in os.walk('.'):
-        for file in files:
-            if file == file_name:
-                return os.path.join(root, file)
-    return ""
+def _get_input_filepath():
+    return str(os.path.join(_get_input_root_path(), "446007 ITEM 1 PROFILE.iwp"))
 
 
 def _get_input_root_path() -> str:
@@ -36,13 +40,17 @@ def _get_input_root_path() -> str:
     return str(os.path.join(current_dir, "Input"))
 
 
+def _get_output_directory() -> str:
+    return str(os.path.join(_get_output_root_path(), "Input"))
+
+
+def _get_output_filepath():
+    return str(os.path.join(_get_output_directory(), "446007 ITEM 1 PROFILE.iwp"))
+
+
 def _get_output_root_path() -> str:
     current_dir = os.path.dirname(__file__)
     return str(os.path.join(current_dir, "Output"))
-
-
-def _get_output_directory() -> str:
-    return str(os.path.join(_get_output_root_path(), "Input"))
 
 
 def _get_stored_ini_value(ini_section, ini_key):
@@ -64,14 +72,6 @@ def _get_unencoded_file_lines(file_path: str) -> list[str]:
         return []
     with open(file_path, "r") as f:
         return f.readlines()
-
-
-def _get_input_filepath():
-    return str(os.path.join(_get_input_root_path(), "446007 ITEM 1 PROFILE.iwp"))
-
-
-def _get_output_filepath():
-    return str(os.path.join(_get_output_directory(), "446007 ITEM 1 PROFILE.iwp"))
 
 
 def _store_ini_value(ini_value, ini_section, ini_key):
