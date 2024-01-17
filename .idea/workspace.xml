@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Adding Processor Tests">
-      <change afterPath="$PROJECT_DIR$/lib/TextKill_text.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/AnokaTests/TextKill_text.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/AnokaTests/test_MicroVuProgram.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/AnokaTests/test_Processor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/TextKill_text.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/AnokaTests/test_AnokaSmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_AnokaSmartProfileMicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_MicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileMicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
-    </list>
+    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Adding Processor Tests" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -165,14 +150,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00003" summary="starting...">
-      <option name="closed" value="true" />
-      <created>1702670788006</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1702670788006</updated>
     </task>
     <task id="LOCAL-00004" summary="starting...">
       <option name="closed" value="true" />
@@ -558,7 +535,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705496820427</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Adding Processor Tests">
+      <option name="closed" value="true" />
+      <created>1705504018557</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1705504018557</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="UnknownFeatures">
