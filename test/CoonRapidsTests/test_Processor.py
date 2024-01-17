@@ -127,6 +127,7 @@ def micro_vu_lines() -> list[str]:
 
 
 def setup_module():
+    _store_ini_value("CoonRapids", "Location", "site")
     input_path = _get_input_filepath("446007 END VIEW.iwp")
     micro_vu = MicroVuProgram(input_path, "10", "A", "")
     _processor = lib.MicroVuFileProcessor.get_processor("JTW")
@@ -135,6 +136,11 @@ def setup_module():
 
 
 # Tests
+def test_correct_processor():
+    p = lib.MicroVuFileProcessor.get_processor("JTW")
+    assert isinstance(p, MicroVuFileProcessor.CoonRapidsProcessor)
+
+
 def test_output_file_exists(micro_vu_lines):
     assert os.path.exists(_get_output_filepath("446007 END VIEW.iwp"))
 

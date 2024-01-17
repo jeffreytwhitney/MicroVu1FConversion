@@ -29,6 +29,14 @@ class MicroVuProgram:
 
     # Static Methods
     @staticmethod
+    def get_node(line_text: str, search_value: str) -> str:
+        begin_index: int = line_text.upper().find(f"({search_value.upper()}")
+        end_index: int = line_text.find(")", begin_index + len(search_value) + 1)
+        if end_index == -1:
+            end_index = len(line_text)
+        return line_text[begin_index:end_index + 1].strip()
+
+    @staticmethod
     def get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
         if not end_delimiter:
             end_delimiter = start_delimiter
@@ -175,12 +183,33 @@ class MicroVuProgram:
         return self._filepath
 
     @property
+    def has_text_kill(self) -> bool:
+        return any("killFile.bat" in line for line in self.file_lines)
+
+    @property
     def has_calculators(self) -> bool:
         return self._has_calculators
 
     @property
+    def has_auto_report(self) -> bool:
+        if not (line_idx := self.get_index_containing_text("AutoExpFile")):
+            return False
+        line = self.file_lines[line_idx]
+        if "(AutoRptSortInstructionsByName 0)" not in line:
+            return False
+        if "(AutoRptTemplateName" not in line:
+            return False
+        if "(AutoRptAppendDateAndTime" not in line:
+            return False
+        return "(AutoRptFileName" in line
+
+    @property
     def get_existing_smartprofile_call_index(self) -> int:
         return self.get_index_containing_text("SmartProfile.exe")
+
+    @property
+    def instructions_index(self) -> int:
+        return next((i for i, l in enumerate(self.file_lines) if l.startswith("Instructions")), 0)
 
     @property
     def is_smartprofile(self) -> bool:
@@ -248,15 +277,39 @@ class MicroVuProgram:
     def report_filepath(self, value: str) -> None:
         if self.is_smartprofile:
             value = ""
-        line_idx = self.get_index_containing_text("AutoRptFileName")
-        if not line_idx:
-            return
-        line_text = self.file_lines[line_idx]
-        if self.is_smartprofile:
-            updated_line_text = MicroVuProgram.set_node_text(line_text, "(AutoRptFileName ", "", "\"")
+
+        if self.has_auto_report:
+            line_idx = self.get_index_containing_text("AutoRptFileName")
+            if not line_idx:
+                return
+            line_text = self.file_lines[line_idx]
+            if self.is_smartprofile:
+                updated_line_text = MicroVuProgram.set_node_text(line_text, "(AutoRptFileName ", "", "\"")
+            else:
+                updated_line_text = MicroVuProgram.set_node_text(line_text, "(AutoRptFileName ", value, "\"")
+            self.file_lines[line_idx] = updated_line_text
         else:
-            updated_line_text = MicroVuProgram.set_node_text(line_text, "(AutoRptFileName ", value, "\"")
-        self.file_lines[line_idx] = updated_line_text
+            if line_idx := self.get_index_containing_text("AutoExpFile"):
+                line = self.file_lines[line_idx]
+                if "(AutoRptSortInstructionsByName" not in line:
+                    line += " (AutoRptSortInstructionsByName 0)"
+                else:
+                    existing_node = MicroVuProgram.get_node(line, "AutoRptSortInstructionsByName")
+                    line = line.replace(existing_node, "(AutoRptSortInstructionsByName 0)")
+
+                if "(AutoRptTemplateName" not in line:
+                    line += " (AutoRptTemplateName \"Classic\")"
+                else:
+                    existing_node = MicroVuProgram.get_node(line, "AutoRptTemplateName")
+                    line = line.replace(existing_node, "(AutoRptTemplateName \"Classic\")")
+
+                if "(AutoRptAppendDateAndTime" not in line:
+                    line += " (AutoRptAppendDateAndTime 1)"
+                else:
+                    existing_node = MicroVuProgram.get_node(line, "AutoRptAppendDateAndTime")
+                    line = line.replace(existing_node, "(AutoRptAppendDateAndTime 1)")
+                line += f"(AutoRptFileName \"{value}\")"
+                self.file_lines[line_idx] = line
 
     @property
     def rev_number(self) -> str:

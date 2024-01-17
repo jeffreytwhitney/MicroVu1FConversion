@@ -5,7 +5,6 @@ import pathlib
 import pytest
 
 import lib
-import lib.MicroVuFileProcessor
 from lib import MicroVuFileProcessor
 from lib.MicroVuProgram import MicroVuProgram
 
@@ -120,20 +119,20 @@ def _store_ini_value(ini_value, ini_section, ini_key):
         config.write(conf)
 
 
-# Setup/Teardown
-def setup_module():
-    input_path = _get_input_filepath("446007 ITEM 1 PROFILE.iwp")
-    micro_vu = MicroVuProgram(input_path, "10", "A", "446007 ITEM 1 PROFILE")
-    _processor = lib.MicroVuFileProcessor.get_processor("JTW")
-    _processor.add_micro_vu_program(micro_vu)
-    _processor.process_files()
-
-
 # Fixtures
 @pytest.fixture(scope="module")
 def micro_vu_lines() -> list[str]:
-    output_path = _get_output_filepath("446007 ITEM 1 PROFILE.iwp")
+    output_path = _get_output_filepath("NN00160A001-2_OPFAI_REVC_VMM_REV2.iwp")
     return _get_utf_encoded_file_lines(output_path)
+
+
+def setup_module():
+    _store_ini_value("Anoka", "Location", "site")
+    input_path = _get_input_filepath("NN00160A001-2_OPFAI_REVC_VMM_REV2.iwp")
+    micro_vu = MicroVuProgram(input_path, "10", "A", "")
+    _processor = lib.MicroVuFileProcessor.get_processor("JTW")
+    _processor.add_micro_vu_program(micro_vu)
+    _processor.process_files()
 
 
 # Tests
@@ -143,23 +142,23 @@ def test_correct_processor():
 
 
 def test_output_file_exists(micro_vu_lines):
-    assert os.path.exists(_get_output_filepath("446007 ITEM 1 PROFILE.iwp"))
+    assert os.path.exists(_get_output_filepath("446007 END VIEW.iwp"))
 
 
 def test_export_filepath(micro_vu_lines):
     assert _get_node_text(
-            micro_vu_lines[2], "ExpFile", "\"") == "C:\\TEXT\\OUTPUT.txt"
+            micro_vu_lines[2], "ExpFile", "\"") == "C:\\Users\\Public\\CURL\\in\\446007_OP10_END VIEW_REVA_.csv"
     assert _get_node_text(
-            micro_vu_lines[2], "AutoExpFile", "\"") == "C:\\TEXT\\OUTPUT.txt"
+            micro_vu_lines[2], "AutoExpFile", "\"") == "C:\\Users\\Public\\CURL\\in\\446007_OP10_END VIEW_REVA_.csv"
 
 
 def test_auto_report_filepath(micro_vu_lines):
     assert _get_node_text(
-            micro_vu_lines[2], "AutoRptFileName", "\"") == ""
+            micro_vu_lines[2], "AutoRptFileName", "\"") == "S:\\Micro-Vu\\446007_OP10_END VIEW_REVA_.pdf"
 
 
 def test_instruction_count(micro_vu_lines):
-    assert "Instructions 63" in micro_vu_lines[3]
+    assert "Instructions 57" in micro_vu_lines[3]
 
 
 def test_text_kill_exists(micro_vu_lines):
@@ -192,35 +191,37 @@ def test_op_number_is_correct(micro_vu_lines):
     assert "(Name \"OPERATION\")" in micro_vu_lines[14]
 
 
-def test_smartprofile_filename(micro_vu_lines):
-    assert "(Txt \"446007 ITEM 1 PROFILE\")" in micro_vu_lines[15]
-    assert "(Name \"SPFILENAME\")" in micro_vu_lines[15]
-
-
 def test_employee_id_prompt_exists(micro_vu_lines):
-    assert "(Txt \"Enter Employee #\")" in micro_vu_lines[16]
-    assert "(Name \"EMPLOYEE\")" in micro_vu_lines[16]
+    assert "(Txt \"Enter Employee #\")" in micro_vu_lines[15]
+    assert "(Name \"EMPLOYEE\")" in micro_vu_lines[15]
 
 
 def test_job_number_prompt_exists(micro_vu_lines):
-    assert "(Txt \"Enter Job #\")" in micro_vu_lines[17]
-    assert "(Name \"JOB\")" in micro_vu_lines[17]
+    assert "(Txt \"Enter Job #\")" in micro_vu_lines[16]
+    assert "(Name \"JOB\")" in micro_vu_lines[16]
 
 
 def test_machine_number_prompt_exists(micro_vu_lines):
-    assert "(Txt \"Enter Machine #\")" in micro_vu_lines[18]
-    assert "(Name \"MACHINE\")" in micro_vu_lines[18]
+    assert "(Txt \"Enter Machine #\")" in micro_vu_lines[17]
+    assert "(Name \"MACHINE\")" in micro_vu_lines[17]
 
 
 def test_inprocess_text_exists(micro_vu_lines):
-    assert "(Txt \"IN PROCESS\")" in micro_vu_lines[19]
-    assert "(Name \"IN PROCESS\")" in micro_vu_lines[19]
+    assert "(Txt \"IN PROCESS\")" in micro_vu_lines[18]
+    assert "(Name \"IN PROCESS\")" in micro_vu_lines[18]
 
 
 def test_sequence_number_prompt_exists(micro_vu_lines):
-    assert "(Txt \"SEQUENCE # IF SETUP PART USE 0 (ZERO).\")" in micro_vu_lines[20]
-    assert "(Name \"SEQUENCE\")" in micro_vu_lines[20]
+    assert "(Txt \"SEQUENCE # IF SETUP PART USE 0 (ZERO).\")" in micro_vu_lines[19]
+    assert "(Name \"SEQUENCE\")" in micro_vu_lines[19]
 
 
-def test_smart_profile_call(micro_vu_lines):
-    assert "(Name \"CallSmartProfileScript\")" in micro_vu_lines[327]
+def test_inspection_names(micro_vu_lines):
+    assert "(Name \"INSP_4\")" in micro_vu_lines[177]
+    assert "(Name \"INSP_5\")" in micro_vu_lines[187]
+    assert "(Name \"INSP_28\")" in micro_vu_lines[197]
+    assert "(Name \"INSP_30\")" in micro_vu_lines[203]
+    assert "(Name \"INSP_31A\")" in micro_vu_lines[209]
+    assert "(Name \"INSP_31B\")" in micro_vu_lines[215]
+    assert "(Name \"INSP_32A\")" in micro_vu_lines[221]
+    assert "(Name \"INSP_32B\")" in micro_vu_lines[231]

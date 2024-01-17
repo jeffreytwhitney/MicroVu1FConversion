@@ -97,11 +97,23 @@ def micro_vu() -> MicroVuProgram:
     return MicroVuProgram(_get_input_filepath(), "10", "A", "")
 
 
+def test_has_auto_report(micro_vu):
+    assert micro_vu.has_auto_report
+
+
 def test_can_write_to_output_file(micro_vu):
     assert micro_vu.can_write_to_output_file is True
     shutil.copy(_get_input_filepath(), _get_output_filepath())
     assert micro_vu.can_write_to_output_file is False
     _delete_all_files_in_output_directory()
+
+
+def test_instruction_index(micro_vu):
+    assert micro_vu.instructions_index == 3
+
+
+def test_has_killfile(micro_vu):
+    assert micro_vu.has_text_kill is True
 
 
 def test_comment(micro_vu):

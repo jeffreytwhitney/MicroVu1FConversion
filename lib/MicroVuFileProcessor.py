@@ -63,7 +63,29 @@ class Processor(metaclass=ABCMeta):
 
 class CoonRapidsProcessor(Processor):
 
-    def _add_smart_profile_call(self, micro_vu: MicroVuProgram) -> None:
+    def _inject_kill_file_call(self, micro_vu: MicroVuProgram) -> None:
+
+        if not micro_vu.has_text_kill:
+            return
+
+        if micro_vu.instructions_index == -1:
+            return
+
+        text_kill_index = micro_vu.instructions_index + 1
+
+        textkill_filepath = get_filepath_by_name('TextKill_text.txt')
+        if not textkill_filepath:
+            raise ProcessorException("Can't find 'TextKill_text' file.")
+
+        lines = get_unencoded_file_lines(textkill_filepath)
+        if not lines:
+            raise ProcessorException("Can't find 'TextKill_text' file.")
+
+        micro_vu.insert_line(text_kill_index, lines[3])
+        micro_vu.insert_line(text_kill_index, lines[2])
+        micro_vu.insert_line(text_kill_index, lines[1])
+
+    def _inject_smart_profile_call(self, micro_vu: MicroVuProgram) -> None:
 
         if not micro_vu.is_smartprofile:
             return
@@ -235,7 +257,9 @@ class CoonRapidsProcessor(Processor):
                 if not micro_vu.is_smartprofile:
                     self._replace_dimension_names(micro_vu)
                 else:
-                    self._add_smart_profile_call(micro_vu)
+                    self._inject_smart_profile_call(micro_vu)
+                if not micro_vu.has_text_kill:
+                    self._inject_kill_file_call(micro_vu)
                 self._update_comments(micro_vu)
                 self._replace_prompt_section(micro_vu)
                 micro_vu.update_instruction_count()

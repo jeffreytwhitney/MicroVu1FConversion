@@ -5,33 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Adding Processor Tests">
-      <change afterPath="$PROJECT_DIR$/test/AnokaTests/CallSmartProfile_text.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/AnokaTests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/AnokaTests/conftest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/AnokaTests/prompt_text.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/AnokaTests/sp_prompt_text.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/CallSmartProfile_text.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/conftest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/prompt_text.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/sp_prompt_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/TextKill_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/AnokaTests/TextKill_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/AnokaTests/test_MicroVuProgram.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/AnokaTests/test_Processor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/TextKill_text.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/CallSmartProfile_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/CallSmartProfile_text.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/MacOS.qss" beforeDir="false" afterPath="$PROJECT_DIR$/MacOS.qss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Reset/110047396A0_OPFAI_REVA_SP.iwp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Reset/446007 END VIEW.iwp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Reset/446007 ITEM 1 PROFILE.iwp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/Reset/NN00160A001-2_OPFAI_REVC_VMM_REV2.iwp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuProgram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/AnokaTests/test_AnokaSmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_AnokaSmartProfileMicroVuProgram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_MicroVuProgram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileMicroVuProgram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/TestDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/TestDialog.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/conftest.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/prompt_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/prompt_text.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/sp_prompt_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/sp_prompt_text.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_AnokaSmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_AnokaSmartProfileMicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_CoonRapidsMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_MicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_CoonRapidsProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_CoonRapidsSmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileMicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_CoonRapidsSmartProfileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,11 +77,15 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Batch.ConvertUIToPython.executor": "Run",
+    "Python tests.Python tests for test_MicroVuProgram.test_report_filepath.executor": "Run",
     "Python tests.Python tests in test.executor": "Run",
     "Python tests.Python tests in test_CoonRapidsMicroVuProgram.py.executor": "Run",
     "Python tests.Python tests in test_CoonRapidsProcessor.py.executor": "Run",
     "Python tests.Python tests in test_CoonRapidsSmartProfileMicroVuProgram.py.executor": "Run",
     "Python tests.Python tests in test_CoonRapidsSmartProfileProcessor.py.executor": "Run",
+    "Python tests.Python tests in test_MicroVuProgram.py (1).executor": "Run",
+    "Python tests.Python tests in test_MicroVuProgram.py.executor": "Run",
+    "Python tests.Python tests in test_SmartProfileMicroVuProgram.py.executor": "Run",
     "Python tests.Python tests in test_Utilities.py.executor": "Run",
     "Python.DimensionNameEntryDialog.executor": "Run",
     "Python.Main.executor": "Run",
@@ -174,14 +165,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00002" summary="starting...">
-      <option name="closed" value="true" />
-      <created>1702585002028</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1702585002028</updated>
     </task>
     <task id="LOCAL-00003" summary="starting...">
       <option name="closed" value="true" />
@@ -567,7 +550,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705434863973</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Adding Processor Tests">
+      <option name="closed" value="true" />
+      <created>1705496820426</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1705496820427</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="UnknownFeatures">

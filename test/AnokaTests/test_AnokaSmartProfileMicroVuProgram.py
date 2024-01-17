@@ -117,11 +117,18 @@ def _store_ini_value(ini_value, ini_section, ini_key):
         config.write(conf)
 
 
-
 # Fixtures
 @pytest.fixture(scope="module")
 def micro_vu() -> MicroVuProgram:
     return MicroVuProgram(_get_input_filepath("110047396A0_OPFAI_REVA_SP.iwp"), "10", "A", "110047396A0_OPFAI_REVA_SP.iwp")
+
+
+def test_instruction_index(micro_vu):
+    assert micro_vu.instructions_index == 3
+
+
+def test_has_killfile(micro_vu):
+    assert micro_vu.has_text_kill is False
 
 
 def test_can_write_to_output_file(micro_vu):
