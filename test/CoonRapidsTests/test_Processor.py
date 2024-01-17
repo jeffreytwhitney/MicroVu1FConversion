@@ -1,9 +1,11 @@
 import configparser
 import os
+import pathlib
 
 import pytest
 
-import lib.MicroVuFileProcessor
+import lib
+from lib import MicroVuFileProcessor
 from lib.MicroVuProgram import MicroVuProgram
 
 
@@ -16,7 +18,7 @@ def _delete_all_files_in_output_directory():
 
 
 def _get_dot_filepath_by_name(file_name: str) -> str:
-    for root, dirs, files in os.walk('.'):
+    for root, dirs, files in os.walk(_get_parent_directory()):
         for file in files:
             if file == file_name:
                 return os.path.join(root, file)
@@ -24,34 +26,19 @@ def _get_dot_filepath_by_name(file_name: str) -> str:
 
 
 def _get_filepath_by_name(file_name: str) -> str:
-    current_dir = os.path.dirname(__file__)
-    for root, dirs, files in os.walk(current_dir):
+    for root, dirs, files in os.walk(_get_parent_directory()):
         for file in files:
             if file == file_name:
                 return str(os.path.join(root, file))
     return ""
 
 
-def _get_input_filepath(file_name: str) -> str:
+def _get_input_filepath(file_name: str):
     return str(os.path.join(_get_input_root_path(), file_name))
 
 
 def _get_input_root_path() -> str:
-    current_dir = os.path.dirname(__file__)
-    return str(os.path.join(current_dir, "Input"))
-
-
-def _get_output_directory() -> str:
-    return str(os.path.join(_get_output_root_path(), "Input"))
-
-
-def _get_output_filepath(file_name: str):
-    return str(os.path.join(_get_output_directory(), file_name))
-
-
-def _get_output_root_path() -> str:
-    current_dir = os.path.dirname(__file__)
-    return str(os.path.join(current_dir, "Output"))
+    return str(os.path.join(_get_parent_directory(), "Input"))
 
 
 def _get_node_text(line_text: str, search_value: str, start_delimiter: str, end_delimiter: str = "") -> str:
@@ -63,6 +50,23 @@ def _get_node_text(line_text: str, search_value: str, start_delimiter: str, end_
     if end_index == -1:
         end_index = len(line_text)
     return line_text[begin_index + 1:end_index].strip()
+
+
+def _get_output_directory() -> str:
+    return str(os.path.join(_get_output_root_path(), "Input"))
+
+
+def _get_output_filepath(file_name: str):
+    return str(os.path.join(_get_output_directory(), file_name))
+
+
+def _get_output_root_path() -> str:
+    return str(os.path.join(_get_parent_directory(), "Output"))
+
+
+def _get_parent_directory():
+    current_dir = os.path.dirname(__file__)
+    return str(pathlib.Path(current_dir).resolve().parents[0])
 
 
 def _get_stored_ini_value(ini_section, ini_key):
@@ -115,37 +119,19 @@ def _store_ini_value(ini_value, ini_section, ini_key):
         config.write(conf)
 
 
-# Setup/Teardown
-def setup_module():
-    config_filepath = _get_filepath_by_name("TESTSettings.ini")
-    os.environ['MICRO_VU_CONVERTER_CONFIG_LOCATION'] = config_filepath
-    input_path = _get_input_root_path()
-    output_path = _get_output_root_path()
-    _store_ini_value(input_path, "Paths", "input_rootpath")
-    _store_ini_value(output_path, "Paths", "output_rootpath")
-    _delete_all_files_in_output_directory()
-    if not os.path.exists(_get_output_directory()):
-        os.mkdir(_get_output_directory())
-    _processor = lib.MicroVuFileProcessor.get_processor("JTW")
-    micro_vu = MicroVuProgram(_get_input_filepath("446007 END VIEW.iwp"), "10", "A", "")
-    _processor.add_micro_vu_program(micro_vu)
-    _processor.process_files()
-
-
-def teardown_module():
-    os.environ['MICRO_VU_CONVERTER_CONFIG_LOCATION'] = ""
-
-
 # Fixtures
-@pytest.fixture(scope="module")
-def micro_vu() -> MicroVuProgram:
-    return MicroVuProgram(_get_input_filepath("446007 END VIEW.iwp"), "10", "A", "")
-
-
 @pytest.fixture(scope="module")
 def micro_vu_lines() -> list[str]:
     output_path = _get_output_filepath("446007 END VIEW.iwp")
     return _get_utf_encoded_file_lines(output_path)
+
+
+def setup_module():
+    input_path = _get_input_filepath("446007 END VIEW.iwp")
+    micro_vu = MicroVuProgram(input_path, "10", "A", "")
+    _processor = lib.MicroVuFileProcessor.get_processor("JTW")
+    _processor.add_micro_vu_program(micro_vu)
+    _processor.process_files()
 
 
 # Tests

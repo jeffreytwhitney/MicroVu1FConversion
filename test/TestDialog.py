@@ -32,7 +32,7 @@ class Ui_OpenDialog(QtWidgets.QMainWindow):
 
 
 if __name__ == "__main__":
-    stylesheet_filepath = lib.Utilities.get_filepath_by_name("MacOS.qss")
+    stylesheet_filepath = lib.Utilities.get_filepath_by_name("../MacOS.qss")
     styleSheet = lib.Utilities.get_file_as_string(stylesheet_filepath)
     app = QtWidgets.QApplication(sys.argv)
     OpenDialog = QtWidgets.QMainWindow()

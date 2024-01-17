@@ -4,7 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Adding Processor Tests" />
+    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Adding Processor Tests">
+      <change afterPath="$PROJECT_DIR$/test/AnokaTests/CallSmartProfile_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/AnokaTests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/AnokaTests/conftest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/AnokaTests/prompt_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/AnokaTests/sp_prompt_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/CallSmartProfile_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/conftest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/prompt_text.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/CoonRapidsTests/sp_prompt_text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CallSmartProfile_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/CallSmartProfile_text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/MacOS.qss" beforeDir="false" afterPath="$PROJECT_DIR$/MacOS.qss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Reset/110047396A0_OPFAI_REVA_SP.iwp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Reset/446007 END VIEW.iwp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Reset/446007 ITEM 1 PROFILE.iwp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Reset/NN00160A001-2_OPFAI_REVC_VMM_REV2.iwp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/TestDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/TestDialog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/conftest.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/prompt_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/prompt_text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/sp_prompt_text.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lib/sp_prompt_text.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_AnokaSmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_AnokaSmartProfileMicroVuProgram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_CoonRapidsMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_MicroVuProgram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_CoonRapidsProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_CoonRapidsSmartProfileMicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileMicroVuProgram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test_CoonRapidsSmartProfileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -57,49 +85,56 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Batch.ConvertUIToPython.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test_CoonRapidsProcessor.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in test_Utilities.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.DimensionNameEntryDialog.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MicroVu1FactoryConverter.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MicroVuFileProcessor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MicroVuProcessor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MicroVuProcessor_MainWindow.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MicroVuProgram.executor&quot;: &quot;Run&quot;,
-    &quot;Python.TestDialog.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gui_DimensionNameEntryDialog.executor&quot;: &quot;Run&quot;,
-    &quot;Python.gui_MicroVuProcessor_MainWindow.executor&quot;: &quot;Run&quot;,
-    &quot;Python.mvFileProcessor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.scratch.executor&quot;: &quot;Run&quot;,
-    &quot;Python.scratch_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.CodyProjectSettingsMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last.edited.regexp&quot;: &quot;Sample_Text&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/test&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Batch.ConvertUIToPython.executor": "Run",
+    "Python tests.Python tests in test.executor": "Run",
+    "Python tests.Python tests in test_CoonRapidsMicroVuProgram.py.executor": "Run",
+    "Python tests.Python tests in test_CoonRapidsProcessor.py.executor": "Run",
+    "Python tests.Python tests in test_CoonRapidsSmartProfileMicroVuProgram.py.executor": "Run",
+    "Python tests.Python tests in test_CoonRapidsSmartProfileProcessor.py.executor": "Run",
+    "Python tests.Python tests in test_Utilities.py.executor": "Run",
+    "Python.DimensionNameEntryDialog.executor": "Run",
+    "Python.Main.executor": "Run",
+    "Python.MicroVu1FactoryConverter.executor": "Run",
+    "Python.MicroVuFileProcessor.executor": "Run",
+    "Python.MicroVuProcessor.executor": "Run",
+    "Python.MicroVuProcessor_MainWindow.executor": "Run",
+    "Python.MicroVuProgram.executor": "Run",
+    "Python.TestDialog.executor": "Run",
+    "Python.gui_DimensionNameEntryDialog.executor": "Run",
+    "Python.gui_MicroVuProcessor_MainWindow.executor": "Run",
+    "Python.mvFileProcessor.executor": "Run",
+    "Python.scratch.executor": "Run",
+    "Python.scratch_1.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.CodyProjectSettingsMigration": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "deletionFromPopupRequiresConfirmation": "false",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last.edited.regexp": "Sample_Text",
+    "last_opened_file_path": "C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/test/AnokaTests",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\AnokaTests" />
+      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\CoonRapidsTests" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\ui" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\ui" />
-      <recent name="D:\OneDrive\Projects\Automation\MicroVu1FConversion\ui" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\lib" />
+      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion" />
+      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test" />
+      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\CoonRapidsTests" />
+      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\AnokaTests" />
     </key>
   </component>
   <component name="RunManager">
@@ -139,14 +174,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00001" summary="starting...">
-      <option name="closed" value="true" />
-      <created>1702500737195</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1702500737195</updated>
     </task>
     <task id="LOCAL-00002" summary="starting...">
       <option name="closed" value="true" />
@@ -532,11 +559,30 @@
       <option name="project" value="LOCAL" />
       <updated>1705434033908</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Adding Processor Tests">
+      <option name="closed" value="true" />
+      <created>1705434863972</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1705434863973</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.qss" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -561,16 +607,5 @@
     <MESSAGE value="V1.2" />
     <MESSAGE value="Adding Processor Tests" />
     <option name="LAST_COMMIT_MESSAGE" value="Adding Processor Tests" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test/test_Utilities.py</url>
-          <line>138</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
