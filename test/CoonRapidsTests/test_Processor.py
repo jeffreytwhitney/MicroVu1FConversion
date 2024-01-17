@@ -128,6 +128,7 @@ def micro_vu_lines() -> list[str]:
 
 def setup_module():
     _store_ini_value("CoonRapids", "Location", "site")
+    _store_ini_value("False", "GlobalSettings", "hand_edit_dimension_names")
     input_path = _get_input_filepath("446007 END VIEW.iwp")
     micro_vu = MicroVuProgram(input_path, "10", "A", "")
     _processor = lib.MicroVuFileProcessor.get_processor("JTW")

@@ -290,7 +290,7 @@ class MicroVuProgram:
             self.file_lines[line_idx] = updated_line_text
         else:
             if line_idx := self.get_index_containing_text("AutoExpFile"):
-                line = self.file_lines[line_idx]
+                line = self.file_lines[line_idx][:-2]
                 if "(AutoRptSortInstructionsByName" not in line:
                     line += " (AutoRptSortInstructionsByName 0)"
                 else:
@@ -308,7 +308,7 @@ class MicroVuProgram:
                 else:
                     existing_node = MicroVuProgram.get_node(line, "AutoRptAppendDateAndTime")
                     line = line.replace(existing_node, "(AutoRptAppendDateAndTime 1)")
-                line += f"(AutoRptFileName \"{value}\")"
+                line += f" (AutoRptFileName \"{value}\")\n"
                 self.file_lines[line_idx] = line
 
     @property

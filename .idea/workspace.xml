@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Adding Processor Tests" />
+    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Adding Processor Tests">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuProgram.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/AnokaTests/test_Processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_Processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,6 +71,10 @@
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Batch.ConvertUIToPython.executor": "Run",
     "Python tests.Python tests for test_MicroVuProgram.test_report_filepath.executor": "Run",
+    "Python tests.Python tests for test_Processor.test_auto_report_filepath.executor": "Run",
+    "Python tests.Python tests for test_Processor.test_export_filepath.executor": "Run",
+    "Python tests.Python tests for test_Processor.test_instruction_count.executor": "Run",
+    "Python tests.Python tests for test_Processor.test_text_kill_exists.executor": "Run",
     "Python tests.Python tests in test.executor": "Run",
     "Python tests.Python tests in test_CoonRapidsMicroVuProgram.py.executor": "Run",
     "Python tests.Python tests in test_CoonRapidsProcessor.py.executor": "Run",
@@ -70,6 +82,7 @@
     "Python tests.Python tests in test_CoonRapidsSmartProfileProcessor.py.executor": "Run",
     "Python tests.Python tests in test_MicroVuProgram.py (1).executor": "Run",
     "Python tests.Python tests in test_MicroVuProgram.py.executor": "Run",
+    "Python tests.Python tests in test_Processor.py.executor": "Run",
     "Python tests.Python tests in test_SmartProfileMicroVuProgram.py.executor": "Run",
     "Python tests.Python tests in test_Utilities.py.executor": "Run",
     "Python.DimensionNameEntryDialog.executor": "Run",
@@ -113,7 +126,29 @@
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\AnokaTests" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python tests.Python tests in test">
+    <configuration name="MicroVu1FactoryConverter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MicroVu1FConversion" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MicroVu1FactoryConverter.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests in test" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="MicroVu1FConversion" />
       <option name="ENV_FILES" value="" />
@@ -132,6 +167,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Python tests in test" />
+        <item itemvalue="Python.MicroVu1FactoryConverter" />
       </list>
     </recent_temporary>
   </component>
@@ -150,14 +186,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00004" summary="starting...">
-      <option name="closed" value="true" />
-      <created>1702670817444</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1702670817444</updated>
     </task>
     <task id="LOCAL-00005" summary="starting...">
       <option name="closed" value="true" />
@@ -543,7 +571,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705504018557</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Adding Processor Tests">
+      <option name="closed" value="true" />
+      <created>1705504047082</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1705504047082</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="UnknownFeatures">

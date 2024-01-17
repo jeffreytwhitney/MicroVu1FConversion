@@ -122,6 +122,8 @@ def _store_ini_value(ini_value, ini_section, ini_key):
 
 # Setup/Teardown
 def setup_module():
+    _store_ini_value("CoonRapids", "Location", "site")
+    _store_ini_value("False", "GlobalSettings", "hand_edit_dimension_names")
     input_path = _get_input_filepath("446007 ITEM 1 PROFILE.iwp")
     micro_vu = MicroVuProgram(input_path, "10", "A", "446007 ITEM 1 PROFILE")
     _processor = lib.MicroVuFileProcessor.get_processor("JTW")
