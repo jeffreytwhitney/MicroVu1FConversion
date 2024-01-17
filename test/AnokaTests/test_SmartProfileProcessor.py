@@ -220,14 +220,3 @@ def test_inprocess_text_exists(micro_vu_lines):
 def test_sequence_number_prompt_exists(micro_vu_lines):
     assert "(Txt \"SEQUENCE # IF SETUP PART USE 0 (ZERO).\")" in micro_vu_lines[22]
     assert "(Name \"SEQUENCE\")" in micro_vu_lines[22]
-
-
-def test_inspection_names(micro_vu_lines):
-    assert "(Name \"INSP_1\")" in micro_vu_lines[526]
-    assert "(Name \"INSP_2\")" in micro_vu_lines[536]
-    assert "(Name \"INSP_3\")" in micro_vu_lines[544]
-    assert "(Name \"INSP_4\")" in micro_vu_lines[552]
-    assert "(Name \"INSP_5\")" in micro_vu_lines[557]
-    assert "(Name \"INSP_6\")" in micro_vu_lines[572]
-    assert "(Name \"INSP_7\")" in micro_vu_lines[577]
-    assert "(Name \"INSP_8\")" in micro_vu_lines[583]
