@@ -1,5 +1,7 @@
+import contextlib
 import os
 import re
+import string
 from abc import ABCMeta, abstractmethod
 from datetime import datetime
 from pathlib import Path
@@ -9,6 +11,56 @@ import lib.Utilities
 from lib import Utilities
 from lib.MicroVuProgram import MicroVuProgram, MicroVuException, DimensionName
 from lib.Utilities import get_unencoded_file_lines, get_utf_encoded_file_lines, get_filepath_by_name
+
+
+def _convert_number_to_letter(num_value: str) -> str:
+    charstr = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    chars = list(charstr)
+    return chars[int(num_value)]
+
+
+def _collapse_dot_dimension_parts(parts: list[str]) -> list[str]:
+    if any(part for part in parts if part == "."):
+        if parts[0] == ".":
+            return []
+        if parts[-1] == ".":
+            return []
+        for i, part in enumerate(parts):
+            if parts[i] == ".":
+                parts[i - 1] = f"{parts[i - 1]}.{parts[i + 1]}"
+                parts.remove(parts[i + 1])
+                parts.remove(parts[i])
+    return parts
+
+
+def _containsNumber(line):
+    res = False
+    if " " in line:
+        return False
+    if "_" in line:
+        return False
+    with contextlib.suppress(ValueError):
+        for val in line.split():
+            if float(val.strip(string.punctuation)):
+                res = True
+                break
+    return res
+
+
+def _get_dimension_parts(dimension_name: str) -> list[str]:
+    dimension_name = dimension_name.replace("INSP", "").replace("ITEM", "")
+    parts = re.split("(\d+)", dimension_name)
+    while "" in parts:
+        parts.remove("")
+    while " " in parts:
+        parts.remove(" ")
+    while "_" in parts:
+        parts.remove("_")
+    while "-" in parts:
+        parts.remove("-")
+    for i, part in enumerate(parts):
+        parts[i] = part.strip().replace("_", "").replace("-", "")
+    return _collapse_dot_dimension_parts(parts)
 
 
 class Processor(metaclass=ABCMeta):
@@ -27,30 +79,68 @@ class Processor(metaclass=ABCMeta):
         self._hand_edit_dimension_names = hand_edit_setting_value == "True"
 
     @staticmethod
-    def _parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
-        dim_parts = re.split("[ _Xx.-]", dimension_name)
-        while "" in dim_parts:
-            dim_parts.remove("")
-        if len(dim_parts) == 1:
-            dim_part = dim_parts[0]
-            dim_part = dim_part.upper().replace("INSP", "").replace("ITEM", "")
-            if dim_part.isnumeric():
-                return dim_part
-            elif dim_part[:-1].isnumeric():
-                return dim_part
-        if len(dim_parts) == 2 and dim_parts[1].isnumeric():
-            return f"{dimension_root}{dim_parts[1]}"
-        if len(dim_parts) == 2:
-            last_part = dim_parts[1][:-1]
-            if last_part.isnumeric():
-                return f"{dimension_root}{dim_parts[1]}"
-        if dim_parts[1].isnumeric() and dim_parts[2].isnumeric():
-            charstr = ' ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            chars = list(charstr)
-            return f"{dimension_root}{dim_parts[1]}{chars[int(dim_parts[2])]}"
-        if dim_parts[1].isnumeric() and dim_parts[2].isalpha() and len(dim_parts[2]) == 1:
-            return f"{dimension_root}{dim_parts[1]}{dim_parts[2]}"
-        return ""
+    def parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
+        dimension_name = dimension_name.upper()
+        if _containsNumber(dimension_name):
+            return f"{dimension_root}{dimension_name}"
+        if dimension_name.isalpha():
+            return dimension_name
+
+        parts = _get_dimension_parts(dimension_name)
+
+        if not parts:
+            return dimension_name
+        if not _containsNumber(parts[0]):
+            return dimension_name
+
+        num_parts = len(parts)
+        match num_parts:
+
+            case 1:
+                if _containsNumber(parts[0]):
+                    return f"{dimension_root}{parts[0]}"
+                else:
+                    return dimension_name
+
+            case 2:
+                if _containsNumber(parts[0]) and parts[1].isnumeric():
+                    return f"{dimension_root}{parts[0]}{_convert_number_to_letter(parts[1])}"
+                if _containsNumber(parts[0]) and parts[1].isalpha():
+                    if len(parts[1]) > 1:
+                        return dimension_name
+                    if parts[1] == "X":
+                        return dimension_name
+                    return f"{dimension_root}{parts[0]}{parts[1]}"
+                return dimension_name
+
+            case 3:
+                if parts[2] != "X":
+                    return dimension_name
+                if _containsNumber(parts[0]) and parts[1].isnumeric():
+                    return f"{dimension_root}{parts[0]}{_convert_number_to_letter(parts[1])}"
+                if _containsNumber(parts[0]) and parts[1].isalpha():
+                    if len(parts[1]) > 1:
+                        return dimension_name
+                    if parts[1] == "X":
+                        return dimension_name
+                    return f"{dimension_root}{parts[0]}{parts[1]}"
+                return dimension_name
+
+            case 4:
+                if parts[-1] != "X":
+                    return dimension_name
+                if not parts[0].isnumeric():
+                    return dimension_name
+                if parts[1].isalpha():
+                    return dimension_name
+                if parts[2].isnumeric():
+                    return f"{dimension_root}{parts[0]}{parts[1]}{_convert_number_to_letter(parts[2])}"
+                if parts[2].isalpha() and len(parts[2]) == 1:
+                    return f"{dimension_root}{parts[0]}{parts[1]}{parts[2]}"
+                return dimension_name
+
+            case _:
+                return dimension_name
 
     @property
     def micro_vu_programs(self) -> list[MicroVuProgram]:
@@ -68,8 +158,8 @@ class CoonRapidsProcessor(Processor):
 
     def _replace_kill_file_call(self, micro_vu: MicroVuProgram):
         killfile_index = next(
-            (i for i, l in enumerate(micro_vu.file_lines)
-             if "killFile.bat" in l), -1
+                (i for i, l in enumerate(micro_vu.file_lines)
+                 if "killFile.bat" in l), -1
         )
         if killfile_index == -1:
             return
@@ -77,8 +167,6 @@ class CoonRapidsProcessor(Processor):
         killfile_node = MicroVuProgram.get_node(current_line, "CmdText")
         new_line = current_line.replace(killfile_node, "(CmdText \"\"\"C:\\killFile.bat\"\"\")")
         micro_vu.file_lines[killfile_index] = new_line
-
-
 
     def _inject_kill_file_call(self, micro_vu: MicroVuProgram) -> None:
 
@@ -181,7 +269,7 @@ class CoonRapidsProcessor(Processor):
             if self._hand_edit_dimension_names:
                 new_dimension_name = dimension_name.name
             else:
-                new_dimension_name = Processor._parse_dimension_name(dimension_name.name, self._dimension_root)
+                new_dimension_name = Processor.parse_dimension_name(dimension_name.name, self._dimension_root)
             micro_vu.update_feature_name(dimension_name.index, new_dimension_name)
 
     def _replace_export_filepath(self, micro_vu: MicroVuProgram) -> None:
