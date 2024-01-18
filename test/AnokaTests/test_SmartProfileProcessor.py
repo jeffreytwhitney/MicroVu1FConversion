@@ -168,6 +168,7 @@ def test_instruction_count(micro_vu_lines):
 
 
 def test_text_kill_exists(micro_vu_lines):
+    assert "C:\\killFile.bat" in micro_vu_lines[4]
     assert "TEXT KILL" in micro_vu_lines[4]
 
 
