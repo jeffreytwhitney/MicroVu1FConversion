@@ -184,7 +184,7 @@ class MicroVuProgram:
 
     @property
     def has_text_kill(self) -> bool:
-        return any("killFile.bat" in line for line in self.file_lines)
+        return any("C:\\killFile.bat" in line for line in self.file_lines)
 
     @property
     def has_calculators(self) -> bool:

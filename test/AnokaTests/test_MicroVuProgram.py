@@ -113,7 +113,7 @@ def test_instruction_index(micro_vu):
 
 
 def test_has_killfile(micro_vu):
-    assert micro_vu.has_text_kill is True
+    assert micro_vu.has_text_kill is False
 
 
 def test_comment(micro_vu):

@@ -8,8 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/AnokaTests/test_SmartProfileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_SmartProfileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +78,7 @@
     "Python tests.Python tests in test_CoonRapidsSmartProfileProcessor.py.executor": "Run",
     "Python tests.Python tests in test_MicroVuProgram.py (1).executor": "Run",
     "Python tests.Python tests in test_MicroVuProgram.py.executor": "Run",
-    "Python tests.Python tests in test_Processor.py.executor": "Debug",
+    "Python tests.Python tests in test_Processor.py.executor": "Run",
     "Python tests.Python tests in test_SmartProfileMicroVuProgram.py.executor": "Run",
     "Python tests.Python tests in test_SmartProfileProcessor.py.executor": "Run",
     "Python tests.Python tests in test_Utilities.py.executor": "Run",
@@ -125,7 +123,7 @@
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\AnokaTests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in test_Processor.py">
+  <component name="RunManager" selected="Python tests.Python tests in test">
     <configuration name="MicroVu1FactoryConverter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MicroVu1FConversion" />
       <option name="ENV_FILES" value="" />
@@ -163,40 +161,8 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in test_Processor.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="MicroVu1FConversion" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test/AnokaTests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/test/AnokaTests/test_Processor.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Python tests in test_SmartProfileProcessor.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="MicroVu1FConversion" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test/AnokaTests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/test/AnokaTests/test_SmartProfileProcessor.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Python tests in test_Processor.py" />
-        <item itemvalue="Python tests.Python tests in test_SmartProfileProcessor.py" />
         <item itemvalue="Python tests.Python tests in test" />
         <item itemvalue="Python.MicroVu1FactoryConverter" />
       </list>
@@ -217,14 +183,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00006" summary="starting...">
-      <option name="closed" value="true" />
-      <created>1702755473203</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1702755473203</updated>
     </task>
     <task id="LOCAL-00007" summary="First Working Version">
       <option name="closed" value="true" />
@@ -610,7 +568,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705518115070</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="Adding Processor Tests">
+      <option name="closed" value="true" />
+      <created>1705579295498</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1705579295498</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -650,16 +616,5 @@
     <MESSAGE value="V1.2" />
     <MESSAGE value="Adding Processor Tests" />
     <option name="LAST_COMMIT_MESSAGE" value="Adding Processor Tests" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/lib/MicroVuProgram.py</url>
-          <line>371</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

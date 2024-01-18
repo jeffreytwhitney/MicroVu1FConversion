@@ -66,9 +66,27 @@ class Processor(metaclass=ABCMeta):
 
 class CoonRapidsProcessor(Processor):
 
+    def _replace_kill_file_call(self, micro_vu: MicroVuProgram):
+        killfile_index = next(
+            (i for i, l in enumerate(micro_vu.file_lines)
+             if "killFile.bat" in l), -1
+        )
+        if killfile_index == -1:
+            return
+        current_line = micro_vu.file_lines[killfile_index]
+        killfile_node = MicroVuProgram.get_node(current_line, "CmdText")
+        new_line = current_line.replace(killfile_node, "(CmdText \"\"\"C:\\killFile.bat\"\"\")")
+        micro_vu.file_lines[killfile_index] = new_line
+
+
+
     def _inject_kill_file_call(self, micro_vu: MicroVuProgram) -> None:
 
         if micro_vu.instructions_index == -1:
+            return
+
+        if any("killFile.bat" in line for line in micro_vu.file_lines):
+            self._replace_kill_file_call(micro_vu)
             return
 
         text_kill_index = micro_vu.instructions_index + 1
