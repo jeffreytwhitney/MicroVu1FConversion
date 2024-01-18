@@ -59,8 +59,8 @@ class MicroVuProgram:
     def __init__(self, input_filepath: str, op_num: str, rev_num: str, smartprofile_projectname: str):
         self._filepath = input_filepath
         self.file_lines = get_utf_encoded_file_lines(self._filepath)
-        self._op_num = op_num
-        self._rev_num = rev_num
+        self._op_num = op_num.upper()
+        self._rev_num = rev_num.upper()
         self._smartprofile_projectname = smartprofile_projectname
         self._postinit()
 

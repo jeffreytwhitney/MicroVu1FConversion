@@ -6,11 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Adding Processor Tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/AnokaTests/test_Processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_Processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_SmartProfileProcessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/AnokaTests/test_SmartProfileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_SmartProfileProcessor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -82,8 +80,9 @@
     "Python tests.Python tests in test_CoonRapidsSmartProfileProcessor.py.executor": "Run",
     "Python tests.Python tests in test_MicroVuProgram.py (1).executor": "Run",
     "Python tests.Python tests in test_MicroVuProgram.py.executor": "Run",
-    "Python tests.Python tests in test_Processor.py.executor": "Run",
+    "Python tests.Python tests in test_Processor.py.executor": "Debug",
     "Python tests.Python tests in test_SmartProfileMicroVuProgram.py.executor": "Run",
+    "Python tests.Python tests in test_SmartProfileProcessor.py.executor": "Run",
     "Python tests.Python tests in test_Utilities.py.executor": "Run",
     "Python.DimensionNameEntryDialog.executor": "Run",
     "Python.Main.executor": "Run",
@@ -126,7 +125,7 @@
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\AnokaTests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in test">
+  <component name="RunManager" selected="Python tests.Python tests in test_Processor.py">
     <configuration name="MicroVu1FactoryConverter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MicroVu1FConversion" />
       <option name="ENV_FILES" value="" />
@@ -164,8 +163,40 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests in test_Processor.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="MicroVu1FConversion" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test/AnokaTests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/test/AnokaTests/test_Processor.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests in test_SmartProfileProcessor.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="MicroVu1FConversion" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test/AnokaTests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/test/AnokaTests/test_SmartProfileProcessor.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Python tests in test_Processor.py" />
+        <item itemvalue="Python tests.Python tests in test_SmartProfileProcessor.py" />
         <item itemvalue="Python tests.Python tests in test" />
         <item itemvalue="Python.MicroVu1FactoryConverter" />
       </list>
@@ -186,14 +217,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00005" summary="starting...">
-      <option name="closed" value="true" />
-      <created>1702671336005</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1702671336005</updated>
     </task>
     <task id="LOCAL-00006" summary="starting...">
       <option name="closed" value="true" />
@@ -579,7 +602,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705504047082</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Adding Processor Tests">
+      <option name="closed" value="true" />
+      <created>1705518115070</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1705518115070</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -619,5 +650,16 @@
     <MESSAGE value="V1.2" />
     <MESSAGE value="Adding Processor Tests" />
     <option name="LAST_COMMIT_MESSAGE" value="Adding Processor Tests" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/lib/MicroVuProgram.py</url>
+          <line>371</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

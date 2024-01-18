@@ -13,6 +13,7 @@ from lib.Utilities import get_unencoded_file_lines, get_utf_encoded_file_lines, 
 
 class Processor(metaclass=ABCMeta):
     _dimension_root: str
+    _hand_edit_dimension_names: bool
     _microvu_programs: List[MicroVuProgram] = []
 
     @abstractmethod
@@ -22,6 +23,8 @@ class Processor(metaclass=ABCMeta):
     def __init__(self, user_initials: str):
         self.user_initials = user_initials
         self._dimension_root: str = lib.Utilities.GetStoredIniValue("GlobalSettings", "dimension_root", "Settings")
+        hand_edit_setting_value = lib.Utilities.GetStoredIniValue("GlobalSettings", "hand_edit_dimension_names", "Settings")
+        self._hand_edit_dimension_names = hand_edit_setting_value == "True"
 
     @staticmethod
     def _parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
@@ -64,9 +67,6 @@ class Processor(metaclass=ABCMeta):
 class CoonRapidsProcessor(Processor):
 
     def _inject_kill_file_call(self, micro_vu: MicroVuProgram) -> None:
-
-        if not micro_vu.has_text_kill:
-            return
 
         if micro_vu.instructions_index == -1:
             return
@@ -160,7 +160,10 @@ class CoonRapidsProcessor(Processor):
             return
         dimension_names: list[DimensionName] = micro_vu.dimension_names
         for dimension_name in dimension_names:
-            new_dimension_name = Processor._parse_dimension_name(dimension_name.name, self._dimension_root)
+            if self._hand_edit_dimension_names:
+                new_dimension_name = dimension_name.name
+            else:
+                new_dimension_name = Processor._parse_dimension_name(dimension_name.name, self._dimension_root)
             micro_vu.update_feature_name(dimension_name.index, new_dimension_name)
 
     def _replace_export_filepath(self, micro_vu: MicroVuProgram) -> None:
@@ -258,10 +261,10 @@ class CoonRapidsProcessor(Processor):
                     self._replace_dimension_names(micro_vu)
                 else:
                     self._inject_smart_profile_call(micro_vu)
+                self._replace_prompt_section(micro_vu)
                 if not micro_vu.has_text_kill:
                     self._inject_kill_file_call(micro_vu)
                 self._update_comments(micro_vu)
-                self._replace_prompt_section(micro_vu)
                 micro_vu.update_instruction_count()
                 self._write_file_to_harddrive(micro_vu)
         except Exception as e:
