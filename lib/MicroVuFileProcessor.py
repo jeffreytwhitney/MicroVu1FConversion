@@ -328,10 +328,7 @@ class CoonRapidsProcessor(Processor):
                 micro_vu.insert_line(insert_index, line)
                 continue
             if line.find("(Name \"SPFILENAME\")") > 0:
-                try:
-                    smartprofile_projectname = micro_vu.smartprofile_projectname
-                except MicroVuException as e:
-                    raise ProcessorException(e.args[0]) from e
+                smartprofile_projectname = micro_vu.smartprofile_projectname
                 line = line.replace("<SPF>", smartprofile_projectname)
                 micro_vu.insert_line(insert_index, line)
                 continue
