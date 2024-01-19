@@ -1,100 +1,16 @@
-import configparser
-import os
-import pathlib
 import shutil
 
 import pytest
 
 from lib.MicroVuProgram import MicroVuProgram
-
-
-def _get_parent_directory():
-    current_dir = os.path.dirname(__file__)
-    return str(pathlib.Path(current_dir).resolve().parents[0])
-
-
-def _delete_all_files_in_output_directory():
-    for root, dirs, files in os.walk(_get_output_root_path()):
-        for item in files:
-            filespec = os.path.join(root, item)
-            os.unlink(filespec)
-
-
-def _get_filepath_by_name(file_name: str) -> str:
-    for root, dirs, files in os.walk(_get_parent_directory()):
-        for file in files:
-            if file == file_name:
-                return str(os.path.join(root, file))
-    return ""
-
-
-def _get_dot_filepath_by_name(file_name: str) -> str:
-    for root, dirs, files in os.walk(_get_parent_directory()):
-        for file in files:
-            if file == file_name:
-                return os.path.join(root, file)
-    return ""
-
-
-def _get_input_root_path() -> str:
-    return str(os.path.join(_get_parent_directory(), "Input"))
-
-
-def _get_output_root_path() -> str:
-    return str(os.path.join(_get_parent_directory(), "Output"))
-
-
-def _get_output_directory() -> str:
-    return str(os.path.join(_get_output_root_path(), "Input"))
-
-
-def _get_stored_ini_value(ini_section, ini_key):
-    ini_file_path = _get_filepath_by_name("TESTSettings.ini")
-    config = configparser.ConfigParser()
-    config.read(ini_file_path)
-    try:
-        config_value = config.get(ini_section, ini_key)
-    except:
-        try:
-            config_value = config.get(ini_section, "*")
-        except:
-            config_value = ""
-    return config_value
-
-
-def _get_unencoded_file_lines(file_path: str) -> list[str]:
-    if not file_path:
-        return []
-    with open(file_path, "r") as f:
-        return f.readlines()
-
-
-def _get_input_filepath():
-    return str(os.path.join(_get_input_root_path(), "446007 END VIEW.iwp"))
-
-
-def _get_output_filepath():
-    return str(os.path.join(_get_output_directory(), "446007 END VIEW.iwp"))
-
-
-def _store_ini_value(ini_value, ini_section, ini_key):
-    ini_file_path = _get_filepath_by_name("TESTSettings.ini")
-    config = configparser.ConfigParser()
-    if not os.path.exists(ini_file_path):
-        config.add_section(ini_section)
-    else:
-        if not config.has_section(ini_section):
-            config.add_section(ini_section)
-        config.read(ini_file_path)
-    config.set(ini_section, ini_key, ini_value)
-    with open(ini_file_path, "w") as conf:
-        config.write(conf)
+from test.CommonFunctions import get_input_filepath, get_output_filepath, delete_all_files_in_output_directory, \
+    get_output_directory
 
 
 # Fixtures
 @pytest.fixture(scope="module")
 def micro_vu() -> MicroVuProgram:
-    return MicroVuProgram(_get_input_filepath(), "10", "A", "")
+    return MicroVuProgram(get_input_filepath("446007 END VIEW.iwp"), "10", "A", "")
 
 
 def test_has_auto_report(micro_vu):
@@ -103,9 +19,9 @@ def test_has_auto_report(micro_vu):
 
 def test_can_write_to_output_file(micro_vu):
     assert micro_vu.can_write_to_output_file is True
-    shutil.copy(_get_input_filepath(), _get_output_filepath())
+    shutil.copy(get_input_filepath("446007 END VIEW.iwp"), get_output_filepath("446007 END VIEW.iwp"))
     assert micro_vu.can_write_to_output_file is False
-    _delete_all_files_in_output_directory()
+    delete_all_files_in_output_directory()
 
 
 def test_instruction_index(micro_vu):
@@ -147,7 +63,7 @@ def test_filename(micro_vu):
 
 
 def test_filepath(micro_vu):
-    assert micro_vu.filepath == _get_input_filepath()
+    assert micro_vu.filepath == get_input_filepath("446007 END VIEW.iwp")
 
 
 def test_has_calculators(micro_vu):
@@ -178,11 +94,11 @@ def test_op_number(micro_vu):
 
 
 def test_output_directory(micro_vu):
-    assert micro_vu.output_directory == _get_output_directory()
+    assert micro_vu.output_directory == get_output_directory()
 
 
 def test_output_filepath(micro_vu):
-    assert micro_vu.output_filepath == _get_output_filepath()
+    assert micro_vu.output_filepath == get_output_filepath("446007 END VIEW.iwp")
 
 
 def test_part_number(micro_vu):
