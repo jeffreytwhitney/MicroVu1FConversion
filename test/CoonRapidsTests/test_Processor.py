@@ -27,6 +27,26 @@ def setup_module():
 
 
 # Tests
+def test_add_get_microvu():
+    microvu = MicroVuProgram(get_input_filepath("446007 END VIEW.iwp"), "10", "A", "")
+    p = lib.MicroVuFileProcessor.get_processor("JTW")
+    p.add_micro_vu_program(microvu)
+    assert len(p.micro_vu_programs) == 1
+    second_micro_vu = p.micro_vu_programs[0]
+    assert microvu == second_micro_vu
+
+def test_add_get_microvus():
+    micro_vu_list: list[MicroVuProgram] = []
+    mv1 = MicroVuProgram(get_input_filepath("446007 END VIEW.iwp"), "10", "A", "")
+    micro_vu_list.append(mv1)
+    mv2 = MicroVuProgram(get_input_filepath("446007 ITEM 1 PROFILE.iwp"), "10", "A", "")
+    micro_vu_list.append(mv2)
+    p = lib.MicroVuFileProcessor.get_processor("JTW")
+    p.add_micro_vu_programs(micro_vu_list)
+    assert len(p.micro_vu_programs) == 2
+    assert micro_vu_list == p.micro_vu_programs
+
+
 def test_correct_processor():
     p = lib.MicroVuFileProcessor.get_processor("JTW")
     assert isinstance(p, MicroVuFileProcessor.CoonRapidsProcessor)
