@@ -49,7 +49,7 @@ def _containsNumber(line):
 
 def _get_dimension_parts(dimension_name: str) -> list[str]:
     dimension_name = dimension_name.replace("INSP", "").replace("ITEM", "")
-    parts = re.split("(\d+)", dimension_name)
+    parts = re.split("(\\d+)", dimension_name)
     while "" in parts:
         parts.remove("")
     while " " in parts:
