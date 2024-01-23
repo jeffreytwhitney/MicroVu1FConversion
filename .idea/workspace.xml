@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Finally freaking done with creating tests. 201 total. &#10;Oh, wait...&#10;I still have to make tests for the UI. &#10;Crap.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/AnokaTests/test_Processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_Processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/AnokaTests/test_Processor_parse_dimension_names.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/AnokaTests/test_Processor_parse_dimension_names.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor_parse_dimension_names.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor_parse_dimension_names.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,6 +34,7 @@
       </GitPushTagMode>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -184,14 +187,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Finally figured out View Names. (I think), and added &quot;Process File&quot; checkbox to the screen. Testing for both Coon Rapids and Anoka files works. Need to test Profile Files next...">
-      <option name="closed" value="true" />
-      <created>1703072278147</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1703072278148</updated>
     </task>
     <task id="LOCAL-00013" summary="Finally figured out View Names. (I think), and added &quot;Process File&quot; checkbox to the screen. Testing for both Coon Rapids and Anoka files works. Need to test Profile Files next...">
       <option name="closed" value="true" />
@@ -577,7 +572,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705607491403</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="Finally freaking done with creating tests. 201 total. &#10;Oh, wait...&#10;I still have to make tests for the UI. &#10;Crap.">
+      <option name="closed" value="true" />
+      <created>1705680406351</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1705680406352</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="UnknownFeatures">

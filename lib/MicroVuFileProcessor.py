@@ -81,6 +81,8 @@ class Processor(metaclass=ABCMeta):
     @staticmethod
     def parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
         dimension_name = dimension_name.upper()
+        if dimension_name.startswith("#"):
+            dimension_name = dimension_name[1:]
         if _containsNumber(dimension_name):
             return f"{dimension_root}{dimension_name}"
         if dimension_name.isalpha():
