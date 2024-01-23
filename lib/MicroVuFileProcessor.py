@@ -158,17 +158,62 @@ class Processor(metaclass=ABCMeta):
 
 class CoonRapidsProcessor(Processor):
 
-    def _replace_kill_file_call(self, micro_vu: MicroVuProgram):
-        killfile_index = next(
-                (i for i, l in enumerate(micro_vu.file_lines)
-                 if "killFile.bat" in l), -1
-        )
-        if killfile_index == -1:
+    def _delete_old_prompts(self, micro_vu):
+        micro_vu.delete_line_containing_text("Name \"PT #\"")
+        micro_vu.delete_line_containing_text("Name \"Employee #\"")
+        micro_vu.delete_line_containing_text("Name \"Machine #\"")
+        micro_vu.delete_line_containing_text("Name \"PT#\"")
+        micro_vu.delete_line_containing_text("Name \"Employee#\"")
+        micro_vu.delete_line_containing_text("Name \"Machine#\"")
+        micro_vu.delete_line_containing_text("Name \"Run-Setup\"")
+        micro_vu.delete_line_containing_text("Name \"Job #\"")
+        micro_vu.delete_line_containing_text("Name \"Job#\"")
+
+    def _disable_dimensions(self, micro_vu):
+        for i, line in enumerate(micro_vu.file_lines):
+            if "AutoExpFile" in line:
+                line = line.replace("(AutoRpt 1)", "(AutoRpt 0)")
+                line = line.replace("(AutoConf 1)", "(AutoConf 0)")
+                micro_vu.file_lines[i] = line
+                continue
+            if "(Name " not in line:
+                continue
+            if "C:\\killFile.bat" in line:
+                continue
+            if "Bring part to Metrology.JPG" in line:
+                continue
+            if "(DontMeasure)" in line:
+                continue
+            micro_vu.file_lines[i] = f"{line[:-1]} (DontMeasure){line[-1]}"
+
+    def _get_new_prompts(self, micro_vu: MicroVuProgram) -> list[str]:
+        pattern = 'sp_prompt_text.txt' if micro_vu.is_smartprofile else 'prompt_text.txt'
+
+        prompt_file = get_filepath_by_name(pattern)
+        if not prompt_file:
+            return []
+
+        prompt_lines = get_utf_encoded_file_lines(prompt_file)
+        return prompt_lines or []
+
+    def _inject_bring_to_metrology_picture(self, micro_vu: MicroVuProgram) -> None:
+
+        if micro_vu.kill_file_call_index == -1:
             return
-        current_line = micro_vu.file_lines[killfile_index]
-        killfile_node = MicroVuProgram.get_node(current_line, "CmdText")
-        new_line = current_line.replace(killfile_node, "(CmdText \"\"\"C:\\killFile.bat\"\"\")")
-        micro_vu.file_lines[killfile_index] = new_line
+
+        bring_to_met_pic_idx = micro_vu.bring_part_to_metrology_index
+
+        bring_to_met_text_filepath = get_filepath_by_name('BringPartToMetrology_text.txt')
+        if not bring_to_met_text_filepath:
+            raise ProcessorException("Can't find 'BringPartToMetrology_text' file.")
+
+        lines = get_unencoded_file_lines(bring_to_met_text_filepath)
+        if not lines:
+            raise ProcessorException("Can't find 'BringPartToMetrology_text' file.")
+
+        micro_vu.insert_line(bring_to_met_pic_idx, lines[3])
+        micro_vu.insert_line(bring_to_met_pic_idx, lines[2])
+        micro_vu.insert_line(bring_to_met_pic_idx, lines[1])
 
     def _inject_kill_file_call(self, micro_vu: MicroVuProgram) -> None:
 
@@ -230,39 +275,6 @@ class CoonRapidsProcessor(Processor):
         micro_vu.file_lines.append(prompt_lines[2])
         micro_vu.file_lines.append(prompt_lines[3])
 
-    def _write_file_to_harddrive(self, micro_vu: MicroVuProgram) -> None:
-        if os.path.exists(micro_vu.output_filepath):
-            file_name = Path(micro_vu.output_filepath).name
-            dir_name = os.path.dirname(micro_vu.output_filepath)
-            raise ProcessorException(
-                    f"File '{file_name}' already exists in output directory '{dir_name}'."
-            )
-        os.makedirs(micro_vu.output_directory, exist_ok=True)
-        with open(micro_vu.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
-            for line in micro_vu.file_lines:
-                f.write(f"{line}")
-
-    def _delete_old_prompts(self, micro_vu):
-        micro_vu.delete_line_containing_text("Name \"PT #\"")
-        micro_vu.delete_line_containing_text("Name \"Employee #\"")
-        micro_vu.delete_line_containing_text("Name \"Machine #\"")
-        micro_vu.delete_line_containing_text("Name \"PT#\"")
-        micro_vu.delete_line_containing_text("Name \"Employee#\"")
-        micro_vu.delete_line_containing_text("Name \"Machine#\"")
-        micro_vu.delete_line_containing_text("Name \"Run-Setup\"")
-        micro_vu.delete_line_containing_text("Name \"Job #\"")
-        micro_vu.delete_line_containing_text("Name \"Job#\"")
-
-    def _get_new_prompts(self, micro_vu: MicroVuProgram) -> list[str]:
-        pattern = 'sp_prompt_text.txt' if micro_vu.is_smartprofile else 'prompt_text.txt'
-
-        prompt_file = get_filepath_by_name(pattern)
-        if not prompt_file:
-            return []
-
-        prompt_lines = get_utf_encoded_file_lines(prompt_file)
-        return prompt_lines or []
-
     def _replace_dimension_names(self, micro_vu: MicroVuProgram) -> None:
         if micro_vu.is_smartprofile:
             return
@@ -288,6 +300,18 @@ class CoonRapidsProcessor(Processor):
         export_filepath += f"_{part_rev}"
         export_filepath += "_.csv"
         micro_vu.export_filepath = export_filepath
+
+    def _replace_kill_file_call(self, micro_vu: MicroVuProgram):
+        killfile_index = next(
+                (i for i, l in enumerate(micro_vu.file_lines)
+                 if "killFile.bat" in l), -1
+        )
+        if killfile_index == -1:
+            return
+        current_line = micro_vu.file_lines[killfile_index]
+        killfile_node = MicroVuProgram.get_node(current_line, "CmdText")
+        new_line = current_line.replace(killfile_node, "(CmdText \"\"\"C:\\killFile.bat\"\"\")")
+        micro_vu.file_lines[killfile_index] = new_line
 
     def _replace_prompt_section(self, micro_vu: MicroVuProgram) -> None:
         insert_index = micro_vu.prompt_insertion_index
@@ -357,6 +381,18 @@ class CoonRapidsProcessor(Processor):
         current_comment += new_comment
         micro_vu.comment = current_comment
 
+    def _write_file_to_harddrive(self, micro_vu: MicroVuProgram) -> None:
+        if os.path.exists(micro_vu.output_filepath):
+            file_name = Path(micro_vu.output_filepath).name
+            dir_name = os.path.dirname(micro_vu.output_filepath)
+            raise ProcessorException(
+                    f"File '{file_name}' already exists in output directory '{dir_name}'."
+            )
+        os.makedirs(micro_vu.output_directory, exist_ok=True)
+        with open(micro_vu.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
+            for line in micro_vu.file_lines:
+                f.write(f"{line}")
+
     def process_files(self) -> None:
         try:
             for micro_vu in self.micro_vu_programs:
@@ -369,7 +405,10 @@ class CoonRapidsProcessor(Processor):
                 self._replace_prompt_section(micro_vu)
                 if not micro_vu.has_text_kill:
                     self._inject_kill_file_call(micro_vu)
+                if not micro_vu.has_bring_to_metrology_picture:
+                    self._inject_bring_to_metrology_picture(micro_vu)
                 self._update_comments(micro_vu)
+                self._disable_dimensions(micro_vu)
                 micro_vu.update_instruction_count()
                 self._write_file_to_harddrive(micro_vu)
         except Exception as e:

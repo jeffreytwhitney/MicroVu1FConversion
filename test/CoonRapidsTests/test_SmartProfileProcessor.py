@@ -51,7 +51,7 @@ def test_auto_report_filepath(micro_vu_lines):
 
 
 def test_instruction_count(micro_vu_lines):
-    assert "Instructions 63" in micro_vu_lines[3]
+    assert "Instructions 64" in micro_vu_lines[3]
 
 
 def test_text_kill_exists(micro_vu_lines):
@@ -60,59 +60,83 @@ def test_text_kill_exists(micro_vu_lines):
 
 def test_created_by_exists(micro_vu_lines):
     assert get_node_text(
-            micro_vu_lines[10], "Txt", "\"") == "Created By:"
+            micro_vu_lines[13], "Txt", "\"") == "Created By:"
 
 
 def test_comments(micro_vu_lines):
     assert get_node_text(
-            micro_vu_lines[11], "Txt", "\"") == "Edited By and Comments:"
-    assert "Converted program to work with 1Factory." in micro_vu_lines[11]
+            micro_vu_lines[14], "Txt", "\"") == "Edited By and Comments:"
+    assert "Converted program to work with 1Factory." in micro_vu_lines[14]
 
 
 def test_part_number_is_correct(micro_vu_lines):
-    assert "(Txt \"446007\")" in micro_vu_lines[12]
-    assert "(Name \"PT\")" in micro_vu_lines[12]
+    assert "(Txt \"446007\")" in micro_vu_lines[15]
+    assert "(Name \"PT\")" in micro_vu_lines[15]
 
 
 def test_rev_letter_is_correct(micro_vu_lines):
-    assert "(Txt \"A\")" in micro_vu_lines[13]
-    assert "(Name \"REV LETTER\")" in micro_vu_lines[13]
+    assert "(Txt \"A\")" in micro_vu_lines[16]
+    assert "(Name \"REV LETTER\")" in micro_vu_lines[16]
 
 
 def test_op_number_is_correct(micro_vu_lines):
-    assert "(Txt \"10\")" in micro_vu_lines[14]
-    assert "(Name \"OPERATION\")" in micro_vu_lines[14]
+    assert "(Txt \"10\")" in micro_vu_lines[17]
+    assert "(Name \"OPERATION\")" in micro_vu_lines[17]
 
 
 def test_smartprofile_filename(micro_vu_lines):
-    assert "(Txt \"446007 ITEM 1 PROFILE\")" in micro_vu_lines[15]
-    assert "(Name \"SPFILENAME\")" in micro_vu_lines[15]
+    assert "(Txt \"446007 ITEM 1 PROFILE\")" in micro_vu_lines[18]
+    assert "(Name \"SPFILENAME\")" in micro_vu_lines[18]
 
 
 def test_employee_id_prompt_exists(micro_vu_lines):
-    assert "(Txt \"Enter Employee #\")" in micro_vu_lines[16]
-    assert "(Name \"EMPLOYEE\")" in micro_vu_lines[16]
+    assert "(Txt \"Enter Employee #\")" in micro_vu_lines[19]
+    assert "(Name \"EMPLOYEE\")" in micro_vu_lines[19]
 
 
 def test_job_number_prompt_exists(micro_vu_lines):
-    assert "(Txt \"Enter Job #\")" in micro_vu_lines[17]
-    assert "(Name \"JOB\")" in micro_vu_lines[17]
+    assert "(Txt \"Enter Job #\")" in micro_vu_lines[20]
+    assert "(Name \"JOB\")" in micro_vu_lines[20]
 
 
 def test_machine_number_prompt_exists(micro_vu_lines):
-    assert "(Txt \"Enter Machine #\")" in micro_vu_lines[18]
-    assert "(Name \"MACHINE\")" in micro_vu_lines[18]
+    assert "(Txt \"Enter Machine #\")" in micro_vu_lines[21]
+    assert "(Name \"MACHINE\")" in micro_vu_lines[21]
 
 
 def test_inprocess_text_exists(micro_vu_lines):
-    assert "(Txt \"IN PROCESS\")" in micro_vu_lines[19]
-    assert "(Name \"IN PROCESS\")" in micro_vu_lines[19]
+    assert "(Txt \"IN PROCESS\")" in micro_vu_lines[22]
+    assert "(Name \"IN PROCESS\")" in micro_vu_lines[22]
 
 
 def test_sequence_number_prompt_exists(micro_vu_lines):
-    assert "(Txt \"SEQUENCE # IF SETUP PART USE 0 (ZERO).\")" in micro_vu_lines[20]
-    assert "(Name \"SEQUENCE\")" in micro_vu_lines[20]
+    assert "(Txt \"SEQUENCE # IF SETUP PART USE 0 (ZERO).\")" in micro_vu_lines[23]
+    assert "(Name \"SEQUENCE\")" in micro_vu_lines[23]
 
 
 def test_smart_profile_call(micro_vu_lines):
-    assert "(Name \"CallSmartProfileScript\")" in micro_vu_lines[327]
+    assert "(Name \"CallSmartProfileScript\")" in micro_vu_lines[330]
+
+
+def test_features_disabled(micro_vu_lines):
+    assert "(AutoRpt 0)" in micro_vu_lines[2]
+    assert "(AutoConf 0)" in micro_vu_lines[2]
+    assert "(DontMeasure)" in micro_vu_lines[15]
+    assert "(DontMeasure)" in micro_vu_lines[16]
+    assert "(DontMeasure)" in micro_vu_lines[17]
+    assert "(DontMeasure)" in micro_vu_lines[18]
+    assert "(DontMeasure)" in micro_vu_lines[19]
+    assert "(DontMeasure)" in micro_vu_lines[20]
+    assert "(DontMeasure)" in micro_vu_lines[21]
+    assert "(DontMeasure)" in micro_vu_lines[22]
+    assert "(DontMeasure)" in micro_vu_lines[23]
+
+    assert "(DontMeasure)" in micro_vu_lines[48]
+    assert "(DontMeasure)" in micro_vu_lines[59]
+    assert "(DontMeasure)" in micro_vu_lines[74]
+    assert "(DontMeasure)" in micro_vu_lines[84]
+    assert "(DontMeasure)" in micro_vu_lines[96]
+
+
+def test_bring_part_to_met_exists(micro_vu_lines):
+    assert "Bring part to Metrology" in micro_vu_lines[7]

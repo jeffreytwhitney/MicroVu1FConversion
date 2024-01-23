@@ -163,3 +163,15 @@ def test_update_instruction_count(micro_vu):
     micro_vu.delete_line_containing_text("Farfignugen")
     micro_vu.update_instruction_count()
     assert micro_vu.file_lines[3].find("Instructions 156") > -1
+
+
+def test_kill_file_call_index(micro_vu):
+    assert micro_vu.kill_file_call_index == 4
+
+
+def test_has_bring_part_to_metrology(micro_vu):
+    assert micro_vu.has_bring_to_metrology_picture is True
+
+
+def test_bring_part_to_metrology_idx(micro_vu):
+    assert micro_vu.bring_part_to_metrology_index == 7

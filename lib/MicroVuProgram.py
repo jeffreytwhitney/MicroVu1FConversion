@@ -91,9 +91,9 @@ class MicroVuProgram:
     def _set_smartprofile(self) -> None:
         line_idx = self.get_index_containing_text("AutoExpFile")
         existing_export_filepath = str(Path(MicroVuProgram.get_node_text(
-            self.file_lines[line_idx], "AutoExpFile", "\""))).upper()
+                self.file_lines[line_idx], "AutoExpFile", "\""))).upper()
         existing_export_filename = Path(MicroVuProgram.get_node_text(
-            self.file_lines[line_idx], "AutoExpFile", "\"")).stem.upper()
+                self.file_lines[line_idx], "AutoExpFile", "\"")).stem.upper()
         if existing_export_filename == "OUTPUT":
             self._is_smartprofile = True
             return
@@ -103,6 +103,18 @@ class MicroVuProgram:
         self._is_smartprofile = False
 
     # Properties
+    @property
+    def bring_part_to_metrology_index(self) -> int:
+        idx = next(
+                (i for i, l in enumerate(self.file_lines)
+                 if "Bring part to Metrology.JPG" in l), -1
+        )
+        if idx > -1:
+            return idx
+
+        kill_file_idx = self.kill_file_call_index
+        return -1 if kill_file_idx == -1 else kill_file_idx + 3
+
     @property
     def can_write_to_output_file(self) -> bool:
         return not os.path.exists(self.output_filepath)
@@ -214,6 +226,17 @@ class MicroVuProgram:
     @property
     def is_smartprofile(self) -> bool:
         return self._is_smartprofile
+
+    @property
+    def has_bring_to_metrology_picture(self) -> bool:
+        return any("Bring part to Metrology.JPG" in line for line in self.file_lines)
+
+    @property
+    def kill_file_call_index(self) -> int:
+        return next(
+                (i for i, l in enumerate(self.file_lines)
+                 if "killFile.bat" in l), -1
+        )
 
     @property
     def last_microvu_system_id(self) -> str:
@@ -361,8 +384,8 @@ class MicroVuProgram:
 
     def get_index_containing_text(self, text_to_find: str) -> int:
         return next(
-            (i for i, l in enumerate(self.file_lines)
-             if l.upper().find(text_to_find.upper()) > 1), -1
+                (i for i, l in enumerate(self.file_lines)
+                 if l.upper().find(text_to_find.upper()) > 1), -1
         )
 
     def insert_line(self, line_index: int, line: str) -> None:
@@ -382,7 +405,7 @@ class MicroVuProgram:
         instruction_count = self._get_instructions_count()
         idx: int = self.get_index_containing_text("AutoExpFile")
         self.file_lines[idx] = MicroVuProgram.set_node_text(
-            self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
+                self.file_lines[idx], "(InsIdx", instruction_count, " ", ")")
         instruction_line_idx = next((i for i, l in enumerate(self.file_lines) if l.startswith("Instructions")), 0)
         self.file_lines[instruction_line_idx] = MicroVuProgram.set_node_text(
-            self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")
+                self.file_lines[instruction_line_idx], "Instructions", instruction_count, " ")

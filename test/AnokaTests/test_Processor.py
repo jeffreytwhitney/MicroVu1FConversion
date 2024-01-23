@@ -124,3 +124,30 @@ def test_inspection_names(micro_vu_lines):
     assert "(Name \"INSP_6\")" in micro_vu_lines[572]
     assert "(Name \"INSP_7\")" in micro_vu_lines[577]
     assert "(Name \"INSP_8\")" in micro_vu_lines[583]
+
+
+def test_features_disabled(micro_vu_lines):
+    assert "(AutoRpt 0)" in micro_vu_lines[2]
+    assert "(AutoConf 0)" in micro_vu_lines[2]
+    assert "(DontMeasure)" in micro_vu_lines[15]
+    assert "(DontMeasure)" in micro_vu_lines[16]
+    assert "(DontMeasure)" in micro_vu_lines[17]
+    assert "(DontMeasure)" in micro_vu_lines[18]
+    assert "(DontMeasure)" in micro_vu_lines[19]
+    assert "(DontMeasure)" in micro_vu_lines[20]
+    assert "(DontMeasure)" in micro_vu_lines[21]
+    assert "(DontMeasure)" in micro_vu_lines[22]
+    assert "(DontMeasure)" in micro_vu_lines[23]
+
+    assert "(DontMeasure)" in micro_vu_lines[526]
+    assert "(DontMeasure)" in micro_vu_lines[536]
+    assert "(DontMeasure)" in micro_vu_lines[544]
+    assert "(DontMeasure)" in micro_vu_lines[552]
+    assert "(DontMeasure)" in micro_vu_lines[557]
+    assert "(DontMeasure)" in micro_vu_lines[572]
+    assert "(DontMeasure)" in micro_vu_lines[577]
+    assert "(DontMeasure)" in micro_vu_lines[583]
+
+
+def test_bring_part_to_met_exists(micro_vu_lines):
+    assert "Bring part to Metrology" in micro_vu_lines[7]
