@@ -129,13 +129,21 @@ def test_sequence_number_prompt_exists(micro_vu_lines):
 
 def test_inspection_names(micro_vu_lines):
     assert "(Name \"INSP_4\")" in micro_vu_lines[180]
+    assert "(DistX \"INSP_4\")" in micro_vu_lines[180]
     assert "(Name \"INSP_5\")" in micro_vu_lines[190]
+    assert "(AngInt \"INSP_5\")" in micro_vu_lines[190]
     assert "(Name \"INSP_28\")" in micro_vu_lines[200]
+    assert "(DistY \"INSP_28\")" in micro_vu_lines[200]
     assert "(Name \"INSP_30\")" in micro_vu_lines[206]
+    assert "(DistX \"INSP_30\")" in micro_vu_lines[206]
     assert "(Name \"INSP_31A\")" in micro_vu_lines[212]
+    assert "(DistX \"INSP_31A\")" in micro_vu_lines[212]
     assert "(Name \"INSP_31B\")" in micro_vu_lines[218]
+    assert "(DistX \"INSP_31B\")" in micro_vu_lines[218]
     assert "(Name \"INSP_32A\")" in micro_vu_lines[224]
+    assert "(DistX \"INSP_32A\")" in micro_vu_lines[224]
     assert "(Name \"INSP_32B\")" in micro_vu_lines[234]
+    assert "(DistX \"INSP_32B\")" in micro_vu_lines[234]
 
 
 def test_features_disabled(micro_vu_lines):

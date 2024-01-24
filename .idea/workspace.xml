@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="#12A bug.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CoonRapidsTests/test_Processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/Input/446007 END VIEW.iwp" beforeDir="false" afterPath="$PROJECT_DIR$/test/Input/446007 END VIEW.iwp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/TESTSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/test/TESTSettings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +127,7 @@
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\CoonRapidsTests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.Python tests in test">
+  <component name="RunManager">
     <configuration name="MicroVu1FactoryConverter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MicroVu1FConversion" />
       <option name="ENV_FILES" value="" />
@@ -184,14 +187,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Finally figured out View Names. (I think), and added &quot;Process File&quot; checkbox to the screen. Testing for both Coon Rapids and Anoka files works. Need to test Profile Files next...">
-      <option name="closed" value="true" />
-      <created>1703167525295</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1703167525295</updated>
     </task>
     <task id="LOCAL-00016" summary="Finally figured out View Names. (I think), and added &quot;Process File&quot; checkbox to the screen. Testing for both Coon Rapids and Anoka files works. Need to test Profile Files next...">
       <option name="closed" value="true" />
@@ -577,7 +572,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706027992929</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="#12A bug.">
+      <option name="closed" value="true" />
+      <created>1706123572882</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1706123572882</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="UnknownFeatures">
