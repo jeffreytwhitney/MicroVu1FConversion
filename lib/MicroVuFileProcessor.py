@@ -168,6 +168,15 @@ class CoonRapidsProcessor(Processor):
         micro_vu.delete_line_containing_text("Name \"Run-Setup\"")
         micro_vu.delete_line_containing_text("Name \"Job #\"")
         micro_vu.delete_line_containing_text("Name \"Job#\"")
+        micro_vu.delete_line_containing_text("Name \"PT\"")
+        micro_vu.delete_line_containing_text("Name \"REV LETTER\"")
+        micro_vu.delete_line_containing_text("Name \"OPERATION\"")
+        micro_vu.delete_line_containing_text("Name \"EMPLOYEE\"")
+        micro_vu.delete_line_containing_text("Name \"JOB\"")
+        micro_vu.delete_line_containing_text("Name \"MACHINE\"")
+        micro_vu.delete_line_containing_text("Name \"IN PROCESS\"")
+        micro_vu.delete_line_containing_text("Name \"SEQUENCE\"")
+        micro_vu.delete_line_containing_text("Name \"SPFILENAME\"")
 
     def _disable_dimensions(self, micro_vu):
         for i, line in enumerate(micro_vu.file_lines):
