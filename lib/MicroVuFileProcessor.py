@@ -145,6 +145,10 @@ class Processor(metaclass=ABCMeta):
                 return dimension_name
 
     @property
+    def allow_deletion_of_old_program(self) -> bool:
+        return Utilities.GetStoredIniValue("GlobalSettings", "allow_delete", "Settings") == "True"
+
+    @property
     def micro_vu_programs(self) -> list[MicroVuProgram]:
         return self._microvu_programs
 
@@ -420,6 +424,8 @@ class CoonRapidsProcessor(Processor):
                 self._disable_dimensions(micro_vu)
                 micro_vu.update_instruction_count()
                 self._write_file_to_harddrive(micro_vu)
+                if self.allow_deletion_of_old_program:
+                    os.remove(micro_vu.filepath)
         except Exception as e:
             raise ProcessorException(e.args[0]) from e
 
