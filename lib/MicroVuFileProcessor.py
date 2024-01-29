@@ -149,6 +149,10 @@ class Processor(metaclass=ABCMeta):
         return Utilities.GetStoredIniValue("GlobalSettings", "allow_delete", "Settings") == "True"
 
     @property
+    def disable_on_convert(self) -> bool:
+        return Utilities.GetStoredIniValue("GlobalSettings", "disable_on_convert", "Settings") == "True"
+
+    @property
     def micro_vu_programs(self) -> list[MicroVuProgram]:
         return self._microvu_programs
 
@@ -418,10 +422,11 @@ class CoonRapidsProcessor(Processor):
                 self._replace_prompt_section(micro_vu)
                 if not micro_vu.has_text_kill:
                     self._inject_kill_file_call(micro_vu)
-                if not micro_vu.has_bring_to_metrology_picture:
+                if self.disable_on_convert and not micro_vu.has_bring_to_metrology_picture:
                     self._inject_bring_to_metrology_picture(micro_vu)
                 self._update_comments(micro_vu)
-                self._disable_dimensions(micro_vu)
+                if self.disable_on_convert:
+                    self._disable_dimensions(micro_vu)
                 micro_vu.update_instruction_count()
                 self._write_file_to_harddrive(micro_vu)
                 if self.allow_deletion_of_old_program:
