@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="#12A bug.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/MicroVuProgram.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuProgram.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
-    </list>
+    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -187,14 +183,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Refactoring">
-      <option name="closed" value="true" />
-      <created>1704201059131</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1704201059131</updated>
     </task>
     <task id="LOCAL-00021" summary="Refactoring">
       <option name="closed" value="true" />
@@ -580,7 +568,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706525579301</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it.">
+      <option name="closed" value="true" />
+      <created>1709642394852</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1709642394853</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -621,6 +617,7 @@
     <MESSAGE value="Adding Processor Tests" />
     <MESSAGE value="Finally freaking done with creating tests. 201 total. &#10;Oh, wait...&#10;I still have to make tests for the UI. &#10;Crap." />
     <MESSAGE value="#12A bug." />
-    <option name="LAST_COMMIT_MESSAGE" value="#12A bug." />
+    <MESSAGE value="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it." />
+    <option name="LAST_COMMIT_MESSAGE" value="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it." />
   </component>
 </project>
