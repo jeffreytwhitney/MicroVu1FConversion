@@ -184,6 +184,10 @@ class MicroVuProgram:
         else:
             updated_line_text = updated_line_text.replace("(AutoExpFSApSt None)", "(AutoExpFSApSt DT)")
         updated_line_text = updated_line_text.replace("(FldDlm Tab)", "(FldDlm CrLf)")
+        updated_line_text = updated_line_text.replace("(FldDlm Comma)", "(FldDlm CrLf)")
+        updated_line_text = updated_line_text.replace("(NoDblQt 1)", "(NoDblQt 0)")
+        updated_line_text = updated_line_text.replace("(ValDlm Comma)", "(ValDlm Tab)")
+        updated_line_text = updated_line_text.replace("(AutoRptTemplateName \"\")", "(AutoRptTemplateName \"Classic\")")
         self.file_lines[line_idx] = updated_line_text
 
     @property
