@@ -302,7 +302,7 @@ class MicroVuProcessorMainWindow(QtWidgets.QMainWindow, gui_MicroVuProcessorMain
             self.tableWidget.setRowCount(len(files))
             for row, file in enumerate(files):
                 textItem = QTableWidgetItem(file)
-                textItem.setFlags(Qt.ItemFlag.ItemIsEditable)
+                textItem.setFlags(Qt.ItemFlag.ItemIsEnabled)
                 self.tableWidget.setItem(row, 0, textItem)
                 sp_textItem = QTableWidgetItem("")
                 self.tableWidget.setItem(row, 2, sp_textItem)

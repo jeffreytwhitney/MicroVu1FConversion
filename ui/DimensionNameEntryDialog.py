@@ -6,12 +6,15 @@ from PyQt6.QtGui import QColor
 from PyQt6.QtWidgets import QTableWidgetItem, QMessageBox, QWidget
 
 import lib.Utilities
+from lib import MicroVuFileProcessor
 from lib.MicroVuProgram import MicroVuProgram, DimensionName
+from lib.MicroVuFileProcessor import Processor
 
 
 class DimensionNameEntryDialog(QtWidgets.QDialog):
     _manual_dimension_names: List[DimensionName]
     _micro_vu: MicroVuProgram
+    _processor: Processor
 
     # Dunder Methods
     def __init__(self, parent: QWidget, mv: MicroVuProgram):
@@ -19,13 +22,21 @@ class DimensionNameEntryDialog(QtWidgets.QDialog):
         self.parent = parent
         self._micro_vu = mv
         self._manual_dimension_names = mv.dimension_names
+        self._processor = MicroVuFileProcessor.get_processor("JTW")
         self._setupUi()
+        self.btnAutoFill.clicked.connect(self._btnAutoFill_clicked)
         self.btnOK.clicked.connect(self._btnOK_clicked)
         self.btnCancel.clicked.connect(self._btnCancel_clicked)
         self.dimensionTable.keyPressEvent = self._tableKeyPressEvent
         self._load_form()
 
     # Event Methods
+    def _btnAutoFill_clicked(self):
+        for row, dimension_name in enumerate(self._manual_dimension_names):
+            new_name = self._processor.parse_dimension_name(dimension_name.name, "")
+            new_name_item = QTableWidgetItem(new_name)
+            self.dimensionTable.setItem(row, 1, new_name_item)
+
     def _btnOK_clicked(self):
         if not self._validate_table():
             return
@@ -44,6 +55,16 @@ class DimensionNameEntryDialog(QtWidgets.QDialog):
             if nextIndex.isValid():
                 self.dimensionTable.setCurrentIndex(nextIndex)
                 self.dimensionTable.edit(nextIndex)
+
+    def _tableDoubleClicked(self, mi):
+        row = mi.row()
+        column = mi.column()
+        if column > 0:
+            return
+        table_cell = self.dimensionTable.item(row, column)
+        table_cell_value = table_cell.text()
+        new_cell = self.dimensionTable.item(row, 1)
+        new_cell.setText(table_cell_value)
 
     # Internal Methods
     def _get_user_response(self, message: str, title: str) -> QMessageBox.StandardButton:
@@ -68,11 +89,13 @@ class DimensionNameEntryDialog(QtWidgets.QDialog):
 
         for row, dimension_name in enumerate(self._manual_dimension_names):
             old_name_item = QTableWidgetItem(dimension_name.name)
-            old_name_item.setFlags(Qt.ItemFlag.ItemIsEditable)
+            old_name_item.setFlags(Qt.ItemFlag.ItemIsEnabled)
             self.dimensionTable.setItem(row, 0, old_name_item)
-            new_name_item = QTableWidgetItem("")
+            new_name = self._processor.parse_dimension_name(dimension_name.name, "")
+            new_name_item = QTableWidgetItem(new_name)
             self.dimensionTable.setItem(row, 1, new_name_item)
             self.dimensionTable.setRowHeight(row, 20)
+        self.dimensionTable.doubleClicked.connect(self._tableDoubleClicked)
         self.dimensionTable.setVisible(True)
 
     def _reset_table_cells_color(self):
@@ -106,7 +129,7 @@ class DimensionNameEntryDialog(QtWidgets.QDialog):
         self.warning_Label.setObjectName("warning_Label")
 
         self.dimensionTable = QtWidgets.QTableWidget(parent=self)
-        self.dimensionTable.setGeometry(QtCore.QRect(10, 80, 660, 681))
+        self.dimensionTable.setGeometry(QtCore.QRect(10, 120, 660, 621))
         self.dimensionTable.setObjectName("dimensionTable")
         self.dimensionTable.setColumnCount(2)
         self.dimensionTable.setRowCount(1)
@@ -127,6 +150,11 @@ class DimensionNameEntryDialog(QtWidgets.QDialog):
         self.btnCancel.setGeometry(QtCore.QRect(465, 770, 100, 23))
         self.btnCancel.setObjectName("btnCancel")
         self.btnCancel.setText("Cancel")
+
+        self.btnAutoFill = QtWidgets.QPushButton(parent=self)
+        self.btnAutoFill.setGeometry(QtCore.QRect(190, 90, 100, 23))
+        self.btnAutoFill.setObjectName("btnAutoFill")
+        self.btnAutoFill.setText("AutoFill")
 
     def _show_error_message(self, message: str, title: str):
         msg_box = QMessageBox(self)

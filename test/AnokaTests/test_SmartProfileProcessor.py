@@ -54,7 +54,7 @@ def test_auto_report_filepath(micro_vu_lines):
 
 
 def test_instruction_count(micro_vu_lines):
-    assert "Instructions 142" in micro_vu_lines[3]
+    assert "Instructions 141\n" in micro_vu_lines[3]
 
 
 def test_text_kill_exists(micro_vu_lines):

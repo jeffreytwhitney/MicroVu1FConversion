@@ -63,6 +63,11 @@ def _get_dimension_parts(dimension_name: str) -> list[str]:
     return _collapse_dot_dimension_parts(parts)
 
 
+def _contains_digit(s):
+    isdigit = str.isdigit
+    return any(map(isdigit, s))
+
+
 class Processor(metaclass=ABCMeta):
     _dimension_root: str
     _hand_edit_dimension_names: bool
@@ -320,8 +325,8 @@ class CoonRapidsProcessor(Processor):
 
     def _replace_kill_file_call(self, micro_vu: MicroVuProgram):
         killfile_index = next(
-                (i for i, l in enumerate(micro_vu.file_lines)
-                 if "killFile.bat" in l), -1
+            (i for i, l in enumerate(micro_vu.file_lines)
+             if "killFile.bat" in l), -1
         )
         if killfile_index == -1:
             return
@@ -403,7 +408,7 @@ class CoonRapidsProcessor(Processor):
             file_name = Path(micro_vu.output_filepath).name
             dir_name = os.path.dirname(micro_vu.output_filepath)
             raise ProcessorException(
-                    f"File '{file_name}' already exists in output directory '{dir_name}'."
+                f"File '{file_name}' already exists in output directory '{dir_name}'."
             )
         os.makedirs(micro_vu.output_directory, exist_ok=True)
         with open(micro_vu.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
@@ -438,6 +443,92 @@ class CoonRapidsProcessor(Processor):
 class AnokaProcessor(CoonRapidsProcessor):
     def __init__(self, user_initials: str):
         super().__init__(user_initials)
+
+    @staticmethod
+    def parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
+        dimension_name = dimension_name.upper()
+        if dimension_name.startswith("ITEM_"):
+            dimension_name = dimension_name[5:]
+        if dimension_name.startswith("IP_"):
+            dimension_name = dimension_name[3:]
+        if dimension_name.startswith("IP"):
+            dimension_name = dimension_name[2:]
+            
+        if " " not in dimension_name and "_" not in dimension_name:
+            return dimension_name
+        if not _contains_digit(dimension_name):
+            return dimension_name
+        space_index = dimension_name.find(" ")
+        underscore_index = dimension_name.find("_")
+
+        if space_index > -1 and underscore_index == -1:
+            dimension_name = dimension_name[:space_index]
+        elif space_index > -1 and space_index < underscore_index:
+            dimension_name = dimension_name[:space_index]
+        elif underscore_index > -1 and space_index == -1:
+            dimension_name = dimension_name[:underscore_index]
+        elif underscore_index > -1 and underscore_index < space_index:
+            dimension_name = dimension_name[:underscore_index]
+
+        dimension_name = dimension_name.replace(".", "_")
+        if dimension_name.isalpha():
+            return dimension_name
+
+        parts = _get_dimension_parts(dimension_name)
+
+        if not parts:
+            return dimension_name
+        if not _containsNumber(parts[0]):
+            return dimension_name
+
+        num_parts = len(parts)
+        match num_parts:
+
+            case 1:
+                if _containsNumber(parts[0]):
+                    return f"{dimension_root}{parts[0]}"
+                else:
+                    return dimension_name
+
+            case 2:
+                if _containsNumber(parts[0]) and parts[1].isnumeric():
+                    return f"{dimension_root}{parts[0]}{_convert_number_to_letter(parts[1])}"
+                if _containsNumber(parts[0]) and parts[1].isalpha():
+                    if len(parts[1]) > 1:
+                        return dimension_name
+                    if parts[1] == "X":
+                        return dimension_name
+                    return f"{dimension_root}{parts[0]}{parts[1]}"
+                return dimension_name
+
+            case 3:
+                if parts[2] != "X":
+                    return dimension_name
+                if _containsNumber(parts[0]) and parts[1].isnumeric():
+                    return f"{dimension_root}{parts[0]}{_convert_number_to_letter(parts[1])}"
+                if _containsNumber(parts[0]) and parts[1].isalpha():
+                    if len(parts[1]) > 1:
+                        return dimension_name
+                    if parts[1] == "X":
+                        return dimension_name
+                    return f"{dimension_root}{parts[0]}{parts[1]}"
+                return dimension_name
+
+            case 4:
+                if parts[-1] != "X":
+                    return dimension_name
+                if not parts[0].isnumeric():
+                    return dimension_name
+                if parts[1].isalpha():
+                    return dimension_name
+                if parts[2].isnumeric():
+                    return f"{dimension_root}{parts[0]}{parts[1]}{_convert_number_to_letter(parts[2])}"
+                if parts[2].isalpha() and len(parts[2]) == 1:
+                    return f"{dimension_root}{parts[0]}{parts[1]}{parts[2]}"
+                return dimension_name
+
+            case _:
+                return dimension_name
 
     def _replace_prompt_section(self, micro_vu: MicroVuProgram) -> None:
         try:

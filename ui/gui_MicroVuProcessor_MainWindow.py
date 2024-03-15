@@ -52,6 +52,7 @@ class gui_MicroVuProcessorMainWindow(object):
         self.txtInputFolder = QtWidgets.QLineEdit(parent=self.gridLayoutWidget)
         self.txtInputFolder.setObjectName("txtInputFolder")
         self.txtInputFolder.setReadOnly(True)
+        
         self.gridLayout.addWidget(self.txtInputFolder, 1, 2, 1, 1)
 
         self.btnSelectInputFolder = QtWidgets.QToolButton(parent=self.gridLayoutWidget)
