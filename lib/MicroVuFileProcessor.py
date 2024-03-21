@@ -446,6 +446,8 @@ class AnokaProcessor(CoonRapidsProcessor):
 
     @staticmethod
     def parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
+        if dimension_name.startswith("#"):
+            dimension_name = dimension_name[1:]
         dimension_name = dimension_name.upper()
         if dimension_name.startswith("ITEM_"):
             dimension_name = dimension_name[5:]
