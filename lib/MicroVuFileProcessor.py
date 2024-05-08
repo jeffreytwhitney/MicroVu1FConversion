@@ -72,6 +72,7 @@ class Processor(metaclass=ABCMeta):
     _dimension_root: str
     _hand_edit_dimension_names: bool
     _microvu_programs: List[MicroVuProgram] = []
+    _dimension_name_sorter: DimensionName
 
     @abstractmethod
     def process_files(self) -> None:
