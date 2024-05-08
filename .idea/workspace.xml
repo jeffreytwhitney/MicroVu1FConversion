@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it.">
-      <change afterPath="$PROJECT_DIR$/lib/DimensionNameParser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MicroVu1FactoryConverter.py" beforeDir="false" afterPath="$PROJECT_DIR$/MicroVu1FactoryConverter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/DimensionNameParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/DimensionNameParser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -197,14 +194,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00025" summary="Refactoring">
-      <option name="closed" value="true" />
-      <created>1704399073392</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1704399073392</updated>
     </task>
     <task id="LOCAL-00026" summary="Refactoring">
       <option name="closed" value="true" />
@@ -590,7 +579,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711038452381</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it.">
+      <option name="closed" value="true" />
+      <created>1715188611094</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1715188611094</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="UnknownFeatures">
