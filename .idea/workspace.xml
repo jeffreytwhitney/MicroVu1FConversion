@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it.">
+      <change afterPath="$PROJECT_DIR$/lib/DimensionNameParser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/MicroVuFileProcessor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/MicroVuProcessor_MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/ui/gui_MicroVuProcessor_MainWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MicroVu1FactoryConverter.py" beforeDir="false" afterPath="$PROJECT_DIR$/MicroVu1FactoryConverter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Utilities.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,14 +42,12 @@
     &quot;assignee&quot;: &quot;jeffreytwhitney&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="290fb69a-b60e-41ec-af6b-331ddec9da04" />
-        <option name="url" value="https://github.com/jeffreytwhitney/MicroVu1FConversion" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jeffreytwhitney/MicroVu1FConversion&quot;,
+    &quot;accountId&quot;: &quot;290fb69a-b60e-41ec-af6b-331ddec9da04&quot;
+  }
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -86,10 +85,12 @@
     &quot;Python tests.Python tests in test_SmartProfileMicroVuProgram.py.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in test_SmartProfileProcessor.py.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in test_Utilities.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.AnokaMicroVuProcessor_MainWindow.executor&quot;: &quot;Run&quot;,
     &quot;Python.DimensionNameEntryDialog.executor&quot;: &quot;Run&quot;,
+    &quot;Python.DimensionNameParser.executor&quot;: &quot;Run&quot;,
     &quot;Python.Main.executor&quot;: &quot;Run&quot;,
     &quot;Python.MicroVu1FactoryConverter.executor&quot;: &quot;Run&quot;,
-    &quot;Python.MicroVuFileProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.MicroVuFileProcessor.executor&quot;: &quot;Debug&quot;,
     &quot;Python.MicroVuProcessor.executor&quot;: &quot;Run&quot;,
     &quot;Python.MicroVuProcessor_MainWindow.executor&quot;: &quot;Run&quot;,
     &quot;Python.MicroVuProgram.executor&quot;: &quot;Run&quot;,
@@ -110,7 +111,7 @@
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last.edited.regexp&quot;: &quot;Sample_Text&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/test/CoonRapidsTests&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/JTWhitney/PycharmProjects/MicroVu1FConversion/ui&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -122,11 +123,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\ui" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\CoonRapidsTests" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\Input" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\AnokaTests" />
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\lib" />
-      <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\Input" />
@@ -136,7 +137,7 @@
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\CoonRapidsTests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.MicroVu1FactoryConverter">
+  <component name="RunManager">
     <configuration name="MicroVu1FactoryConverter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MicroVu1FConversion" />
       <option name="ENV_FILES" value="" />
@@ -184,7 +185,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-d68999036c7f-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.14475.56" />
+        <option value="bundled-python-sdk-babbdf50b680-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.15989.155" />
       </set>
     </attachedChunks>
   </component>
@@ -196,14 +197,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00024" summary="Refactoring">
-      <option name="closed" value="true" />
-      <created>1704398690535</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1704398690535</updated>
     </task>
     <task id="LOCAL-00025" summary="Refactoring">
       <option name="closed" value="true" />
@@ -589,7 +582,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710527953759</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it.">
+      <option name="closed" value="true" />
+      <created>1711038452381</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1711038452381</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="UnknownFeatures">

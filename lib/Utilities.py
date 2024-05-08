@@ -52,7 +52,8 @@ def get_utf_encoded_file_lines(file_path: str) -> list[str]:
 
 
 def get_filepath_by_name(file_name: str) -> str:
-    for root, dirs, files in os.walk('.'):
+    p = os.path.abspath('..')
+    for root, dirs, files in os.walk(p):
         for file in files:
             if file == file_name:
                 return os.path.join(root, file)
