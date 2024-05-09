@@ -2,7 +2,8 @@ import sys
 from PyQt6 import QtWidgets
 
 from lib import Utilities
-from ui import AnokaMicroVuProcessor_MainWindow
+
+from ui.MicroVuProcessor_MainWindow import MicroVuProcessorMainWindow
 
 
 def main():
@@ -10,7 +11,7 @@ def main():
     styleSheet = Utilities.get_file_as_string(stylesheet_filepath)
     app = QtWidgets.QApplication(sys.argv)
     app.setStyleSheet(styleSheet)
-    ui = AnokaMicroVuProcessor_MainWindow()
+    ui = MicroVuProcessorMainWindow()
     ui.show()
     sys.exit(app.exec())
 
