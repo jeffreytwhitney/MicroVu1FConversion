@@ -15,7 +15,7 @@ class Processor(metaclass=ABCMeta):
     _dimension_root: str
     _hand_edit_dimension_names: bool
     _microvu_programs: List[MicroVuProgram] = []
-    _dimension_name_sorter: DimensionNameSorter
+    _sorter: DimensionNameSorter
 
     @abstractmethod
     def process_files(self) -> None:
@@ -26,11 +26,11 @@ class Processor(metaclass=ABCMeta):
         self._dimension_root: str = lib.Utilities.GetStoredIniValue("GlobalSettings", "dimension_root", "Settings")
         hand_edit_setting_value = lib.Utilities.GetStoredIniValue("GlobalSettings", "hand_edit_dimension_names", "Settings")
         self._hand_edit_dimension_names = hand_edit_setting_value == "True"
-        Processor._dimension_name_sorter = DimensionNameSorter()
+        Processor._sorter = DimensionNameSorter()
 
     @staticmethod
     def parse_dimension_name(dimension_name: str, dimension_root: str) -> str:
-        return Processor._dimension_name_sorter.get_dimension_name(dimension_name, dimension_root)
+        return Processor._sorter.get_dimension_name(dimension_name, dimension_root)
 
     @property
     def allow_deletion_of_old_program(self) -> bool:
