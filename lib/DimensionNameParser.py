@@ -1,5 +1,5 @@
-from abc import ABCMeta, abstractmethod
 import re
+from abc import ABCMeta, abstractmethod
 from typing import List
 
 
@@ -16,10 +16,9 @@ class DimensionParser(metaclass=ABCMeta):
 
 class Parser1(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(?:ITEM|INSP)([ _-])(\d+)\.(\d+)([A-Za-z])([ _-])\d+X$")
+        self._regex = re.compile(r"^(?:#*)(?:ITEM|INSP)([ _-])(\d+)\.(\d+)([A-Za-z])([ _-])\d+(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
-
         if match := self._regex.search(search_string):
             return f"{prefix}{match[2]}.{match[3]}{match[4]}"
         else:
@@ -28,19 +27,18 @@ class Parser1(DimensionParser):
 
 class Parser2(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(ITEM|INSP)([ _-])(\d+)\.(\d+)([ _-])(\d+)X$")
+        self._regex = re.compile(r"^(?:#*)(ITEM|INSP)([ _-])(\d+)\.(\d+)([ _-])(\d+)X$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
-        if match := self._regex.search(search_string):
-            letter = chr(ord('@') + int(match[6]))
-            return f"{prefix}{match[3]}.{match[4]}{letter}"
-        else:
+        if not (match := self._regex.search(search_string)):
             return search_string
+        letter = chr(ord('@') + int(match[6]))
+        return f"{prefix}{match[3]}.{match[4]}{letter}"
 
 
 class Parser3(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(ITEM|INSP)([ _-])(\d+)([A-Za-z])([ _-])\d+X$")
+        self._regex = re.compile(r"^(?:#*)(ITEM|INSP)([ _-])(\d+)([A-Za-z])([ _-])\d+(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
@@ -51,23 +49,21 @@ class Parser3(DimensionParser):
 
 class Parser4(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(ITEM|INSP)([ _-])(\d+)([ _-])(\d+)X$")
+        self._regex = re.compile(r"^(?:#*)(ITEM|INSP)([ _-])(\d+)([ _-])(\d+)(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
-        if match := self._regex.search(search_string):
-            letter = chr(ord('@') + int(match[5]))
-            return f"{prefix}{match[3]}{letter}"
-        else:
+        if not (match := self._regex.search(search_string)):
             return search_string
+        letter = chr(ord('@') + int(match[5]))
+        return f"{prefix}{match[3]}{letter}"
 
 
 class Parser5(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(ITEM|INSP)([ _-])(\d+)\.(\d+)$")
+        self._regex = re.compile(r"^(?:#*)(ITEM|INSP)([ _-])(\d+)\.(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
-
             return f"{prefix}{match[3]}.{match[4]}"
         else:
             return search_string
@@ -75,143 +71,120 @@ class Parser5(DimensionParser):
 
 class Parser6(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)\.(\d+)([A-Za-z])([ _-])(\d+)X$")
+        self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)([A-Za-z])([ _-])(\d+)(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
-        if match := self._regex.search(search_string):
-            letter = chr(ord('@') + int(match[5]))
-            return f"{prefix}{match[1]}.{match[2]}{letter}"
-        else:
+        if not (match := self._regex.search(search_string)):
             return search_string
+        letter = chr(ord('@') + int(match[5]))
+        return f"{prefix}{match[1]}.{match[2]}{letter}"
 
 
 class Parser7(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)\.(\d+)([ _-])(\d+)X$")
+        self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)([ _-])(\d+)(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
-        if match := self._regex.search(search_string):
-            letter = chr(ord('@') + int(match[4]))
-            return f"{prefix}{match[1]}.{match[2]}{letter}"
-        else:
+        if not (match := self._regex.search(search_string)):
             return search_string
+        letter = chr(ord('@') + int(match[4]))
+        return f"{prefix}{match[1]}.{match[2]}{letter}"
 
 
 class Parser8(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)\.(\d+)([ _-])(\d+)$")
+        self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)([ _-])([A-Za-z])$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
-            letter = chr(ord('@') + int(match[4]))
-            return f"{prefix}{match[1]}.{match[2]}{letter}"
+            return f"{prefix}{match[1]}.{match[2]}{match[4]}"
         else:
             return search_string
 
 
 class Parser9(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)\.(\d+)([ _-])([A-Za-z])$")
+        self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)([A-Za-z])$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
-
-            return f"{prefix}{match[1]}.{match[2]}{match[4]}"
+            return f"{prefix}{match[1]}.{match[2]}{match[3]}"
         else:
             return search_string
 
 
 class Parser10(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)\.(\d+)([A-Za-z])$")
+        self._regex = re.compile(r"^(?:#*)(\d+)[ _-](\d+)(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
-        if match := self._regex.search(search_string):
-
-            return f"{prefix}{match[1]}.{match[2]}{match[3]}"
-        else:
+        if not (match := self._regex.search(search_string)):
             return search_string
+        letter = chr(ord('@') + int(match[2]))
+        return f"{prefix}{match[1]}{letter}"
 
 
 class Parser11(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)[ _-](\d+)X+$")
+        self._regex = re.compile(r"^(?:#*)(?:ITEM|INSP)([ _-])(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
-            letter = chr(ord('@') + int(match[2]))
-            return f"{prefix}{match[1]}{letter}"
+            return f"{prefix}{match[2]}"
         else:
             return search_string
 
 
 class Parser12(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(?:ITEM|INSP)([ _-])(\d+)$")
+        self._regex = re.compile(r"^(?:#*)(\d+)([ _-])(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
-        if match := self._regex.search(search_string):
-
-            return f"{prefix}{match[2]}"
-        else:
+        if not (match := self._regex.search(search_string)):
             return search_string
+        letter = chr(ord('@') + int(match[3]))
+        return f"{prefix}{match[1]}{letter}"
 
 
 class Parser13(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)([ _-])(\d+)$")
+        self._regex = re.compile(r"^(?:#*)(\d+)([ _-])([A-Za-z])$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
-            letter = chr(ord('@') + int(match[3]))
-            return f"{prefix}{match[1]}{letter}"
+            return f"{prefix}{match[1]}{match[3]}"
         else:
             return search_string
 
 
 class Parser14(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)([ _-])([A-Za-z])$")
+        self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
-
-            return f"{prefix}{match[1]}{match[3]}"
+            return f"{prefix}{match[1]}.{match[2]}"
         else:
             return search_string
 
 
 class Parser15(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)\.(\d+)$")
+        self._regex = re.compile(r"^(?:#*)(\d+)([A-Za-z])$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
-
-            return f"{prefix}{match[1]}.{match[2]}"
+            return f"{prefix}{match[1]}{match[2]}"
         else:
             return search_string
 
 
 class Parser16(DimensionParser):
     def __init__(self):
-        self._regex = re.compile(r"^(\d+)([A-Za-z])$")
+        self._regex = re.compile(r"^(?:#*)(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         if match := self._regex.search(search_string):
-
-            return f"{prefix}{match[1]}{match[2]}"
-        else:
-            return search_string
-
-
-class Parser17(DimensionParser):
-    def __init__(self):
-        self._regex = re.compile(r"^(\d+)$")
-
-    def get_dimension_name(self, search_string: str, prefix: str) -> str:
-        if match := self._regex.search(search_string):
-
             return f"{prefix}{match[1]}"
         else:
             return search_string
@@ -237,15 +210,13 @@ class DimensionNameSorter:
         self._dimension_parsers.append(Parser14())
         self._dimension_parsers.append(Parser15())
         self._dimension_parsers.append(Parser16())
-        self._dimension_parsers.append(Parser17())
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
-        if search_string.startswith("#"):
-            search_string = search_string[1:]
         for p in self._dimension_parsers:
             if p.does_pattern_match(search_string):
                 return p.get_dimension_name(search_string, prefix)
 
         return search_string
+
 
 

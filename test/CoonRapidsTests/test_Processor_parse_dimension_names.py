@@ -1,12 +1,7 @@
 import lib
 
 from lib import DimensionNameParser
-from test.CommonFunctions import store_ini_value
 
-
-def setup_module():
-    store_ini_value("CoonRapids", "Location", "site")
-    store_ini_value("False", "GlobalSettings", "hand_edit_dimension_names")
 
 
 def test_parse_dimension_names():
@@ -74,7 +69,7 @@ def test_parse_dimension_names():
     assert processor.get_dimension_name("INSP-12_1X", "INSP_") == "INSP_12A"
     assert processor.get_dimension_name("INSP_12-1X", "INSP_") == "INSP_12A"
     assert processor.get_dimension_name("INSP-12-1X", "INSP_") == "INSP_12A"
-    assert processor.get_dimension_name("ITEM-12_1X", "INSP_") == "INSP_12A"
+    assert processor.get_dimension_name("ITEM-12_10X", "INSP_") == "INSP_12J"
     assert processor.get_dimension_name("ITEM_12-1X", "INSP_") == "INSP_12A"
     assert processor.get_dimension_name("ITEM-12-1X", "INSP_") == "INSP_12A"
     assert processor.get_dimension_name("12-1X", "INSP_") == "INSP_12A"
@@ -135,7 +130,7 @@ def test_parse_dimension_names():
     assert processor.get_dimension_name("#INSP 12.1 1X", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("#INSP_12.1 1X", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("#INSP_12.1_1X", "INSP_") == "INSP_12.1A"
-    assert processor.get_dimension_name("#INSP 12.1_1X", "INSP_") == "INSP_12.1A"
+    assert processor.get_dimension_name("#INSP 12.1_10X", "INSP_") == "INSP_12.1J"
     assert processor.get_dimension_name("#12.1 1X", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("#12.1_1X", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("#12.1 A", "INSP_") == "INSP_12.1A"
