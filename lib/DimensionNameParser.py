@@ -217,6 +217,3 @@ class DimensionNameSorter:
                 return p.get_dimension_name(search_string, prefix)
 
         return search_string
-
-
-
