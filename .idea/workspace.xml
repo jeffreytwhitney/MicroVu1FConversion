@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it.">
+    <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Tidying up....">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/DimensionNameParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/DimensionNameParser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +69,7 @@
     &quot;Python tests.Python tests for test_Processor.test_export_filepath.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_Processor.test_instruction_count.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests for test_Processor.test_text_kill_exists.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.Python tests in DimensionNameParser.py.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in test.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in test_CoonRapidsMicroVuProgram.py.executor&quot;: &quot;Run&quot;,
     &quot;Python tests.Python tests in test_CoonRapidsProcessor.py.executor&quot;: &quot;Run&quot;,
@@ -133,7 +135,7 @@
       <recent name="C:\Users\JTWhitney\PycharmProjects\MicroVu1FConversion\test\CoonRapidsTests" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.MicroVu1FactoryConverter">
+  <component name="RunManager">
     <configuration name="MicroVu1FactoryConverter" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MicroVu1FConversion" />
       <option name="ENV_FILES" value="" />
@@ -193,30 +195,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00031" summary="Refactoring">
-      <option name="closed" value="true" />
-      <created>1704801415629</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1704801415629</updated>
-    </task>
-    <task id="LOCAL-00032" summary="Refactoring">
-      <option name="closed" value="true" />
-      <created>1704806392119</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1704806392119</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Refactoring">
-      <option name="closed" value="true" />
-      <created>1704891094053</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1704891094053</updated>
     </task>
     <task id="LOCAL-00034" summary="Refactoring">
       <option name="closed" value="true" />
@@ -586,7 +564,31 @@
       <option name="project" value="LOCAL" />
       <updated>1715267876414</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it.">
+      <option name="closed" value="true" />
+      <created>1715268940355</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1715268940355</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Tidying up....">
+      <option name="closed" value="true" />
+      <created>1715681637440</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1715681637440</updated>
+    </task>
+    <task id="LOCAL-00082" summary="Tidying up....">
+      <option name="closed" value="true" />
+      <created>1715690862532</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1715690862532</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -628,6 +630,7 @@
     <MESSAGE value="Finally freaking done with creating tests. 201 total. &#10;Oh, wait...&#10;I still have to make tests for the UI. &#10;Crap." />
     <MESSAGE value="#12A bug." />
     <MESSAGE value="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it." />
-    <option name="LAST_COMMIT_MESSAGE" value="Found a bug for anoka. Specifically, they were using Comma as a delimeter and I wasn't checking for it." />
+    <MESSAGE value="Tidying up...." />
+    <option name="LAST_COMMIT_MESSAGE" value="Tidying up...." />
   </component>
 </project>

@@ -16,6 +16,7 @@ class DimensionParser(metaclass=ABCMeta):
 
 class Parser1(DimensionParser):
     def __init__(self):
+        # Matches "ITEM_12.1A 1X"
         self._regex = re.compile(r"^(?:#*)(?:ITEM|INSP)([ _-])(\d+)\.(\d+)([A-Za-z])([ _-])\d+(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -27,6 +28,7 @@ class Parser1(DimensionParser):
 
 class Parser2(DimensionParser):
     def __init__(self):
+        # Matches "INSP-12.1_1X"
         self._regex = re.compile(r"^(?:#*)(ITEM|INSP)([ _-])(\d+)\.(\d+)([ _-])(\d+)X$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -38,6 +40,7 @@ class Parser2(DimensionParser):
 
 class Parser3(DimensionParser):
     def __init__(self):
+        # Matches "ITEM_12A_1X"
         self._regex = re.compile(r"^(?:#*)(ITEM|INSP)([ _-])(\d+)([A-Za-z])([ _-])\d+(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -49,6 +52,7 @@ class Parser3(DimensionParser):
 
 class Parser4(DimensionParser):
     def __init__(self):
+        # Matches "INSP_12 1X"
         self._regex = re.compile(r"^(?:#*)(ITEM|INSP)([ _-])(\d+)([ _-])(\d+)(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -60,6 +64,7 @@ class Parser4(DimensionParser):
 
 class Parser5(DimensionParser):
     def __init__(self):
+        # Matches "INSP 12.1"
         self._regex = re.compile(r"^(?:#*)(ITEM|INSP)([ _-])(\d+)\.(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -71,6 +76,7 @@ class Parser5(DimensionParser):
 
 class Parser6(DimensionParser):
     def __init__(self):
+        # Matches "12.1A_1X"
         self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)([A-Za-z])([ _-])(\d+)(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -82,6 +88,7 @@ class Parser6(DimensionParser):
 
 class Parser7(DimensionParser):
     def __init__(self):
+        # Matches "12.1_1"
         self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)([ _-])(\d+)(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -93,6 +100,7 @@ class Parser7(DimensionParser):
 
 class Parser8(DimensionParser):
     def __init__(self):
+        # Matches "#12.1_A"
         self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)([ _-])([A-Za-z])$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -104,6 +112,7 @@ class Parser8(DimensionParser):
 
 class Parser9(DimensionParser):
     def __init__(self):
+        # Matches "#12.16A"
         self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)([A-Za-z])$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -115,6 +124,7 @@ class Parser9(DimensionParser):
 
 class Parser10(DimensionParser):
     def __init__(self):
+        # Matches "#12_1"
         self._regex = re.compile(r"^(?:#*)(\d+)[ _-](\d+)(?:X*)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -126,6 +136,7 @@ class Parser10(DimensionParser):
 
 class Parser11(DimensionParser):
     def __init__(self):
+        # Matches "#ITEM-12"
         self._regex = re.compile(r"^(?:#*)(?:ITEM|INSP)([ _-])(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -137,6 +148,7 @@ class Parser11(DimensionParser):
 
 class Parser12(DimensionParser):
     def __init__(self):
+        # Matches "12 1"
         self._regex = re.compile(r"^(?:#*)(\d+)([ _-])(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -148,6 +160,7 @@ class Parser12(DimensionParser):
 
 class Parser13(DimensionParser):
     def __init__(self):
+        # Matches "12_B"
         self._regex = re.compile(r"^(?:#*)(\d+)([ _-])([A-Za-z])$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -159,6 +172,7 @@ class Parser13(DimensionParser):
 
 class Parser14(DimensionParser):
     def __init__(self):
+        # Matches "12.16"
         self._regex = re.compile(r"^(?:#*)(\d+)\.(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -170,6 +184,7 @@ class Parser14(DimensionParser):
 
 class Parser15(DimensionParser):
     def __init__(self):
+        # Matches "12A"
         self._regex = re.compile(r"^(?:#*)(\d+)([A-Za-z])$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
@@ -181,6 +196,7 @@ class Parser15(DimensionParser):
 
 class Parser16(DimensionParser):
     def __init__(self):
+        # Matches "#12"
         self._regex = re.compile(r"^(?:#*)(\d+)$")
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
