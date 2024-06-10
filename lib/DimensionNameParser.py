@@ -205,6 +205,23 @@ class Parser16(DimensionParser):
         else:
             return search_string
 
+class Parser17(DimensionParser):
+    def __init__(self):
+        # Matches "ITEM_32X1"
+        self._regex = re.compile(r"^(?:#*)(ITEM|INSP)(?:[ _-])(\d+)(X)(\d+)$")
+
+    def get_dimension_name(self, search_string: str, prefix: str) -> str:
+        if match := self._regex.search(search_string):
+            letter = chr(ord('@') + int(match[4]))
+            return f"{prefix}{match[2]}{letter}"
+        else:
+            return search_string
+
+
+
+
+
+
 
 class DimensionNameSorter:
     _dimension_parsers: List[DimensionParser] = []
@@ -226,6 +243,7 @@ class DimensionNameSorter:
         self._dimension_parsers.append(Parser14())
         self._dimension_parsers.append(Parser15())
         self._dimension_parsers.append(Parser16())
+        self._dimension_parsers.append(Parser17())
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
         for p in self._dimension_parsers:

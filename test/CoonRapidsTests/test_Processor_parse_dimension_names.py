@@ -150,4 +150,6 @@ def test_parse_dimension_names():
     assert processor.get_dimension_name("#12_1", "INSP_") == "INSP_12A"
     assert processor.get_dimension_name("#12.1A", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("#12.1_1", "INSP_") == "INSP_12.1A"
+    assert processor.get_dimension_name("ITEM_32X1", "INSP_") == "INSP_32A"
+
 
