@@ -13,6 +13,7 @@ from lib.Utilities import get_unencoded_file_lines, get_utf_encoded_file_lines, 
 
 class Processor(metaclass=ABCMeta):
     _dimension_root: str
+    _export_path: str
     _hand_edit_dimension_names: bool
     _microvu_programs: List[MicroVuProgram] = []
     _sorter: DimensionNameSorter
@@ -25,6 +26,7 @@ class Processor(metaclass=ABCMeta):
         self.user_initials = user_initials
         self._dimension_root: str = lib.Utilities.GetStoredIniValue("GlobalSettings", "dimension_root", "Settings")
         hand_edit_setting_value = lib.Utilities.GetStoredIniValue("GlobalSettings", "hand_edit_dimension_names", "Settings")
+        self._export_path = lib.Utilities.GetStoredIniValue("Paths", "export_path", "Settings")
         self._hand_edit_dimension_names = hand_edit_setting_value == "True"
         Processor._sorter = DimensionNameSorter()
 
@@ -196,7 +198,7 @@ class CoonRapidsProcessor(Processor):
             micro_vu.export_filepath = "C:\\TEXT\\OUTPUT.txt"
             return
         part_rev = f"REV{micro_vu.rev_number}"
-        export_filepath: str = "C:\\Users\\Public\\CURL\\in\\"
+        export_filepath: str = self._export_path
         export_filepath += micro_vu.part_number
         export_filepath += f"_OP{micro_vu.op_number}"
         view_name = str(micro_vu.view_name)

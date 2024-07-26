@@ -13,7 +13,7 @@ def test_parse_dimension_names():
     assert processor.get_dimension_name("ITEM 12A_1X", "INSP_") == "INSP_12A"
     assert processor.get_dimension_name("ITEM 12.1A 1X", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("ITEM_12.1A 1X", "INSP_") == "INSP_12.1A"
-    assert processor.get_dimension_name("ITEM_12.1A_1X", "INSP_") == "INSP_12.1A"
+    assert processor.get_dimension_name("ITEM_12.1a_1X", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("ITEM 12.1A_1X", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("12", "INSP_") == "INSP_12"
     assert processor.get_dimension_name("ITEM 12", "INSP_") == "INSP_12"
@@ -77,7 +77,7 @@ def test_parse_dimension_names():
     assert processor.get_dimension_name("12_1", "INSP_") == "INSP_12A"
     assert processor.get_dimension_name("12.1A", "INSP_") == "INSP_12.1A"
     assert processor.get_dimension_name("12.1_1", "INSP_") == "INSP_12.1A"
-    assert processor.get_dimension_name("Aardvark", "INSP_") == "Aardvark"
+    assert processor.get_dimension_name("Aardvark", "INSP_") == "AARDVARK"
 
     assert processor.get_dimension_name("#12", "INSP_") == "INSP_12"
     assert processor.get_dimension_name("#ITEM 12A 1X", "INSP_") == "INSP_12A"

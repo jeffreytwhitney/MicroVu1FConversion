@@ -205,6 +205,7 @@ class Parser16(DimensionParser):
         else:
             return search_string
 
+
 class Parser17(DimensionParser):
     def __init__(self):
         # Matches "ITEM_32X1"
@@ -216,11 +217,6 @@ class Parser17(DimensionParser):
             return f"{prefix}{match[2]}{letter}"
         else:
             return search_string
-
-
-
-
-
 
 
 class DimensionNameSorter:
@@ -246,6 +242,7 @@ class DimensionNameSorter:
         self._dimension_parsers.append(Parser17())
 
     def get_dimension_name(self, search_string: str, prefix: str) -> str:
+        search_string = search_string.upper()
         for p in self._dimension_parsers:
             if p.does_pattern_match(search_string):
                 return p.get_dimension_name(search_string, prefix)
