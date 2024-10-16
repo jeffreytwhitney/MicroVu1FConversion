@@ -105,15 +105,14 @@ class MicroVuProgram:
     # Properties
     @property
     def bring_part_to_metrology_index(self) -> int:
-        idx = next(
-                (i for i, l in enumerate(self.file_lines)
-                 if "Bring part to Metrology.JPG" in l), -1
+        return next(
+            (
+                i
+                for i, l in enumerate(self.file_lines)
+                if "Bring Part To Metrology 1Factory.jpg" in l
+            ),
+            -1,
         )
-        if idx > -1:
-            return idx
-
-        kill_file_idx = self.kill_file_call_index
-        return -1 if kill_file_idx == -1 else kill_file_idx + 3
 
     @property
     def can_write_to_output_file(self) -> bool:
@@ -234,7 +233,7 @@ class MicroVuProgram:
 
     @property
     def has_bring_to_metrology_picture(self) -> bool:
-        return any("Bring part to Metrology.JPG" in line for line in self.file_lines)
+        return any("Bring Part To Metrology 1Factory.jpg" in line for line in self.file_lines)
 
     @property
     def kill_file_call_index(self) -> int:
@@ -350,6 +349,10 @@ class MicroVuProgram:
     @property
     def smartprofile_projectname(self) -> str:
         return self._smartprofile_projectname
+
+    @smartprofile_projectname.setter
+    def smartprofile_projectname(self, value: str) -> None:
+        self._smartprofile_projectname = value
 
     @property
     def view_name(self) -> str:

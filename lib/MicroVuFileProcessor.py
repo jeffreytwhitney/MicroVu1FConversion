@@ -43,6 +43,10 @@ class Processor(metaclass=ABCMeta):
         return Utilities.GetStoredIniValue("GlobalSettings", "disable_on_convert", "Settings") == "True"
 
     @property
+    def remove_bring_to_metrology_pic(self) -> bool:
+        return Utilities.GetStoredIniValue("GlobalSettings", "remove_bring_to_metrology_pic", "Settings") == "True"
+
+    @property
     def micro_vu_programs(self) -> list[MicroVuProgram]:
         return self._microvu_programs
 
@@ -182,6 +186,15 @@ class CoonRapidsProcessor(Processor):
         micro_vu.file_lines.append(prompt_lines[2])
         micro_vu.file_lines.append(prompt_lines[3])
 
+    def _remove_bring_to_metrology_picture(self, micro_vu: MicroVuProgram) -> None:
+        idx = micro_vu.bring_part_to_metrology_index
+        if idx == -1:
+            return
+
+        del micro_vu.file_lines[idx + 2]
+        del micro_vu.file_lines[idx + 1]
+        del micro_vu.file_lines[idx]
+
     def _replace_dimension_names(self, micro_vu: MicroVuProgram) -> None:
         if micro_vu.is_smartprofile:
             return
@@ -299,6 +312,22 @@ class CoonRapidsProcessor(Processor):
         with open(micro_vu.output_filepath, 'w+', encoding='utf-16-le', newline='\r\n') as f:
             for line in micro_vu.file_lines:
                 f.write(f"{line}")
+
+    def process_file(self, micro_vu: MicroVuProgram):
+        self._replace_export_filepath(micro_vu)
+        self._replace_report_filepath(micro_vu)
+        if not micro_vu.is_smartprofile:
+            self._replace_dimension_names(micro_vu)
+        else:
+            self._inject_smart_profile_call(micro_vu)
+        self._replace_prompt_section(micro_vu)
+        if not micro_vu.has_text_kill:
+            self._inject_kill_file_call(micro_vu)
+        self._update_comments(micro_vu)
+        if self.remove_bring_to_metrology_pic:
+            self._remove_bring_to_metrology_picture(micro_vu)
+        micro_vu.update_instruction_count()
+        self._write_file_to_harddrive(micro_vu)
 
     def process_files(self) -> None:
         try:
