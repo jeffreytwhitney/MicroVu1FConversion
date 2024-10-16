@@ -59,18 +59,19 @@ class MegaConversionThingyBob:
             filelines = f.readlines()
         for file_path in filelines:
             file_path = file_path.rstrip("\n")
-            file_name = os.path.basename(file_path)
-            part_number = self.parse_part_number(file_name)
-            directory_name = os.path.basename(os.path.dirname(file_path))
-            op_number = self.parse_operation_from_file_name(file_name)
-            rev_number = self.parse_rev_from_file_name(directory_name)
-            micro_vu = MicroVuProgram(file_path, op_number, rev_number, "")
-            if micro_vu.is_smartprofile:
-                micro_vu.smartprofile_projectname = self.find_highest_fuzzy_match(part_number, self._sp_lines)
-            try:
-                self._processor.process_file(micro_vu)
-            except ProcessorException as e:
-                logging.error(f"FilePath:{file_path}: {e.args[0]}", exc_info=False)
+            if os.path.exists(file_path):
+                file_name = os.path.basename(file_path)
+                part_number = self.parse_part_number(file_name)
+                directory_name = os.path.basename(os.path.dirname(file_path))
+                op_number = self.parse_operation_from_file_name(file_name)
+                rev_number = self.parse_rev_from_file_name(directory_name)
+                micro_vu = MicroVuProgram(file_path, op_number, rev_number, "")
+                if micro_vu.is_smartprofile:
+                    micro_vu.smartprofile_projectname = self.find_highest_fuzzy_match(part_number, self._sp_lines)
+                try:
+                    self._processor.process_file(micro_vu)
+                except ProcessorException as e:
+                    logging.error(f"FilePath:{file_path}: {e.args[0]}", exc_info=False)
 
 
 sp_filepath = "C:\\Users\\JTWhitney\\PycharmProjects\\MicroVu1FConversion\\MassConversion\\SmartProfiles.txt"
@@ -82,6 +83,6 @@ three_forty_one_output = "V:\\Inspect Programs\\Micro-Vu\\1Factory_Untested\\341
 four_twenty_output = "V:\\Inspect Programs\\Micro-Vu\\1Factory_Untested\\420"
 
 megaConverter = MegaConversionThingyBob(sp_filepath)
-megaConverter.mass_process_microvus(three_elevens, three_eleven_output)
-megaConverter.mass_process_microvus(three_forty_ones, three_forty_one_output)
+#megaConverter.mass_process_microvus(three_elevens, three_eleven_output)
+#megaConverter.mass_process_microvus(three_forty_ones, three_forty_one_output)
 megaConverter.mass_process_microvus(four_twenties, four_twenty_output)

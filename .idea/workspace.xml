@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="1c88e8c6-ef59-435b-8d54-886224d22287" name="Changes" comment="Added the Mega Conversion MicroVu Thingy Bob">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MassConversion/420s.txt" beforeDir="false" afterPath="$PROJECT_DIR$/MassConversion/420s.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MassConversion/Mega Conversion MicroVu Thingy Bob.py" beforeDir="false" afterPath="$PROJECT_DIR$/MassConversion/Mega Conversion MicroVu Thingy Bob.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Settings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +89,7 @@
     "Python.DimensionNameEntryDialog.executor": "Run",
     "Python.DimensionNameParser.executor": "Run",
     "Python.Main.executor": "Run",
-    "Python.Mega Conversion MicroVu Thingy Bob.executor": "Debug",
+    "Python.Mega Conversion MicroVu Thingy Bob.executor": "Run",
     "Python.MicroVu1FactoryConverter.executor": "Debug",
     "Python.MicroVuFileProcessor.executor": "Debug",
     "Python.MicroVuProcessor.executor": "Run",
@@ -204,14 +206,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702490214759</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Refactoring">
-      <option name="closed" value="true" />
-      <created>1705076057264</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1705076057264</updated>
     </task>
     <task id="LOCAL-00039" summary="Refactoring">
       <option name="closed" value="true" />
@@ -597,7 +591,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729083712055</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="Added the Mega Conversion MicroVu Thingy Bob">
+      <option name="closed" value="true" />
+      <created>1729084800701</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1729084800701</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -643,5 +645,21 @@
     <MESSAGE value="Tidying up...." />
     <MESSAGE value="Added the Mega Conversion MicroVu Thingy Bob" />
     <option name="LAST_COMMIT_MESSAGE" value="Added the Mega Conversion MicroVu Thingy Bob" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MassConversion/Mega Conversion MicroVu Thingy Bob.py</url>
+          <line>84</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/MassConversion/Mega Conversion MicroVu Thingy Bob.py</url>
+          <line>57</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

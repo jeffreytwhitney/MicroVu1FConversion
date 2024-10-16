@@ -126,8 +126,6 @@ V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9070-XX_REV D\C9070-02
 V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9539-01 REV_C\C9539-01.IWP
 V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9539-01 REV_C\C9539-01 PROFILE.IWP
 V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9543-XX REV C\C9543-03.IWP
-V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9546-XX REV B\C9546-01 SIDE VIEW.IWP
-V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9546-XX REV B\C9546-01 TOP VIEW.IWP
 V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9547-XX REV_C\C9547-03.IWP
 V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9549-01 REV_C\C9549-01 PROFILE.IWP
 V:\Inspect Programs\Micro-Vu\Approved Programs\420\Ortho\C9549-01 REV_C\C9549-01.IWP
