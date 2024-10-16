@@ -24,7 +24,7 @@ class MegaConversionThingyBob:
         self._op_regex = re.compile(r"^(.*)([ _-]OP)( *)(\d+)(.*)(\.IWP)$")
         self._rev_regex = re.compile(r"(REV)( *)(\w+)")
         self._processor = get_processor("JTW")
-        logging.basicConfig(filename="C:\\Users\\JTWhitney\\PycharmProjects\\MicroVu1FConversion\\MassConversion\\ErrorLog.txt", filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
+        logging.basicConfig(filename="C:\\Users\\JTWhitney\\PycharmProjects\\MicroVu1FConversion\\MassConversion\\ErrorLog.txt", filemode='a', format='%(message)s')
 
     def find_highest_fuzzy_match(self, target_line, lines):
         max_ratio = 0
@@ -34,7 +34,7 @@ class MegaConversionThingyBob:
             ratio: int = fuzz.ratio(target_line, line)
             if ratio > max_ratio:
                 max_ratio = ratio
-                best_match = line
+                best_match = line.rstrip("\n")
 
         return best_match
 
@@ -70,7 +70,7 @@ class MegaConversionThingyBob:
             try:
                 self._processor.process_file(micro_vu)
             except ProcessorException as e:
-                logging.error(f"FilePath:{file_path}: {e.args[0]}", exc_info=True)
+                logging.error(f"FilePath:{file_path}: {e.args[0]}", exc_info=False)
 
 
 sp_filepath = "C:\\Users\\JTWhitney\\PycharmProjects\\MicroVu1FConversion\\MassConversion\\SmartProfiles.txt"
@@ -83,3 +83,5 @@ four_twenty_output = "V:\\Inspect Programs\\Micro-Vu\\1Factory_Untested\\420"
 
 megaConverter = MegaConversionThingyBob(sp_filepath)
 megaConverter.mass_process_microvus(three_elevens, three_eleven_output)
+megaConverter.mass_process_microvus(three_forty_ones, three_forty_one_output)
+megaConverter.mass_process_microvus(four_twenties, four_twenty_output)
